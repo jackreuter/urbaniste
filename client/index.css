@@ -1,0 +1,19 @@
+:root {
+  --grid-cols: 1;
+  --grid-rows: 1;
+}
+
+#board {
+  display: grid;
+  height: 50%;
+  width: 50%;
+  grid-gap: 1em;
+  grid-template-rows: repeat(var(--grid-rows), 1fr);
+  grid-template-columns: repeat(var(--grid-cols), 1fr);
+}
+
+.grid-item {
+  padding: 1em;
+  border: 1px solid #ddd;
+  text-align: center;
+}
