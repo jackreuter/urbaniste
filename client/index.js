@@ -1,3 +1,5 @@
+/* MAIN CLIENT SIDE CODE */
+
 /*
 	BUILDING object:
 		{
