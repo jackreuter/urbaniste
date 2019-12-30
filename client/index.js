@@ -13,7 +13,7 @@
 		{
 			marker: , // unoccupied or which playe has a marker on this tile
 			building_id: ,
-			type: , // Water, BM, C, L, other?
+			type: , // w, bm, c, l, other?
 			dom_id: , // id of dom element associated to this tile
 		}
 
@@ -29,6 +29,10 @@ var SHOP = undefined
 var MY_TURN = false
 var SOCKET_ID = undefined
 var RESPONSE = undefined
+
+var MY_BM = 0
+var MY_C = 0
+var MY_L = 0
 
 
 function getColor(row, col) {
@@ -54,14 +58,11 @@ function displayBoard() {
 
 	    cell.onclick = function(cell) {
 	    	return function() {
-
-	    		clearPendingSelections()
-
 	    		var coor = cell.id.split("_")
 		 			var row = coor[0]
 		 			var col = coor[1]
-		 			
-		 			if (BOARD[row][col].marker == 'empty') {
+		 			if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w') {
+		 				clearPendingSelections()
 		 				cell.innerText = '*'
 		 				RESPONSE = {'marker_placement': cell.id}
 		 			}
@@ -88,19 +89,37 @@ function displayBuildings() {
 }
 
 function displayShop() {
-	var shop = document.getElementById('shop_column')
+	var shop = document.getElementById('shop')
 	for (i = 0; i < SHOP.length; i++) { 
-		var div = document.createElement("div")
-		div.id = i
-		div.onclick = function(div) {
+		var row = document.createElement("tr")
+		row.onclick = function(row) {
 			return function() {
-				console.log(div.id)
+				console.log(row)
     	}
-		}(div)
-		var item = document.createElement("th")
-		item.innerText = SHOP[i]
-		div.appendChild(item)
-		shop.appendChild(div)
+		}(row)
+		var datum
+		for (attribute of Object.keys(SHOP[i])) {
+			datum = document.createElement("th")
+			datum.innerText = SHOP[i][attribute]
+			row.appendChild(datum)
+		}
+
+		shop.appendChild(row)
+	}
+}
+
+function incrementResource(type) {
+	if (type == 'bm') {
+		MY_BM += 1
+		document.getElementById('resource_bm').innerText = "Building Materials: " + MY_BM
+	}
+	if (type == 'l') {
+		MY_L += 1
+		document.getElementById('resource_l').innerText = "Labor: " + MY_L
+	}
+	if (type == 'c') {
+		MY_C += 1
+		document.getElementById('resource_c').innerText = "Coin: " + MY_C
 	}
 }
 
@@ -130,6 +149,7 @@ window.onload = () => {
     if (response.socket_id == SOCKET_ID) {
     	BOARD[row][col].marker = 'M'
     	document.getElementById(response.marker_placement).innerText = 'Mine'
+    	incrementResource(BOARD[row][col].type)
     }
     else {
     	BOARD[row][col].marker = 'E'
@@ -137,20 +157,15 @@ window.onload = () => {
     }
   });
 
-	socket.on('starting_board', (response) => {
+	socket.on('starting_info', (response) => {
     console.log(response)
     BOARD = response.board
     SOCKET_ID = response.socket_id
+    SHOP = response.shop
     displayBoard()
-  });
-
-  socket.on('starting_shop', (response) => {
-    console.log(response)
-    SHOP = response
-    console.log(SHOP)
     displayShop()
   });
-  
+
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
     socket.emit('submit_move', RESPONSE);
