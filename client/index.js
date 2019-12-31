@@ -67,6 +67,7 @@ function displayBoard() {
 	    cell.onclick = function(cell) {
 	    	return function() {
 	    		var coor = cell.id.split("_")
+
 		 			var row = +coor[0]
 		 			var col = +coor[1]
 		 			if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
@@ -204,8 +205,10 @@ window.onload = () => {
     BOARD = response.board
     SOCKET_ID = response.socket_id
     SHOP = response.shop
+
     STARTING_PLAYER = response.starting_player
     console.log("Am starting player: " + STARTING_PLAYER)
+
     displayBoard()
     displayShop()
   });
