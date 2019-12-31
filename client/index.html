@@ -6,10 +6,21 @@
 	<link rel="stylesheet" type="text/css" href="index.css">
 	<body>
 		<header id=turn_title></header>
+		<div>
+			<header>Resources:</header>
+			<div id='resource_bm'>Building Materials: 0</div>
+			<div id='resource_l'>Labor: 0</div>
+			<div id='resource_c'>Coin: 0</div>
+		</div>
+
 		<input type="submit" id='submit_btn'>
 		<table id='shop' style='width:50%'>
-			<tr id='shop_column'>
-				
+			<tr id='shop_header'>
+				<th>Name</th>
+				<th>BMs</th>
+				<th>Labor</th>
+				<th>Coin</th>
+				<th>Amount Left</th>
 			</tr>
 		</table>
 		<div id="board"></div>

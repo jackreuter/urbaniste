@@ -24,8 +24,7 @@ io.on('connection', function(socket) {
   PLAYER_IDS.push(socket.id)
   console.log('num playes: ' + PLAYER_IDS.length)
 
-  socket.emit('starting_board', {'board': STARTING_BOARD, 'socket_id': socket.id} )
-  socket.emit('starting_shop', STARTING_SHOP)
+  socket.emit('starting_info', {'board': STARTING_BOARD, 'socket_id': socket.id, 'shop': STARTING_SHOP} )
 
   // If the first player is connecting
   if (PLAYER_IDS[ACTIVE_PLAYER_INDEX] === socket.id) { 
@@ -36,7 +35,6 @@ io.on('connection', function(socket) {
     io.sockets.emit('your_turn')
     socket.emit('not_your_turn')
   }
-
 
   // When "submit_move" message comes in, call a function
   socket.on('submit_move', function(client_object) {
@@ -70,21 +68,23 @@ function handleDisconnect(socket_id) {
 
 function getTileType() {
   x = Math.floor(Math.random() * 25)
-  if  (x < 4) {
-    return 'w'
-  }
-  if (x < 11) {
-    return 'bm'
-  }
-  if (x < 18) {
-    return 'l'
-  }
+  if  (x < 4) { return 'w' }
+  if (x < 11) { return 'bm' }
+  if (x < 18) { return 'l' }
   return 'c'
 }
 
 function generateShop(num_items) {
   var results = []
-  var buildings = ['Tax House','Docks','Settlement','Bazaar','Quarry','Bank','Embassy','Guard Tower','Customs Office','Casino','Lighthouse','Graveyard','Jail','Workshop','Mill','Wall','Church','Boulevard','Aqueduct','Harbor','Shipyard','Trolley','City Hall','Bridge','Tunnel','Sewers','Depot','Plaza']
+  var buildings = [
+    {'name': 'Tax House', 'bm': 1, 'c': 3, 'l': 2, 'amount': 5},
+    {'name': 'Docks', 'bm': 0, 'c': 3, 'l': 2, 'amount': 5},
+    {'name': 'Settlement', 'bm': 1, 'c': 3, 'l': 2, 'amount': 5},
+    {'name': 'Bazaar', 'bm': 2, 'c': 3, 'l': 2, 'amount': 5},
+    {'name': 'Quarry', 'bm': 0, 'c': 2, 'l': 2, 'amount': 5}, 
+    {'name': 'Bank', 'bm': 3, 'c': 0, 'l': 2, 'amount': 5},
+    {'name': 'Embassy', 'bm': 1, 'c': 3, 'l': 2, 'amount': 5}//,'Guard Tower','Customs Office','Casino','Lighthouse','Graveyard','Jail','Workshop','Mill','Wall','Church','Boulevard','Aqueduct','Harbor','Shipyard','Trolley','City Hall','Bridge','Tunnel','Sewers','Depot','Plaza']
+  ]
   for (i=0; i<num_items; i++) {
     var x = Math.floor(Math.random() * buildings.length)
     results.push(buildings[x])
