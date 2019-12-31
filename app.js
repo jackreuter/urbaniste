@@ -24,7 +24,12 @@ io.on('connection', function(socket) {
   PLAYER_IDS.push(socket.id)
   console.log('num playes: ' + PLAYER_IDS.length)
 
-  socket.emit('starting_info', {'board': STARTING_BOARD, 'socket_id': socket.id, 'shop': STARTING_SHOP} )
+  var starting_player = false
+  if (PLAYER_IDS.length == 1) {
+    starting_player = true
+  }
+
+  socket.emit('starting_info', {'board': STARTING_BOARD, 'socket_id': socket.id, 'shop': STARTING_SHOP, 'starting_player': starting_player} )
 
   // If the first player is connecting
   if (PLAYER_IDS[ACTIVE_PLAYER_INDEX] === socket.id) { 
@@ -38,7 +43,9 @@ io.on('connection', function(socket) {
 
   // When "submit_move" message comes in, call a function
   socket.on('submit_move', function(client_object) {
-    emitMoveToPlayers(client_object, socket)
+    if (client_object) {
+      emitMoveToPlayers(client_object, socket)
+    }
   })
   // When a client disconnects, clean that connection up
   socket.on('disconnect', function() {
@@ -77,13 +84,34 @@ function getTileType() {
 function generateShop(num_items) {
   var results = []
   var buildings = [
-    {'name': 'Tax House', 'bm': 1, 'c': 3, 'l': 2, 'amount': 5},
-    {'name': 'Docks', 'bm': 0, 'c': 3, 'l': 2, 'amount': 5},
-    {'name': 'Settlement', 'bm': 1, 'c': 3, 'l': 2, 'amount': 5},
-    {'name': 'Bazaar', 'bm': 2, 'c': 3, 'l': 2, 'amount': 5},
-    {'name': 'Quarry', 'bm': 0, 'c': 2, 'l': 2, 'amount': 5}, 
-    {'name': 'Bank', 'bm': 3, 'c': 0, 'l': 2, 'amount': 5},
-    {'name': 'Embassy', 'bm': 1, 'c': 3, 'l': 2, 'amount': 5}//,'Guard Tower','Customs Office','Casino','Lighthouse','Graveyard','Jail','Workshop','Mill','Wall','Church','Boulevard','Aqueduct','Harbor','Shipyard','Trolley','City Hall','Bridge','Tunnel','Sewers','Depot','Plaza']
+    {'name': 'Tax House', 'bm': 0, 'c': 3, 'l': 2, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Docks', 'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': '*'},
+    {'name': 'Settlement', 'bm': 1, 'c': 3, 'l': 2, '?': 4, 'limit': 5, 'vp': 2},
+    {'name': 'Bazaar', 'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3},
+    {'name': 'Quarry', 'bm': 0, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 2}, 
+    {'name': 'Bank', 'bm': 0, 'c': 0, 'l': 0, '?': 3, 'limit': 5, 'vp': 2},
+    {'name': 'Embassy', 'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': '*'},
+    {'name': 'Guard Tower', 'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Customs Office', 'bm': 0, 'c': 3, 'l': 3, '?': 0, 'limit': 5, 'vp': 4},
+    {'name': 'Casino', 'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 0},
+    {'name': 'Lighthouse', 'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
+    {'name': 'Graveyard', 'bm': 1, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Jail', 'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Workshop', 'bm': 0, 'c': 0, 'l': 0, '?': 3, 'limit': 5, 'vp': 2},
+    {'name': 'Mill', 'bm': 3, 'c': 0, 'l': 2, '?': 0, 'limit': 5, 'vp': 4},
+    {'name': 'Wall', 'bm': 1, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 1},
+    {'name': 'Church', 'bm': 2, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Boulevard', 'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+    {'name': 'Aqueduct', 'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Harbor', 'bm': 0, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Shipyard', 'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Trolley', 'bm': 0, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
+    {'name': 'City Hall', 'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Bridge', 'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Tunnel', 'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Sewers', 'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Depot', 'bm': 1, 'c': 3, 'l': 2, '?': 0, 'limit': 5, 'vp': 3},
+    {'name': 'Plaza', 'bm': 1, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': '*'}
   ]
   for (i=0; i<num_items; i++) {
     var x = Math.floor(Math.random() * buildings.length)
@@ -93,15 +121,26 @@ function generateShop(num_items) {
   return results
 }
 
+function getMarker(row, col) {
+  if ((row == 0 && col == 7) || (row == 11 && col == 0)) {
+    return "player_one"
+  }
+  if ((row == 0 && col == 0) || (row == 11 && col == 7)) {
+    return "player_two"
+  }
+  return 'empty'
+}
+
 function generateBoard() {
   board = []
   for (row=0; row<12; row+=1) {
     new_row = []
-    num_columns = (row%2 == 0) ? 8 : 9
-    for (column=0; column<num_columns; column+=1) {
+    //num_columns = (row%2 == 0) ? 8 : 9
+    num_columns = 8
+    for (col=0; col<num_columns; col+=1) {
       type = getTileType()
       tile = {
-        'marker': 'empty',
+        'marker': getMarker(row, col),
         'type': type
       }
       new_row.push(tile)

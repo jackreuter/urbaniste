@@ -30,6 +30,8 @@ var MY_TURN = false
 var SOCKET_ID = undefined
 var RESPONSE = undefined
 
+var STARTING_PLAYER = false
+
 var MY_BM = 0
 var MY_C = 0
 var MY_L = 0
@@ -55,13 +57,19 @@ function displayBoard() {
 	    var cell = document.createElement("div")
 	    cell.style.background = getColor(row, col)
 	    cell.id = row + "_" + col
+	    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
+	    	cell.innerText = 'Mine'
+	    }
+	    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_two') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_one')) {
+	    	cell.innerText = 'Enemy'
+	    }
 
 	    cell.onclick = function(cell) {
 	    	return function() {
 	    		var coor = cell.id.split("_")
-		 			var row = coor[0]
-		 			var col = coor[1]
-		 			if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w') {
+		 			var row = +coor[0]
+		 			var col = +coor[1]
+		 			if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
 		 				clearPendingSelections()
 		 				cell.innerText = '*'
 		 				RESPONSE = {'marker_placement': cell.id}
@@ -86,6 +94,32 @@ function clearPendingSelections() {
 
 function displayBuildings() {
 	// Iterate through BOARD object and draw svg lines for buildings
+}
+
+function adjacent(row, col) {
+	console.log('adjacent')
+	console.log(row)
+	console.log(col)
+	try {
+		if (STARTING_PLAYER) {
+  		return BOARD[row][col].marker == 'player_one'
+  	} else {
+  		return BOARD[row][col].marker == 'player_two'
+  	}
+	} catch(e) {
+		return false
+	}
+}
+
+function tileAdjacentToFriendly(row, col) {
+	if (adjacent(row, col+1) || adjacent(row, col-1)) {
+		return true
+	}
+	if (row%2 == 0) {
+		return (adjacent(row-1, col-1) || adjacent(row+1, col-1) || adjacent(row-1, col) || adjacent(row+1, col))
+	} else {
+	  return (adjacent(row-1, col) || adjacent(row+1, col) || adjacent(row-1, col+1) || adjacent(row+1, col+1))
+	}
 }
 
 function displayShop() {
@@ -147,12 +181,20 @@ window.onload = () => {
 		var row = coor[0]
 		var col = coor[1]
     if (response.socket_id == SOCKET_ID) {
-    	BOARD[row][col].marker = 'M'
+    	if (STARTING_PLAYER) {
+    		BOARD[row][col].marker = 'player_one'
+    	} else {
+    		BOARD[row][col].marker = 'player_two'
+    	}
     	document.getElementById(response.marker_placement).innerText = 'Mine'
     	incrementResource(BOARD[row][col].type)
     }
     else {
-    	BOARD[row][col].marker = 'E'
+    	if (STARTING_PLAYER) {
+    		BOARD[row][col].marker = 'player_two'
+    	} else {
+    		BOARD[row][col].marker = 'player_one'
+    	}
     	document.getElementById(response.marker_placement).innerText = 'Enemy'
     }
   });
@@ -162,6 +204,8 @@ window.onload = () => {
     BOARD = response.board
     SOCKET_ID = response.socket_id
     SHOP = response.shop
+    STARTING_PLAYER = response.starting_player
+    console.log("Am starting player: " + STARTING_PLAYER)
     displayBoard()
     displayShop()
   });
@@ -169,5 +213,6 @@ window.onload = () => {
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
     socket.emit('submit_move', RESPONSE);
+    RESPONSE = undefined
   }
 }
