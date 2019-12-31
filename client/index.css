@@ -5,8 +5,8 @@
 
 #board {
   display: grid;
-  height: 50%;
-  width: 50%;
+  height: 80%;
+  width: 80%;
   grid-gap: 1em;
   grid-template-rows: repeat(var(--grid-rows), 1fr);
   grid-template-columns: repeat(var(--grid-cols), 1fr);
