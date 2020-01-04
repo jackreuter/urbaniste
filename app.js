@@ -47,6 +47,10 @@ io.on('connection', function(socket) {
     handleDisconnect(socket.id)
   })
 
+  socket.on('chat_message', function(message) {
+    io.sockets.emit('received_message', message)
+  })
+
 })
 
 // Starta a client by going to localhost:8080 in a browser 
