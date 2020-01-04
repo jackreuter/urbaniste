@@ -199,10 +199,10 @@ window.onload = () => {
     	document.getElementById(response.marker_placement).innerText = 'Enemy'
     }
   });
-
 	socket.on('starting_info', (response) => {
     console.log(response)
     BOARD = response.board
+    
     SOCKET_ID = response.socket_id
     SHOP = response.shop
 
