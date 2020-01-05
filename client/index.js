@@ -39,10 +39,10 @@ var MY_L = 0
 
 function getColor(row, col) {
 	var type = BOARD[row][col].type
-	if (type == 'w') { return 'blue' }
-	if (type == 'bm') { return 'red' }
-	if (type == 'l') { return 'green' }
-	if (type == 'c') { return 'yellow' }
+	if (type == 'w') { return '#2A989E' }
+	if (type == 'bm') { return '#E86F51' }
+	if (type == 'l') { return '#7AD15E' }
+	if (type == 'c') { return '#F4EB61' }
 }
 
 function displayBoard() {
@@ -50,8 +50,8 @@ function displayBoard() {
 
 	rows = BOARD.length
 	cols = BOARD[1].length
-  container.style.setProperty('--grid-rows', rows)
-  container.style.setProperty('--grid-cols', cols)
+  container.style.setProperty('--grid_rows', rows)
+  container.style.setProperty('--grid_cols', cols)
   for (row = 0; row < BOARD.length; row++) {
   	for (col = 0; col < BOARD[row].length; col++) {
 	    var cell = document.createElement("div")

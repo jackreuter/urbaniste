@@ -1,6 +1,13 @@
 :root {
-  --grid-cols: 1;
-  --grid-rows: 1;
+  --grid_cols: 1;
+  --grid_rows: 1;
+  --txt_color: #203C47;
+  --water_color: #2A989E;
+  --labor_color: #7AD15E;
+  --coin_color: #F4EB61;
+  --building_materials_color: #E86F51;
+  --back_color: #EFF3F4;
+  --main_font: 'Goudy Old Style';
 }
 
 #board {
@@ -8,12 +15,55 @@
   height: 80%;
   width: 80%;
   grid-gap: 1em;
-  grid-template-rows: repeat(var(--grid-rows), 1fr);
-  grid-template-columns: repeat(var(--grid-cols), 1fr);
+  grid-template-rows: repeat(var(--grid_rows), 1fr);
+  grid-template-columns: repeat(var(--grid_cols), 1fr);
 }
 
 .grid-item {
   padding: 1em;
   border: 1px solid #ddd;
   text-align: center;
+}
+
+th {
+  border: 1px solid var(--txt_color);
+  padding: 10px;
+  padding-bottom: 1px;
+  padding-top: 1px;
+}
+
+h1 {
+  text-align: center;
+}
+
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+div{
+  color: var(--txt_color);
+}
+
+.table {
+  text-align: left;
+  border-spacing: 0px;
+  border: 3px solid var(--txt_color);
+}
+
+caption {
+  font-weight: bold;
+  font-size: 22;
+}
+img {
+  border: 3px solid var(--txt_color);
+}
+
+body {
+  background-color: var(--back_color);
+  color: var(--txt_color);
+  font-family: var(--main_font);
 }
