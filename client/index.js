@@ -199,10 +199,10 @@ window.onload = () => {
     	document.getElementById(response.marker_placement).innerText = 'Enemy'
     }
   });
-
 	socket.on('starting_info', (response) => {
     console.log(response)
     BOARD = response.board
+    
     SOCKET_ID = response.socket_id
     SHOP = response.shop
 
@@ -213,9 +213,17 @@ window.onload = () => {
     displayShop()
   });
 
+	socket.on('received_message', function(message) {
+		console.log(message)
+	})
+
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
     socket.emit('submit_move', RESPONSE);
     RESPONSE = undefined
+  }
+
+  document.getElementById('message_btn').onclick = function() {
+  	socket.emit('chat_message', document.getElementById('message_block').value)
   }
 }
