@@ -39,10 +39,10 @@ var MY_L = 0
 
 function getColor(row, col) {
 	var type = BOARD[row][col].type
-	if (type == 'w') { return 'blue' }
-	if (type == 'bm') { return 'red' }
-	if (type == 'l') { return 'green' }
-	if (type == 'c') { return 'yellow' }
+	if (type == 'w') { return '#2F6DFF' }
+	if (type == 'bm') { return '#FF6943' }
+	if (type == 'l') { return 'teal' }
+	if (type == 'c') { return '#FFF171' }
 }
 
 function displayBoard() {

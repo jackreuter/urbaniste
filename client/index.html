@@ -4,20 +4,24 @@
 	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
 	
 	<link rel="stylesheet" type="text/css" href="index.css">
+
 	<body>
+		<img src="https://i.imgur.com/930pwBA.jpg" class="center">
+
 		<header id=turn_title></header>
-		<div>
+		<div id="player_spot">
 			<header>Resources:</header>
 			<div id='resource_bm'>Building Materials: 0</div>
 			<div id='resource_l'>Labor: 0</div>
 			<div id='resource_c'>Coin: 0</div>
+
+			<input type="submit" id='submit_btn'>
+			<textarea id='message_block' rows="2" cols="25"></textarea>
+			<input type="submit" id="message_btn" value="Send Message">
 		</div>
 
-		<input type="submit" id='submit_btn'>
-		<textarea id='message_block' rows="2" cols="25"></textarea>
-		<input type="submit" id="message_btn" value="Send Message">
-
-		<table id='shop' style='width:50%'>
+		<table id='shop' class="table">
+			<caption>Shop</caption>
 			<tr id='shop_header'>
 				<th>Name</th>
 				<th>BM</th>

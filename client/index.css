@@ -1,6 +1,8 @@
 :root {
   --grid-cols: 1;
   --grid-rows: 1;
+  --main-txt-color: teal;
+  --back-color: #FFFDEE;
 }
 
 #board {
@@ -16,4 +18,56 @@
   padding: 1em;
   border: 1px solid #ddd;
   text-align: center;
+}
+
+p {
+  font-family: Goudy Old Style;
+  color: var(--main-txt-color);
+}
+
+th {
+  font-family: Goudy Old Style;
+  color: var(--main-txt-color);
+  border: 1px solid var(--main-txt-color);
+  padding: 10px;
+  padding-bottom: 1px;
+  padding-top: 1px;
+}
+
+h1 {
+  font-family: Goudy Old Style;
+  text-align: center;
+  color: var(--main-txt-color);
+}
+
+div {
+  font-family: Goudy Old Style;
+  color: var(--main-txt-color);
+}
+
+.center {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 50%;
+}
+
+.table {
+  text-align: left;
+  border-spacing: 0px;
+  border: 3px solid var(--main-txt-color);
+}
+
+caption {
+  font-family: Goudy Old Style;
+  color: var(--main-txt-color);
+  font-weight: bold;
+  font-size: 22;
+}
+img {
+  border: 3px solid var(--main-txt-color);
+}
+
+body {
+  background-color: var(--back-color);
 }
