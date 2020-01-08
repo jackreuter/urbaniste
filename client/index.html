@@ -7,31 +7,38 @@
 
 	<body>
 		<img src="https://i.imgur.com/930pwBA.jpg" class="center">
-
-		<header id=turn_title></header>
+		<br>
 		<div id="player_spot">
-			<header>Resources:</header>
+			<h1>Resources</h1>
 			<div id='resource_bm'>Building Materials: 0</div>
 			<div id='resource_l'>Labor: 0</div>
 			<div id='resource_c'>Coin: 0</div>
-
-			<input type="submit" id='submit_btn'>
-			<textarea id='message_block' rows="2" cols="25"></textarea>
-			<input type="submit" id="message_btn" value="Send Message">
+			<div>
+				<input type="submit" id='submit_btn' value="Submit Move">
+			</div>
+			<br>
+			<div>
+				<textarea id='message_block' rows="2" cols="25"></textarea>
+				<input type="submit" id="message_btn" value="Send Message">
+			</div>
 		</div>
+		<div id="shop_div">
+			<h1>Shop</h1>
+			<table id="shop">
+				<tr>
+					<th>Name</th>
+					<th color='#E86F51'>BM</th>
+					<th>Labor</th>
+					<th>Coin</th>
+					<th>?</th>
+					<th>Available</th>
+					<th>VP</th>
+				</tr>
+			</table>
+		</div>
+		<p>  Spacing Hack    </p>
 
-		<table id='shop' class="table">
-			<caption>Shop</caption>
-			<tr id='shop_header'>
-				<th>Name</th>
-				<th>BM</th>
-				<th>Labor</th>
-				<th>Coin</th>
-				<th>?</th>
-				<th>Amount Left</th>
-				<th>VP</th>
-			</tr>
-		</table>
+		<h1 id=turn_title></h1>
 		<div id="board"></div>
 	</body>
 </html>

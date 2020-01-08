@@ -14,15 +14,22 @@
   display: grid;
   height: 80%;
   width: 80%;
-  grid-gap: 1em;
+  margin: auto;
+  grid-gap: 1px;
   grid-template-rows: repeat(var(--grid_rows), 1fr);
   grid-template-columns: repeat(var(--grid_cols), 1fr);
 }
 
 .grid-item {
-  padding: 1em;
+  padding: 10px;
   border: 1px solid #ddd;
   text-align: center;
+}
+
+body {
+  background-color: var(--back_color);
+  color: var(--txt_color);
+  font-family: var(--main_font);
 }
 
 th {
@@ -34,6 +41,7 @@ th {
 
 h1 {
   text-align: center;
+  font-size: 20;
 }
 
 
@@ -44,26 +52,25 @@ h1 {
   width: 50%;
 }
 
-div{
-  color: var(--txt_color);
-}
-
-.table {
-  text-align: left;
+table {
+  text-align: center;
   border-spacing: 0px;
-  border: 3px solid var(--txt_color);
+  border: 1px solid var(--txt_color);
 }
 
-caption {
-  font-weight: bold;
-  font-size: 22;
+#player_spot {
+  display: inline-block;
 }
+
+#shop_div {
+  display: inline-block;
+  float: right;
+}
+
 img {
   border: 3px solid var(--txt_color);
 }
 
-body {
-  background-color: var(--back_color);
-  color: var(--txt_color);
-  font-family: var(--main_font);
+p {
+  color: var(--back_color);
 }
