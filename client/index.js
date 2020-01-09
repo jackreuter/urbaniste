@@ -58,6 +58,8 @@ function displayBoard() {
 	    cell.id = row + "_" + col
 	    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
 	    	cell.innerText = 'Mine'
+        console.log("STARTING_PLAYER")
+        console.log(STARTING_PLAYER)
 	    }
 	    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_two') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_one')) {
 	    	cell.innerText = 'Enemy'
@@ -66,9 +68,11 @@ function displayBoard() {
 	    cell.onclick = function(cell) {
 	    	return function() {
 	    		var coor = cell.id.split("_")
-
 		 			var row = +coor[0]
 		 			var col = +coor[1]
+	        console.log("cell clicked:")
+	        console.log(row)
+	        console.log(col)
 		 			if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
 		 				clearPendingSelections()
 		 				cell.innerText = '*'
