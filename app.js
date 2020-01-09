@@ -23,8 +23,15 @@ io.on('connection', function(socket) {
   console.log('New player joined. Id: ' + socket.id)
   PLAYER_IDS.push(socket.id)
   console.log('num playes: ' + PLAYER_IDS.length)
+    
+  // if STARTING_PLAYER
+  if (PLAYER_IDS.length == 1) {
+    socket.emit('starting_info', {'board': STARTING_BOARD, 'socket_id': socket.id, 'shop': STARTING_SHOP, 'starting_player': true} )
+  } else {
+    socket.emit('starting_info', {'board': STARTING_BOARD, 'socket_id': socket.id, 'shop': STARTING_SHOP, 'starting_player': false} )
+  }
 
-  socket.emit('starting_info', {'board': STARTING_BOARD, 'socket_id': socket.id, 'shop': STARTING_SHOP} )
+  console.log(PLAYER_IDS.length)
 
   // If the first player is connecting
   if (PLAYER_IDS[ACTIVE_PLAYER_INDEX] === socket.id) { 
