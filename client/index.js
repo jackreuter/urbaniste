@@ -37,12 +37,12 @@ var MY_C = 0
 var MY_L = 0
 
 
-function getColor(row, col) {
+function getHexagonColorString(row, col) {
 	var type = BOARD[row][col].type
-	if (type == 'w') { return '#2A989E' }
-	if (type == 'bm') { return '#E86F51' }
-	if (type == 'l') { return '#7AD15E' }
-	if (type == 'c') { return '#F4EB61' }
+	if (type == 'w') { return 'hexagon color-blue' }
+	if (type == 'bm') { return 'hexagon color-red' }
+	if (type == 'l') { return 'hexagon color-green' }
+	if (type == 'c') { return 'hexagon color-yellow' }
 }
 
 function displayBoard() {
@@ -55,10 +55,11 @@ function displayBoard() {
   for (row = 0; row < BOARD.length; row++) {
   	for (col = 0; col < BOARD[row].length; col++) {
 	    var cell = document.createElement("div")
-	    cell.style.background = getColor(row, col)
 	    cell.id = row + "_" + col
 	    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
 	    	cell.innerText = 'Mine'
+        console.log("STARTING_PLAYER")
+        console.log(STARTING_PLAYER)
 	    }
 	    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_two') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_one')) {
 	    	cell.innerText = 'Enemy'
@@ -67,9 +68,11 @@ function displayBoard() {
 	    cell.onclick = function(cell) {
 	    	return function() {
 	    		var coor = cell.id.split("_")
-
 		 			var row = +coor[0]
 		 			var col = +coor[1]
+	        console.log("cell clicked:")
+	        console.log(row)
+	        console.log(col)
 		 			if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
 		 				clearPendingSelections()
 		 				cell.innerText = '*'
@@ -78,7 +81,7 @@ function displayBoard() {
 	    	}
 	 			
 	  	}(cell) // immediatlly invoke this function to tie it to correct cell
-	    container.appendChild(cell).className = "grid-item"
+	    container.appendChild(cell).className = getHexagonColorString(row, col)
 	  }
 	}
 }
