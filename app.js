@@ -20,9 +20,7 @@ app.use(express.static(path.join(__dirname, 'client')))
 
 // Socket.io code to listen for client connection.
 io.on('connection', function(socket) {
-  console.log('New player joined. Id: ' + socket.id)
-  PLAYER_IDS.push(socket.id)
-  console.log('num playes: ' + PLAYER_IDS.length)
+  handlePlayerConnect(socket.id)
     
   // if STARTING_PLAYER
   if (PLAYER_IDS.length == 1) {
@@ -31,10 +29,11 @@ io.on('connection', function(socket) {
     socket.emit('starting_info', {'board': STARTING_BOARD, 'socket_id': socket.id, 'shop': STARTING_SHOP, 'starting_player': false} )
   }
 
-  console.log(PLAYER_IDS.length)
+  console.log("Players: ")
+  console.log(PLAYER_IDS)
 
   // If the first player is connecting
-  if (PLAYER_IDS[ACTIVE_PLAYER_INDEX] === socket.id) { 
+  if (PLAYER_IDS[ACTIVE_PLAYER_INDEX].socket_id === socket.id) { 
     // Emit message to specific client rather than to all connected clients
     io.sockets.emit('not_your_turn')
     socket.emit('your_turn')
@@ -52,6 +51,9 @@ io.on('connection', function(socket) {
   // When a client disconnects, clean that connection up
   socket.on('disconnect', function() {
     handleDisconnect(socket.id)
+    console.log("Players: ")
+    console.log(PLAYER_IDS)
+
   })
 
   socket.on('chat_message', function(message) {
@@ -65,18 +67,39 @@ http.listen(8080, function(){
   console.log('listening on *:8080')
 })
 
+function handlePlayerConnect(socket_id) {
+  // replace first inactive socket with new connection
+  for (var i=0; i<PLAYER_IDS.length; i++) {
+    if (!PLAYER_IDS[i].active) {
+      PLAYER_IDS[i].socket_id = socket_id
+      PLAYER_IDS[i].active = true 
+      console.log('Player reconnected with Id: ' + socket_id)
+      return
+    }
+  }
+  if (PLAYER_IDS.length < 2) {
+    console.log('New player joined. Id: ' + socket_id)
+    PLAYER_IDS.push({'socket_id': socket_id, 'active': true})
+  }
+}
+
+function handleDisconnect(socket_id) {
+  console.log('Player disconnected with Id: ' + socket.id)
+  for (var i=0; i<PLAYER_IDS.length; i++) {
+    if (PLAYER_IDS[i].socket_id == socket_id) {
+      PLAYER_IDS[i].active = false
+      return
+    }
+  }
+}
 
 function emitMoveToPlayers(client_object, socket) {  
-  if (PLAYER_IDS[ACTIVE_PLAYER_INDEX] === socket.id) {
+  if (PLAYER_IDS[ACTIVE_PLAYER_INDEX].socket_id === socket.id) {
     io.sockets.emit('server_response', {'marker_placement': client_object['marker_placement'], 'socket_id': socket.id})
 
     socket.emit('not_your_turn')
     ACTIVE_PLAYER_INDEX = +(!ACTIVE_PLAYER_INDEX)
   }
-}
-
-function handleDisconnect(socket_id) {
-  PLAYER_IDS.splice(PLAYER_IDS.indexOf(socket_id), 1)
 }
 
 function getTileType() {
