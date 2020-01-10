@@ -23,12 +23,16 @@
 
 // Matrix of Tile objects. Details of board should come from server on game start
 var BOARD = undefined
+var BUILDINGS = undefined
 var SHOP = undefined
 
 var SOCKET_ID = undefined
 
 var MY_TURN = false
-var MY_MOVE = undefined
+var MY_MOVE = {
+  'marker_placement': undefined, 
+  'building': undefined
+}
 
 var STARTING_PLAYER = false
 var MY_RESOURCES = {'bm':0, 'l':0, 'c':0}
@@ -74,11 +78,14 @@ function displayBoard() {
 	        console.log("cell clicked:")
 	        console.log(row)
 	        console.log(col)
-		 			if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
-		 				clearPendingSelections()
-		 				cell.innerText = '*'
-		 				MY_MOVE = {'marker_placement': {'row': row, 'col': col}}
-		 			}
+
+          if (MY_MOVE['building']===undefined) {
+		 			  if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
+		 				  clearPendingPlacements()
+		 				  cell.innerText = '*'
+		 				  MY_MOVE['marker_placement'] = {'row': row, 'col': col}
+		 			  }
+          }
 	    	}
 	 			
 	  	}(cell) // immediatlly invoke this function to tie it to correct cell
@@ -87,7 +94,8 @@ function displayBoard() {
 	}
 }
 
-function clearPendingSelections() {
+// remove * marker from selected tiles
+function clearPendingPlacements() {
 	for (row = 0; row < BOARD.length; row++) {
 		for (col = 0; col < BOARD[row].length; col++) {
 			if (document.getElementById(row + "_" + col).innerText == "*") {
@@ -198,11 +206,31 @@ function displayShop() {
 	}
 	for (i = 0; i < SHOP.length; i++) { 
 		var row = document.createElement("tr")
+    row.id = SHOP[i]['name']
+    row.style.backgroundColor = 'white'
+
+    // onclick function to handle building
 		row.onclick = function(row) {
 			return function() {
-				console.log(row)
-    	}
-		}(row)
+        buildingName = row.id
+        if (MY_MOVE['marker_placement'] !== undefined) {
+          try {
+            if (MY_MOVE['building']['name'] === buildingName) {
+		 		      MY_MOVE['building'] = undefined
+              row.style.backgroundColor = 'white'
+            } else {
+		          document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'
+		 		      MY_MOVE['building'] = {'name': buildingName}
+              row.style.backgroundColor = 'red'
+            }
+          } catch (x) {
+		 		    MY_MOVE['building'] = {'name': buildingName}
+            row.style.backgroundColor = 'red'
+          }
+	        console.log(MY_MOVE)
+        }
+      }
+		}(row, i)
 		var datum
 		for (attribute of Object.keys(SHOP[i])) {
 			datum = document.createElement("th")
@@ -224,6 +252,7 @@ function displayResources() {
 // Reconcile global variables to server's values. Display elements.
 function ingestServerResponse(server_response) {
 	BOARD = server_response.game_state.board
+  BUILDINGS = server_response.game_state.buildings
   SHOP = server_response.game_state.shop
 
 	if (STARTING_PLAYER) {
@@ -233,6 +262,7 @@ function ingestServerResponse(server_response) {
   }
 
   displayBoard()
+  displayBuildings()
   displayShop()
   displayResources()
 }
@@ -276,7 +306,8 @@ window.onload = () => {
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
     socket.emit('submit_move', MY_MOVE);
-    MY_MOVE = undefined
+    MY_MOVE['marker_placement'] = undefined
+    MY_MOVE['building'] = undefined
   }
 
   document.getElementById('message_btn').onclick = function() {

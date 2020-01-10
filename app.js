@@ -14,6 +14,7 @@ var PLAYER_IDS = []
 
 var GAME_STATE = {
   'board': generateBoard(),
+  'buildings': [],
   'shop': generateShop(5),
   'p1_resources': {'bm':0, 'l':0, 'c':0},
   'p2_resources': {'bm':0, 'l':0, 'c':0}
