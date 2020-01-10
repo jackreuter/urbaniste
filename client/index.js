@@ -5,7 +5,7 @@
 		{
 			id: ,
 			player: ,
-			type: ,
+			name: ,
 			location_array: , // unordered list of coordinates this building exists on
 		}
 
@@ -70,24 +70,58 @@ function displayBoard() {
 	    	cell.innerText = 'Enemy'
 	    }
 
+      // handle hex click
+      // force marker placement selection first
+      // then allow building selection, with shape restrictions
 	    cell.onclick = function(cell) {
 	    	return function() {
 	    		var coor = cell.id.split("_")
 		 			var row = +coor[0]
 		 			var col = +coor[1]
-	        console.log("cell clicked:")
-	        console.log(row)
-	        console.log(col)
 
+          // force marker selection first
           if (MY_MOVE['building']===undefined) {
 		 			  if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
 		 				  clearPendingPlacements()
 		 				  cell.innerText = '*'
 		 				  MY_MOVE['marker_placement'] = {'row': row, 'col': col}
 		 			  }
+          } else {
+
+            // handle building selection
+            // check if first tile selected
+            if (MY_MOVE['building']['location_array'].length == 0) {
+              MY_MOVE['building']['location_array'] = [[row, col]]
+              cell.innerText = 'B'
+            } else {
+              // if tile have already been selected, check if click is to remove
+              locationArray = MY_MOVE['building']['location_array']
+              newLocationArray = []
+              found = false
+              for (i = 0; i < locationArray.length; i++) {
+                if (locationArray[i][0] == row && locationArray[i][1] == col) {
+                  found = true
+                } else {
+                  newLocationArray.push(locationArray[i])
+                }
+              }
+              // if tile already selected, use new array with selection removed
+              if (found) {
+                MY_MOVE['building']['location_array'] = newLocationArray
+                cell.innerText = ""
+                console.log("found")
+                console.log(newLocationArray)
+              // otherwise, add new tile to array
+              } else {
+                newLocationArray.push([row, col])
+                MY_MOVE['building']['location_array'] = newLocationArray
+                cell.innerText = 'B'
+                console.log("not found")
+                console.log(newLocationArray)
+              }
+            }
           }
-	    	}
-	 			
+        }
 	  	}(cell) // immediatlly invoke this function to tie it to correct cell
 	    container.appendChild(cell).className = getHexagonColorString(row, col)
 	  }
@@ -99,6 +133,17 @@ function clearPendingPlacements() {
 	for (row = 0; row < BOARD.length; row++) {
 		for (col = 0; col < BOARD[row].length; col++) {
 			if (document.getElementById(row + "_" + col).innerText == "*") {
+				 document.getElementById(row + "_" + col).innerText = ""
+			}
+		}
+	}
+}
+
+// remove B marker from selected tiles
+function clearPendingBuildings() {
+	for (row = 0; row < BOARD.length; row++) {
+		for (col = 0; col < BOARD[row].length; col++) {
+			if (document.getElementById(row + "_" + col).innerText == "B") {
 				 document.getElementById(row + "_" + col).innerText = ""
 			}
 		}
@@ -209,7 +254,7 @@ function displayShop() {
     row.id = SHOP[i]['name']
     row.style.backgroundColor = 'white'
 
-    // onclick function to handle building
+    // onclick function to handle building selection
 		row.onclick = function(row) {
 			return function() {
         buildingName = row.id
@@ -218,16 +263,18 @@ function displayShop() {
             if (MY_MOVE['building']['name'] === buildingName) {
 		 		      MY_MOVE['building'] = undefined
               row.style.backgroundColor = 'white'
+              clearPendingBuildings()
             } else {
 		          document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'
-		 		      MY_MOVE['building'] = {'name': buildingName}
+		 		      MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
               row.style.backgroundColor = 'red'
+              clearPendingBuildings()
             }
           } catch (x) {
-		 		    MY_MOVE['building'] = {'name': buildingName}
+		 		    MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
             row.style.backgroundColor = 'red'
+            clearPendingBuildings()
           }
-	        console.log(MY_MOVE)
         }
       }
 		}(row, i)
