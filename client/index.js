@@ -91,8 +91,10 @@ function displayBoard() {
             // handle building selection
             // check if first tile selected
             if (MY_MOVE['building']['location_array'].length == 0) {
-              MY_MOVE['building']['location_array'] = [[row, col]]
-              cell.innerText = 'B'
+              if (BUILDING_VALIDITY_FUNCTIONS[MY_MOVE['building']['name']]([[row, col]])) {
+                MY_MOVE['building']['location_array'] = [[row, col]]
+                cell.innerText = 'B'
+              }
             } else {
               // if tile have already been selected, check if click is to remove
               locationArray = MY_MOVE['building']['location_array']
@@ -109,11 +111,13 @@ function displayBoard() {
               if (found) {
                 MY_MOVE['building']['location_array'] = newLocationArray
                 cell.innerText = ""
-              // otherwise, add new tile to array
+              // otherwise, check validity and add new tile to array
               } else {
                 newLocationArray.push([row, col])
-                MY_MOVE['building']['location_array'] = newLocationArray
-                cell.innerText = 'B'
+                if (BUILDING_VALIDITY_FUNCTIONS[MY_MOVE['building']['name']](newLocationArray)) {
+                  MY_MOVE['building']['location_array'] = newLocationArray
+                  cell.innerText = 'B'
+                }
               }
             }
           }
@@ -160,83 +164,6 @@ function displayBuildings() {
   $("svg").append(newLine);
 }
 
-// helper functions to check building validity
-function checkShapeDouble(tiles) {
-  if (tiles.length != 2) {
-    return false;
-  } else {
-  }
-}
-function checkShape3Line(tiles) {
-  if (tiles.length != 3) {
-    return false;
-  } else {
-  }
-}
-function checkShapeV(tiles) {
-  if (tiles.length != 3) {
-    return false;
-  } else {
-  }
-}
-function checkShapeCane(tiles) {
-  if (tiles.length != 4) {
-    return false;
-  } else {
-  }
-}
-function checkShapeY(tiles) {
-  if (tiles.length != 4) {
-    return false;
-  } else {
-  }
-}
-
-// check if two sets of coordinates are adjacent
-function adjacent(row1, col1, row2, col2) {
-}
-
-// get all adjacent tile coordinates
-function getAdjacentCoordinates(row, col) {
-  adjacents = [[row, col-1], [row, col+1]]
-	if (row%2 == 0) {
-    adjacents.push([row-1, col-1])
-    adjacents.push([row+1, col-1])
-    adjacents.push([row-1, col])
-    adjacents.push([row+1, col])
-	} else {
-    adjacents.push([row-1, col])
-    adjacents.push([row+1, col])
-    adjacents.push([row-1, col+1])
-    adjacents.push([row+1, col+1])
-  }
-  return adjacents
-}
-
-// check if tile at coordinates is friendly
-function friendly(row, col) {
-	try {
-		if (STARTING_PLAYER) {
-  		return BOARD[row][col].marker == 'player_one'
-  	} else {
-  		return BOARD[row][col].marker == 'player_two'
-  	}
-	} catch(e) {
-		return false
-	}
-}
-
-// check if tile at coordinates is adjacent to friendly marker
-function tileAdjacentToFriendly(row, col) {
-  adjacentCoordinates = getAdjacentCoordinates(row, col)
-  for (i = 0; i < adjacentCoordinates.length; i++) {
-    coords = adjacentCoordinates[i]
-    if (friendly(coords[0], coords[1])) {
-      return true;
-    }
-  }
-  return false;
-}
 
 // render shop HTML
 function displayShop() {
@@ -354,5 +281,168 @@ window.onload = () => {
 
   document.getElementById('message_btn').onclick = function() {
   	socket.emit('chat_message', document.getElementById('message_block').value)
+  }
+}
+
+/*-----------------------BUILDING VALIDITY FUNCTIONS---------------------------*/
+var BUILDING_VALIDITY_FUNCTIONS = {
+  'Harbor': harborValid,
+  'Tax House': taxHouseValid,
+  'Docks': docksValid,
+  'Settlement': settlementValid,
+  'Bazaar': bazaarValid,
+  'Quarry': quarryValid,
+  'Bank': bankValid,
+  'Embassy': embassyValid,
+  'Guard Tower': guardTowerValid,
+  'Customs Office': customsOfficeValid,
+  'Casino': casinoValid,
+  'Lighthouse': lightHouseValid,
+  'Graveyard': graveyardValid,
+  'Jail': jailValid,
+  'Workshop': workShopValid,
+  'Mill': millValid,
+  'Wall': wallValid,
+  'Church': churchValid,
+  'Boulevard': boulevardValid,
+  'Aqueduct': aqueductValid,
+  'Harbor': harborValid,
+  'Shipyard': shipyardValid,
+  'Trolley': trolleyValid,
+  'City Hall': cityHallValid,
+  'Bridge': bridgeValid,
+  'Tunnel': tunnelValid,
+  'Sewers': sewersValid,
+  'Depot': depotValid,
+  'Plaza': plazaValid,
+}
+
+function harborValid(coords) {
+  if (coords.length != 1) {
+    return false
+  } else { 
+    row = coords[0][0]
+    col = coords[0][1]
+    if (tileAdjacentToFriendlyOrPlacement(row, col) && BOARD[row][col].type === 'w') {
+      return true
+    } else {
+      return false
+    }
+  }
+}
+
+function harborValid() {return false}
+function taxHouseValid() {return false}
+function docksValid() {return false}
+function settlementValid() {return false}
+function bazaarValid() {return false}
+function quarryValid() {return false}
+function bankValid() {return false}
+function embassyValid() {return false}
+function guardTowerValid() {return false}
+function customsOfficeValid() {return false}
+function casinoValid() {return false}
+function lightHouseValid() {return false}
+function graveyardValid() {return false}
+function jailValid() {return false}
+function workShopValid() {return false}
+function millValid() {return false}
+function wallValid() {return false}
+function churchValid() {return false}
+function boulevardValid() {return false}
+function aqueductValid() {return false}
+function harborValid() {return false}
+function shipyardValid() {return false}
+function trolleyValid() {return false}
+function cityHallValid() {return false}
+function bridgeValid() {return false}
+function tunnelValid() {return false}
+function sewersValid() {return false}
+function depotValid() {return false}
+function plazaValid() {return false}
+
+// get all adjacent tile coordinates
+function getAdjacentCoordinates(row, col) {
+  adjacents = [[row, col-1], [row, col+1]]
+	if (row%2 == 0) {
+    adjacents.push([row-1, col-1])
+    adjacents.push([row+1, col-1])
+    adjacents.push([row-1, col])
+    adjacents.push([row+1, col])
+	} else {
+    adjacents.push([row-1, col])
+    adjacents.push([row+1, col])
+    adjacents.push([row-1, col+1])
+    adjacents.push([row+1, col+1])
+  }
+  return adjacents
+}
+
+// check if tile at coordinates is friendly
+function friendly(row, col) {
+	try {
+		if (STARTING_PLAYER) {
+  		return BOARD[row][col].marker == 'player_one'
+  	} else {
+  		return BOARD[row][col].marker == 'player_two'
+  	}
+	} catch(e) {
+		return false
+	}
+}
+
+// check if tile at coordinates is adjacent to friendly marker
+function tileAdjacentToFriendly(row, col) {
+  adjacentCoordinates = getAdjacentCoordinates(row, col)
+  for (i = 0; i < adjacentCoordinates.length; i++) {
+    coords = adjacentCoordinates[i]
+    if (friendly(coords[0], coords[1])) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// check if tile at coordinates is adjacent to friendly marker or placement
+function tileAdjacentToFriendlyOrPlacement(row, col) {
+  adjacentCoordinates = getAdjacentCoordinates(row, col)
+  for (i = 0; i < adjacentCoordinates.length; i++) {
+    coords = adjacentCoordinates[i]
+    if (friendly(coords[0], coords[1]) || (MY_MOVE['marker_placement']['row'] == coords[0] && MY_MOVE['marker_placement']['col'] == coords[1])) {
+      return true;
+    }
+  }
+  return false;
+}
+
+// helper functions to check building validity
+function checkShapeDouble(tiles) {
+  if (tiles.length != 2) {
+    return false;
+  } else {
+  }
+}
+function checkShape3Line(tiles) {
+  if (tiles.length != 3) {
+    return false;
+  } else {
+  }
+}
+function checkShapeV(tiles) {
+  if (tiles.length != 3) {
+    return false;
+  } else {
+  }
+}
+function checkShapeCane(tiles) {
+  if (tiles.length != 4) {
+    return false;
+  } else {
+  }
+}
+function checkShapeY(tiles) {
+  if (tiles.length != 4) {
+    return false;
+  } else {
   }
 }
