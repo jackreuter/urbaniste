@@ -34,6 +34,7 @@ var STARTING_PLAYER = false
 var MY_RESOURCES = {'bm':0, 'l':0, 'c':0}
 
 
+// creates HTML class name for hexagons, referenced by CSS
 function getHexagonColorString(row, col) {
 	var type = BOARD[row][col].type
 	if (type == 'w') { return 'hexagon color-blue' }
@@ -42,6 +43,7 @@ function getHexagonColorString(row, col) {
 	if (type == 'c') { return 'hexagon color-yellow' }
 }
 
+// render the board HTML
 function displayBoard() {
 	const container = document.getElementById("board")
 	while (document.getElementById('board').childNodes.length > 0) {
@@ -95,9 +97,8 @@ function clearPendingSelections() {
 	}
 }
 
+// Iterate through BOARD object and draw svg lines for buildings
 function displayBuildings() {
-	// Iterate through BOARD object and draw svg lines for buildings
-
   // just playing around with svg lines
   console.log("line test")
   var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
@@ -111,6 +112,7 @@ function displayBuildings() {
   $("svg").append(newLine);
 }
 
+// helper functions to check building validity
 function checkShapeDouble(tiles) {
   if (tiles.length != 2) {
     return false;
@@ -163,7 +165,7 @@ function getAdjacentCoordinates(row, col) {
   return adjacents
 }
 
-// check if tile at coordinates has friendly marker
+// check if tile at coordinates is friendly
 function friendly(row, col) {
 	try {
 		if (STARTING_PLAYER) {
@@ -188,6 +190,7 @@ function tileAdjacentToFriendly(row, col) {
   return false;
 }
 
+// render shop HTML
 function displayShop() {
 	var shop = document.getElementById('shop')
 	while (document.getElementById('shop').childNodes.length > 2) {
@@ -211,6 +214,7 @@ function displayShop() {
 	}
 }
 
+// render resource list HTML
 function displayResources() {
 	document.getElementById('resource_bm').innerText = "Building Materials: " + MY_RESOURCES.bm
 	document.getElementById('resource_l').innerText = "Labor: " + MY_RESOURCES.l
