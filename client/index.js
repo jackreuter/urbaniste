@@ -21,20 +21,17 @@
 */
 
 
-// Matrix of Tile objects. Details of bord should come from server on game start
+// Matrix of Tile objects. Details of board should come from server on game start
 var BOARD = undefined
-// Should come from server on game start
 var SHOP = undefined
 
-var MY_TURN = false
 var SOCKET_ID = undefined
-var RESPONSE = undefined
+
+var MY_TURN = false
+var MY_MOVE = undefined
 
 var STARTING_PLAYER = false
-
-var MY_BM = 0
-var MY_C = 0
-var MY_L = 0
+var MY_RESOURCES = {'bm':0, 'l':0, 'c':0}
 
 
 function getHexagonColorString(row, col) {
@@ -47,7 +44,9 @@ function getHexagonColorString(row, col) {
 
 function displayBoard() {
 	const container = document.getElementById("board")
-
+	while (document.getElementById('board').childNodes.length > 0) {
+		document.getElementById('board').childNodes[0].remove()
+	}
 	rows = BOARD.length
 	cols = BOARD[1].length
   container.style.setProperty('--grid_rows', rows)
@@ -76,7 +75,7 @@ function displayBoard() {
 		 			if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
 		 				clearPendingSelections()
 		 				cell.innerText = '*'
-		 				RESPONSE = {'marker_placement': cell.id}
+		 				MY_MOVE = {'marker_placement': {'row': row, 'col': col}}
 		 			}
 	    	}
 	 			
@@ -188,6 +187,9 @@ function tileAdjacentToFriendly(row, col) {
 
 function displayShop() {
 	var shop = document.getElementById('shop')
+	while (document.getElementById('shop').childNodes.length > 2) {
+		document.getElementById('shop').childNodes[2].remove()
+	}
 	for (i = 0; i < SHOP.length; i++) { 
 		var row = document.createElement("tr")
 		row.onclick = function(row) {
@@ -206,19 +208,26 @@ function displayShop() {
 	}
 }
 
-function incrementResource(type) {
-	if (type == 'bm') {
-		MY_BM += 1
-		document.getElementById('resource_bm').innerText = "Building Materials: " + MY_BM
-	}
-	if (type == 'l') {
-		MY_L += 1
-		document.getElementById('resource_l').innerText = "Labor: " + MY_L
-	}
-	if (type == 'c') {
-		MY_C += 1
-		document.getElementById('resource_c').innerText = "Coin: " + MY_C
-	}
+function displayResources() {
+	document.getElementById('resource_bm').innerText = "Building Materials: " + MY_RESOURCES.bm
+	document.getElementById('resource_l').innerText = "Labor: " + MY_RESOURCES.l
+	document.getElementById('resource_c').innerText = "Coin: " + MY_RESOURCES.c
+}
+
+// Reconcile global variables to server's values. Display elements.
+function ingestServerResponse(server_response) {
+	BOARD = server_response.game_state.board
+  SHOP = server_response.game_state.shop
+
+	if (STARTING_PLAYER) {
+    MY_RESOURCES = server_response.game_state.p1_resources
+  } else {
+    MY_RESOURCES = server_response.game_state.p2_resources
+  }
+
+  displayBoard()
+  displayShop()
+  displayResources()
 }
 
 window.onload = () => {
@@ -226,55 +235,31 @@ window.onload = () => {
 
 	// handle different messages from server
 	socket.on('your_turn', () => {
-		console.log('my turn')
     MY_TURN = true
     document.getElementById('turn_title').innerText = 'Your Turn'
   });
 
   socket.on('not_your_turn', () => {
-  	console.log('not my turn')
     MY_TURN = false
     document.getElementById('turn_title').innerText = 'Opponents Turn'
   });
 
-  socket.on('server_response', (response) => {
+  socket.on('server_response', (server_response) => {
+    console.log(server_response.game_state)
+
     MY_TURN = true
     document.getElementById('turn_title').innerText = 'Your Turn'
 
-    var coor = response.marker_placement.split("_")
-		var row = coor[0]
-		var col = coor[1]
-    if (response.socket_id == SOCKET_ID) {
-    	if (STARTING_PLAYER) {
-    		BOARD[row][col].marker = 'player_one'
-    	} else {
-    		BOARD[row][col].marker = 'player_two'
-    	}
-    	document.getElementById(response.marker_placement).innerText = 'Mine'
-    	incrementResource(BOARD[row][col].type)
-    }
-    else {
-    	if (STARTING_PLAYER) {
-    		BOARD[row][col].marker = 'player_two'
-    	} else {
-    		BOARD[row][col].marker = 'player_one'
-    	}
-    	document.getElementById(response.marker_placement).innerText = 'Enemy'
-    }
+		ingestServerResponse(server_response)  
   });
-	socket.on('starting_info', (response) => {
-    console.log(response)
-    BOARD = response.board
+
+	socket.on('starting_info', (server_response) => {
+    console.log(server_response)
     
-    SOCKET_ID = response.socket_id
-    SHOP = response.shop
+    STARTING_PLAYER = server_response.starting_player
+    SOCKET_ID = server_response.socket_id
 
-    STARTING_PLAYER = response.starting_player
-    console.log("Am starting player: " + STARTING_PLAYER)
-
-    displayBoard()
-    displayBuildings();
-    displayShop()
+    ingestServerResponse(server_response)  
   });
 
 	socket.on('received_message', function(message) {
@@ -283,8 +268,8 @@ window.onload = () => {
 
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
-    socket.emit('submit_move', RESPONSE);
-    RESPONSE = undefined
+    socket.emit('submit_move', MY_MOVE);
+    MY_MOVE = undefined
   }
 
   document.getElementById('message_btn').onclick = function() {
