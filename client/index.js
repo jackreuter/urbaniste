@@ -109,15 +109,11 @@ function displayBoard() {
               if (found) {
                 MY_MOVE['building']['location_array'] = newLocationArray
                 cell.innerText = ""
-                console.log("found")
-                console.log(newLocationArray)
               // otherwise, add new tile to array
               } else {
                 newLocationArray.push([row, col])
                 MY_MOVE['building']['location_array'] = newLocationArray
                 cell.innerText = 'B'
-                console.log("not found")
-                console.log(newLocationArray)
               }
             }
           }
@@ -153,7 +149,6 @@ function clearPendingBuildings() {
 // Iterate through BOARD object and draw svg lines for buildings
 function displayBuildings() {
   // just playing around with svg lines
-  console.log("line test")
   var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
   newLine.setAttribute('id','line');
   newLine.setAttribute('x1','35');
