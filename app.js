@@ -12,8 +12,12 @@ var io = require('socket.io')(http)
 var ACTIVE_PLAYER_INDEX = 0
 var PLAYER_IDS = []
 
-var STARTING_BOARD = generateBoard()
-var STARTING_SHOP = generateShop(5)
+var GAME_STATE = {
+  'board': generateBoard(),
+  'shop': generateShop(5),
+  'p1_resources': {'bm':0, 'l':0, 'c':0},
+  'p2_resources': {'bm':0, 'l':0, 'c':0}
+}
 
 // Express to serve correct client side code
 app.use(express.static(path.join(__dirname, 'client')))
@@ -23,10 +27,18 @@ io.on('connection', function(socket) {
   handlePlayerConnect(socket.id)
     
   // if STARTING_PLAYER
-  if (PLAYER_IDS.length == 1) {
-    socket.emit('starting_info', {'board': STARTING_BOARD, 'socket_id': socket.id, 'shop': STARTING_SHOP, 'starting_player': true} )
+  if (socket.id == PLAYER_IDS[0].socket_id) {
+    socket.emit('starting_info', {
+      'game_state': GAME_STATE,
+      'socket_id': socket.id,
+      'starting_player': true
+    })
   } else {
-    socket.emit('starting_info', {'board': STARTING_BOARD, 'socket_id': socket.id, 'shop': STARTING_SHOP, 'starting_player': false} )
+    socket.emit('starting_info', {
+      'game_state': GAME_STATE,
+      'socket_id': socket.id,
+      'starting_player': false
+    })
   }
 
   console.log("Players: ")
@@ -44,8 +56,9 @@ io.on('connection', function(socket) {
 
   // When "submit_move" message comes in, call a function
   socket.on('submit_move', function(client_object) {
-    if (client_object) {
-      emitMoveToPlayers(client_object, socket)
+    if (validateMove(client_object, socket.id)) {
+      processMove(client_object)
+      emitMoveToPlayers(GAME_STATE, socket)
     }
   })
   // When a client disconnects, clean that connection up
@@ -79,12 +92,15 @@ function handlePlayerConnect(socket_id) {
   }
   if (PLAYER_IDS.length < 2) {
     console.log('New player joined. Id: ' + socket_id)
-    PLAYER_IDS.push({'socket_id': socket_id, 'active': true})
+    PLAYER_IDS.push({
+      'socket_id': socket_id,
+      'active': true
+    })
   }
 }
 
 function handleDisconnect(socket_id) {
-  console.log('Player disconnected with Id: ' + socket.id)
+  console.log('Player disconnected with Id: ' + socket_id)
   for (var i=0; i<PLAYER_IDS.length; i++) {
     if (PLAYER_IDS[i].socket_id == socket_id) {
       PLAYER_IDS[i].active = false
@@ -93,13 +109,13 @@ function handleDisconnect(socket_id) {
   }
 }
 
-function emitMoveToPlayers(client_object, socket) {  
-  if (PLAYER_IDS[ACTIVE_PLAYER_INDEX].socket_id === socket.id) {
-    io.sockets.emit('server_response', {'marker_placement': client_object['marker_placement'], 'socket_id': socket.id})
-
-    socket.emit('not_your_turn')
-    ACTIVE_PLAYER_INDEX = +(!ACTIVE_PLAYER_INDEX)
-  }
+function emitMoveToPlayers(GAME_STATE, socket) {  
+  io.sockets.emit('server_response', {
+    'game_state': GAME_STATE,
+    'socket_id': socket.id
+  })
+  socket.emit('not_your_turn')
+  ACTIVE_PLAYER_INDEX = +(!ACTIVE_PLAYER_INDEX)
 }
 
 function getTileType() {
@@ -179,7 +195,59 @@ function generateBoard() {
   return board
 }
 
+function validateMove(client_object, socket_id) {
+  // If it's the active player's turn to submit
+  if (client_object && PLAYER_IDS[ACTIVE_PLAYER_INDEX].socket_id === socket_id){
+    var row = client_object.marker_placement.row
+    var col = client_object.marker_placement.col 
+    if (GAME_STATE.board[row][col].marker == 'empty' && GAME_STATE.board[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
+      return true
+    }
+  }
+  return false
+}
 
+function processMove(client_object) {
+  var row = client_object.marker_placement.row
+  var col = client_object.marker_placement.col
+  if (ACTIVE_PLAYER_INDEX == 0) {
+    GAME_STATE.board[row][col].marker = 'player_one'
+  } else {
+    GAME_STATE.board[row][col].marker = 'player_two'
+  }    
+  incrementResource(GAME_STATE.board[row][col].type, ACTIVE_PLAYER_INDEX)
+}
+
+function incrementResource(type, player_index) {
+  if (player_index == 0) {
+    GAME_STATE.p1_resources[type] += 1
+  } else {
+    GAME_STATE.p2_resources[type] += 1
+  }
+}
+
+function tileAdjacentToFriendly(row, col) {
+  if (adjacent(row, col+1) || adjacent(row, col-1)) {
+    return true
+  }
+  if (row%2 == 0) {
+    return (adjacent(row-1, col-1) || adjacent(row+1, col-1) || adjacent(row-1, col) || adjacent(row+1, col))
+  } else {
+    return (adjacent(row-1, col) || adjacent(row+1, col) || adjacent(row-1, col+1) || adjacent(row+1, col+1))
+  }
+}
+
+function adjacent(row, col) {
+  try {
+    if (!ACTIVE_PLAYER_INDEX) {
+      return GAME_STATE.board[row][col].marker == 'player_one'
+    } else {
+      return GAME_STATE.board[row][col].marker == 'player_two'
+    }
+  } catch(e) {
+    return false
+  }
+}
 
 
 
