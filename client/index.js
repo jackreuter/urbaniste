@@ -142,10 +142,12 @@ function checkShapeY(tiles) {
   }
 }
 
+// check if two sets of coordinates are adjacent
 function adjacent(row1, col1, row2, col2) {
 }
 
-function getAdjacents(row, col) {
+// get all adjacent tile coordinates
+function getAdjacentCoordinates(row, col) {
   adjacents = [[row, col-1], [row, col+1]]
 	if (row%2 == 0) {
     adjacents.push([row-1, col-1])
@@ -161,6 +163,7 @@ function getAdjacents(row, col) {
   return adjacents
 }
 
+// check if tile at coordinates has friendly marker
 function friendly(row, col) {
 	try {
 		if (STARTING_PLAYER) {
@@ -173,12 +176,12 @@ function friendly(row, col) {
 	}
 }
 
+// check if tile at coordinates is adjacent to friendly marker
 function tileAdjacentToFriendly(row, col) {
-  allAdjacents = getAdjacents(row, col)
-  for (tile in allAdjacents) {
-    console.log(tile)
-    console.log(friendly(tile))
-    if (friendly(tile)) {
+  adjacentCoordinates = getAdjacentCoordinates(row, col)
+  for (i = 0; i < adjacentCoordinates.length; i++) {
+    coords = adjacentCoordinates[i]
+    if (friendly(coords[0], coords[1])) {
       return true;
     }
   }
