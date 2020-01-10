@@ -98,12 +98,71 @@ function clearPendingSelections() {
 
 function displayBuildings() {
 	// Iterate through BOARD object and draw svg lines for buildings
+
+  // just playing around with svg lines
+  console.log("line test")
+  var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+  newLine.setAttribute('id','line');
+  newLine.setAttribute('x1','35');
+  newLine.setAttribute('y1','35');
+  newLine.setAttribute('x2','130');
+  newLine.setAttribute('y2','200');
+  newLine.setAttribute("stroke", "black");
+  newLine.setAttribute("stroke-width", '40');
+  $("svg").append(newLine);
 }
 
-function adjacent(row, col) {
-	console.log('adjacent')
-	console.log(row)
-	console.log(col)
+function checkShapeDouble(tiles) {
+  if (tiles.length != 2) {
+    return false;
+  } else {
+  }
+}
+function checkShape3Line(tiles) {
+  if (tiles.length != 3) {
+    return false;
+  } else {
+  }
+}
+function checkShapeV(tiles) {
+  if (tiles.length != 3) {
+    return false;
+  } else {
+  }
+}
+function checkShapeCane(tiles) {
+  if (tiles.length != 4) {
+    return false;
+  } else {
+  }
+}
+function checkShapeY(tiles) {
+  if (tiles.length != 4) {
+    return false;
+  } else {
+  }
+}
+
+function adjacent(row1, col1, row2, col2) {
+}
+
+function getAdjacents(row, col) {
+  adjacents = [[row, col-1], [row, col+1]]
+	if (row%2 == 0) {
+    adjacents.push([row-1, col-1])
+    adjacents.push([row+1, col-1])
+    adjacents.push([row-1, col])
+    adjacents.push([row+1, col])
+	} else {
+    adjacents.push([row-1, col])
+    adjacents.push([row+1, col])
+    adjacents.push([row-1, col+1])
+    adjacents.push([row+1, col+1])
+  }
+  return adjacents
+}
+
+function friendly(row, col) {
 	try {
 		if (STARTING_PLAYER) {
   		return BOARD[row][col].marker == 'player_one'
@@ -116,14 +175,15 @@ function adjacent(row, col) {
 }
 
 function tileAdjacentToFriendly(row, col) {
-	if (adjacent(row, col+1) || adjacent(row, col-1)) {
-		return true
-	}
-	if (row%2 == 0) {
-		return (adjacent(row-1, col-1) || adjacent(row+1, col-1) || adjacent(row-1, col) || adjacent(row+1, col))
-	} else {
-	  return (adjacent(row-1, col) || adjacent(row+1, col) || adjacent(row-1, col+1) || adjacent(row+1, col+1))
-	}
+  allAdjacents = getAdjacents(row, col)
+  for (tile in allAdjacents) {
+    console.log(tile)
+    console.log(friendly(tile))
+    if (friendly(tile)) {
+      return true;
+    }
+  }
+  return false;
 }
 
 function displayShop() {
@@ -213,6 +273,7 @@ window.onload = () => {
     console.log("Am starting player: " + STARTING_PLAYER)
 
     displayBoard()
+    displayBuildings();
     displayShop()
   });
 
