@@ -81,11 +81,21 @@ function displayBoard() {
 
           // force marker selection first
           if (MY_MOVE['building']===undefined) {
-		 			  if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
-		 				  clearPendingPlacements()
-		 				  cell.innerText = '*'
-		 				  MY_MOVE['marker_placement'] = {'row': row, 'col': col}
-		 			  }
+						// Clicking on an already selected hex will de-select it.
+		        if (cell.innerText == '*') {
+			 				clearPendingSelections()
+			 				displayResources()
+
+			 				MY_MOVE = undefined
+			 			} else if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
+			 				clearPendingSelections()
+			 				cell.innerText = '*'
+			 				
+			 				MY_RESOURCES[BOARD[row][col].type] += 1
+			 				displayResources()
+
+			 				MY_MOVE = {'marker_placement': {'row': row, 'col': col}}
+			 			}
           } else {
 
             // handle building selection
@@ -133,7 +143,8 @@ function clearPendingPlacements() {
 	for (row = 0; row < BOARD.length; row++) {
 		for (col = 0; col < BOARD[row].length; col++) {
 			if (document.getElementById(row + "_" + col).innerText == "*") {
-				 document.getElementById(row + "_" + col).innerText = ""
+				document.getElementById(row + "_" + col).innerText = ""
+				MY_RESOURCES[BOARD[row][col].type] -= 1
 			}
 		}
 	}
