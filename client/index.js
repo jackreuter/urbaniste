@@ -331,7 +331,6 @@ function harborValid(coords) {
   }
 }
 
-function harborValid() {return false}
 function taxHouseValid() {return false}
 function docksValid() {return false}
 function settlementValid() {return false}
