@@ -17,7 +17,7 @@ var ACTIVE_PLAYER_INDEX = 0
 var PLAYER_IDS = []
 
 var GAME_STATE = {
-  'board': startingStateGeneration.generateBoard(),
+  'board': startingStateGeneration.generateBoard(13, 8),
   'buildings': [],
   'shop': startingStateGeneration.generateShop(5),
   'p1_resources': {'bm':0, 'l':0, 'c':0},

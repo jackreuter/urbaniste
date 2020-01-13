@@ -42,14 +42,14 @@
     return results
   }
 
-  module.exports.generateBoard = function() {
+  module.exports.generateBoard = function(num_rows, num_cols) {
     board = []
-    for (row=0; row<13; row+=1) {
+    for (row=0; row<num_rows; row+=1) {
       new_row = []
       //num_columns = (row%2 == 0) ? 8 : 9
-      num_columns = 8
+      num_columns = num_cols
       for (col=0; col<num_columns; col+=1) {
-        const markerType = getMarker(row, col)
+        const markerType = getMarker(row, col, num_rows, num_cols)
         type = getTileType(markerType)
         tile = {
           'marker': markerType,
@@ -78,11 +78,11 @@
     } 
   }
 
-  function getMarker(row, col) {
-    if ((row == 3 && col == 6) || (row == 9 && col == 1)) {
+  function getMarker(row, col, num_rows, num_cols) {
+    if ((row == 3 && col == (num_cols - 2)) || (row == (num_rows - 4) && col == 1)) {
       return "player_one"
     }
-    if ((row == 3 && col == 1) || (row == 9 && col == 6)) {
+    if ((row == 3 && col == 1) || (row == (num_rows - 4) && col == (num_cols - 2))) {
       return "player_two"
     }
     return 'empty'
