@@ -29,10 +29,7 @@ var SHOP = undefined
 var SOCKET_ID = undefined
 
 var MY_TURN = false
-var MY_MOVE = {
-  'marker_placement': undefined, 
-  'building': undefined
-}
+var MY_MOVE = {}
 
 var STARTING_PLAYER = false
 var MY_RESOURCES = {'bm':0, 'l':0, 'c':0}
@@ -79,16 +76,23 @@ function displayBoard() {
 		 			var row = +coor[0]
 		 			var col = +coor[1]
 
+          // create move object
+          if (MY_MOVE == {}) {
+            MY_MOVE = {
+              'marker_placement': undefined,
+              'building': undefined
+            }
+          }
+
           // force marker selection first
           if (MY_MOVE['building']===undefined) {
 						// Clicking on an already selected hex will de-select it.
 		        if (cell.innerText == '*') {
-			 				clearPendingSelections()
+			 				clearPendingPlacements()
 			 				displayResources()
-
-			 				MY_MOVE = undefined
+			 				MY_MOVE = {}
 			 			} else if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
-			 				clearPendingSelections()
+			 				clearPendingPlacements()
 			 				cell.innerText = '*'
 			 				
 			 				MY_RESOURCES[BOARD[row][col].type] += 1
@@ -190,7 +194,7 @@ function displayShop() {
     // onclick function to handle building selection
 		row.onclick = function(row) {
 			return function() {
-        buildingName = row.id
+        var buildingName = row.id
         if (MY_MOVE['marker_placement'] !== undefined) {
           try {
             if (MY_MOVE['building']['name'] === buildingName) {
@@ -210,7 +214,7 @@ function displayShop() {
           }
         }
       }
-		}(row, i)
+		}(row)
 		var datum
 		for (attribute of Object.keys(SHOP[i])) {
 			datum = document.createElement("th")
