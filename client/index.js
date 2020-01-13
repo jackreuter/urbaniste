@@ -73,7 +73,7 @@ function displayBoard() {
 	        if (cell.innerText == '*') {
 		 				clearPendingSelections()
 		 				displayResources()
-		 				
+
 		 				MY_MOVE = undefined
 		 			} else if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
 		 				clearPendingSelections()
@@ -83,7 +83,7 @@ function displayBoard() {
 		 				displayResources()
 
 		 				MY_MOVE = {'marker_placement': {'row': row, 'col': col}}
-		 			} 
+		 			}
 	    	}
 	 			
 	  	}(cell) // immediatlly invoke this function to tie it to correct cell
@@ -96,8 +96,8 @@ function clearPendingSelections() {
 	for (row = 0; row < BOARD.length; row++) {
 		for (col = 0; col < BOARD[row].length; col++) {
 			if (document.getElementById(row + "_" + col).innerText == "*") {
-				MY_RESOURCES[BOARD[row][col].type] -= 1
 				document.getElementById(row + "_" + col).innerText = ""
+				MY_RESOURCES[BOARD[row][col].type] -= 1
 			}
 		}
 	}
