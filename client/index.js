@@ -79,13 +79,11 @@ function displayBoard() {
           // force marker selection first
           if (!MY_MOVE['building']) {
 						// Clicking on an already selected hex will de-select it.
-						console.log("HERE")
 		        if (cell.innerText == '*') {
 			 				clearPendingPlacements()
 			 				displayResources()
 			 				MY_MOVE = {}
 			 			} else if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly) {
-			 				console.log("NOT HERE")
 			 				clearPendingPlacements()
 			 				cell.innerText = '*'
 			 				

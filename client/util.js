@@ -66,7 +66,6 @@ const ShapeUtils = {
   friendly: friendly,
   // check if tile at coordinates is adjacent to friendly marker, pending placement, or water tile
   tileAdjacencyCheck: (row, col, move, board, startingPlayer) => {
-    console.log('IN TILE')
     var adjacentCoordinates = getAdjacentCoordinates(row, col)
     var adjacentToFriendly = false
     var adjacentToPlacement = false
@@ -88,11 +87,6 @@ const ShapeUtils = {
       } catch (e) {
       }
     }
-    console.log({
-      'adjacentToFriendly': adjacentToFriendly,
-      'adjacentToPlacement': adjacentToPlacement,
-      'adjacentToWater': adjacentToWater
-    })
     return {
       'adjacentToFriendly': adjacentToFriendly,
       'adjacentToPlacement': adjacentToPlacement,
