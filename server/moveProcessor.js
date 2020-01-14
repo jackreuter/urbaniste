@@ -17,7 +17,11 @@
       var row = this.client_object.marker_placement.row
       var col = this.client_object.marker_placement.col 
       
-      if (this.game_state.board[row][col].marker == 'empty' && this.game_state.board[row][col].type != 'w' && tileAdjacentToFriendly(row, col, this.active_player_index, this.game_state)) {
+      if (
+        this.game_state.board[row][col].marker == 'empty'
+        && this.game_state.board[row][col].type != 'w'
+        && tileAdjacentToFriendly(row, col, this.active_player_index, this.game_state)
+      ) {
         return true
       }
     }
@@ -43,9 +47,19 @@
       return true
     }
     if (row%2 == 0) {
-      return (adjacent(row-1, col-1, active_player_index, game_state) || adjacent(row+1, col-1, active_player_index, game_state) || adjacent(row-1, col, active_player_index, game_state) || adjacent(row+1, col, active_player_index, game_state))
+      return (
+        adjacent(row-1, col-1, active_player_index, game_state)
+        || adjacent(row+1, col-1, active_player_index, game_state)
+        || adjacent(row-1, col, active_player_index, game_state)
+        || adjacent(row+1, col, active_player_index, game_state)
+      )
     } else {
-      return (adjacent(row-1, col, active_player_index, game_state) || adjacent(row+1, col, active_player_index, game_state) || adjacent(row-1, col+1, active_player_index, game_state) || adjacent(row+1, col+1, active_player_index, game_state))
+      return (
+        adjacent(row-1, col, active_player_index, game_state)
+        || adjacent(row+1, col, active_player_index, game_state)
+        || adjacent(row-1, col+1, active_player_index, game_state)
+        || adjacent(row+1, col+1, active_player_index, game_state)
+      )
     }
   }
 

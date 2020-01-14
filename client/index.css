@@ -24,26 +24,21 @@
   --back_color: #EFF3F4;
 }
 
-/* #board { */
-/*   display: grid; */
-/*   height: 80%; */
-/*   width: 80%; */
-/*   margin: auto; */
-/*   grid-gap: 1px; */
-/*   grid-template-rows: repeat(var(--grid_rows), 1fr); */
-/*   grid-template-columns: repeat(var(--grid_cols), 1fr); */
-/* } */
-
-/* .grid-item { */
-/*   padding: 10px; */
-/*   border: 1px solid #ddd; */
-/*   text-align: center; */
-/* } */
-
 body {
   background-color: var(--back_color);
   color: var(--txt_color);
   font-family: var(--main_font);
+}
+
+h1 {
+  text-align: center;
+  font-size: 20;
+}
+
+table {
+  text-align: center;
+  border-spacing: 0px;
+  border: 1px solid var(--txt_color);
 }
 
 th {
@@ -53,9 +48,12 @@ th {
   padding-top: 1px;
 }
 
-h1 {
-  text-align: center;
-  font-size: 20;
+img {
+  border: 3px solid var(--txt_color);
+}
+
+p {
+  color: var(--back_color);
 }
 
 
@@ -66,11 +64,6 @@ h1 {
   width: 50%;
 }
 
-table {
-  text-align: center;
-  border-spacing: 0px;
-  border: 1px solid var(--txt_color);
-}
 
 #player_spot {
   display: inline-block;
@@ -79,14 +72,6 @@ table {
 #shop_div {
   display: inline-block;
   float: right;
-}
-
-img {
-  border: 3px solid var(--txt_color);
-}
-
-p {
-  color: var(--back_color);
 }
 
 /* Buildings container*/
@@ -112,6 +97,7 @@ svg {
   cursor: pointer;
   display: flex;
   fill: white;
+  font-size: 20px;
   height: var(--hex-height);
   justify-content: center;
   margin: var(--hex-border) 0;
