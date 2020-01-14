@@ -20,6 +20,7 @@
       if (
         this.game_state.board[row][col].marker == 'empty'
         && this.game_state.board[row][col].type != 'w'
+        && this.game_state.board[row][col].building_id == undefined
         && tileAdjacentToFriendly(row, col, this.active_player_index, this.game_state)
       ) {
         return true
@@ -29,14 +30,34 @@
   }
 
   method.processMove = function() {
+    // marker placement
     var row = this.client_object.marker_placement.row
     var col = this.client_object.marker_placement.col
+    var player
     if (this.active_player_index == 0) {
-      this.game_state.board[row][col].marker = 'player_one'
+      player = 'player_one'
     } else {
-      this.game_state.board[row][col].marker = 'player_two'
+      player = 'player_two'
     }    
+    this.game_state.board[row][col].marker = player
     incrementResource(this.game_state.board[row][col].type, this.active_player_index, this.game_state)
+
+    // building
+    if (this.client_object.building) {
+      var newBuilding = {
+        'id': this.game_state.buildings.length, // not a real solution
+        'player': player,
+        'name': this.client_object.building.name,
+        'location_array': this.client_object.building.location_array
+      }
+      this.game_state.buildings.push(newBuilding)
+      for (var i = 0; i < newBuilding.location_array.length; i++) {
+        var r = newBuilding.location_array[i].row
+        var c = newBuilding.location_array[i].col
+        this.game_state.board[r][c].building_id = newBuilding.id
+      }
+    }
+    
     return this.game_state
   }
 
