@@ -1,13 +1,12 @@
 /* Building validation functions */
+import ShapeUtils from './util.js'
 
-import {
-  tileAdjacencyCheck,
-  friendly
-} from './util.js'
-
-export function validateBuilding(buildingName, coords, move, board, startingPlayer) {
-  return buildingValidationFunctions[buildingName](coords, move, board, startingPlayer)
+const BuildingValidation = { 
+  validateBuilding: (buildingName, coords, move, board, startingPlayer) => {
+    return buildingValidationFunctions[buildingName](coords, move, board, startingPlayer)
+  }
 }
+export default BuildingValidation 
 
 function Harbor(coords, move, board, startingPlayer) {
   if (coords.length != 1) {
@@ -15,8 +14,8 @@ function Harbor(coords, move, board, startingPlayer) {
   } else { 
     var row = coords[0]['row']
     var col = coords[0]['col']
-    var tileAdjacency = tileAdjacencyCheck(row, col, move, board, startingPlayer)
-    if (tileAdjacency['friendly'] && board[row][col].type === 'w') {
+    var tileAdjacency = ShapeUtils.tileAdjacencyCheck(row, col, move, board, startingPlayer)
+    if (tileAdjacency.adjacentToFriendly && board[row][col].type === 'w') {
       return true
     } else {
       return false
@@ -30,9 +29,11 @@ function lightHouse(coords, move, board, startingPlayer) {
   } else { 
     var row = coords[0]['row']
     var col = coords[0]['col']
-    var tileAdjacency = tileAdjacencyCheck(row, col, move, board, startingPlayer)
+    var tileAdjacency = ShapeUtils.tileAdjacencyCheck(row, col, move, board, startingPlayer)
     if (
-      (friendly(row, col, board, startingPlayer) || (move['marker_placement']['row'] == row && move['marker_placement']['col'] == col)) && tileAdjacency['water']) {
+      (ShapeUtils.friendly(row, col, board, startingPlayer) || (move['marker_placement']['row'] == row && move['marker_placement']['col'] == col))
+      && tileAdjacency.adjacentToWater
+    ) {
       return true
     } else {
       return false

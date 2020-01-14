@@ -29,7 +29,7 @@ app.use(express.static(path.join(__dirname, 'client')))
 
 // Socket.io code to listen for client connection.
 io.on('connection', function(socket) {
-  handlePlayerConnect(socket.id)
+  handlePlayerConnect(socket)
     
   // if STARTING_PLAYER
   if (socket.id == PLAYER_IDS[0].socket_id) {
@@ -88,22 +88,25 @@ http.listen(8080, function(){
   console.log('listening on *:8080')
 })
 
-function handlePlayerConnect(socket_id) {
+function handlePlayerConnect(socket) {
   // replace first inactive socket with new connection
   for (var i=0; i<PLAYER_IDS.length; i++) {
     if (!PLAYER_IDS[i].active) {
-      PLAYER_IDS[i].socket_id = socket_id
+      PLAYER_IDS[i].socket_id = socket.id
       PLAYER_IDS[i].active = true 
-      console.log('Player reconnected with Id: ' + socket_id)
+      console.log('Player reconnected with Id: ' + socket.id)
       return
     }
   }
   if (PLAYER_IDS.length < 2) {
-    console.log('New player joined. Id: ' + socket_id)
+    console.log('New player joined. Id: ' + socket.id)
     PLAYER_IDS.push({
-      'socket_id': socket_id,
+      'socket_id': socket.id,
       'active': true
     })
+  }
+  if (PLAYER_IDS.length >= 2) {
+    socket.emit('not_welcome')
   }
 }
 

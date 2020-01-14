@@ -79,10 +79,10 @@
   }
 
   function getMarker(row, col, num_rows, num_cols) {
-    if ((row == 3 && col == (num_cols - 2)) || (row == (num_rows - 4) && col == 1)) {
+    if ((row == 1 && col == (num_cols - 2)) || (row == (num_rows - 2) && col == 1)) {
       return "player_one"
     }
-    if ((row == 3 && col == 1) || (row == (num_rows - 4) && col == (num_cols - 2))) {
+    if ((row == 1 && col == 1) || (row == (num_rows - 2) && col == (num_cols - 2))) {
       return "player_two"
     }
     return 'empty'
