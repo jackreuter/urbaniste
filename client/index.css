@@ -74,6 +74,14 @@ p {
   float: right;
 }
 
+/* Buildings container*/
+svg {
+    position: absolute;
+    left: 0;
+    top: 400;
+    z-index: 1;
+}
+
 /* Hexagons */
 /* modified from https://codepen.io/ericornelissen/pen/vWbWKv */
 #board {

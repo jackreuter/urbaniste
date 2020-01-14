@@ -5,7 +5,7 @@
 		{
 			id: ,
 			player: ,
-			type: ,
+			name: ,
 			location_array: , // unordered list of coordinates this building exists on
 		}
 
@@ -23,17 +23,22 @@
 
 // Matrix of Tile objects. Details of board should come from server on game start
 var BOARD = undefined
+var BUILDINGS = undefined
 var SHOP = undefined
 
 var SOCKET_ID = undefined
 
 var MY_TURN = false
-var MY_MOVE = undefined
+var MY_MOVE = {}
 
 var STARTING_PLAYER = false
 var MY_RESOURCES = {'bm':0, 'l':0, 'c':0}
 
+// individual functions to validate building placement in separate local file
+import { validateBuilding } from './buildingValidation.js'
+import { tileAdjacencyCheck } from './util.js'
 
+// creates HTML class name for hexagons, referenced by CSS
 function getHexagonColorString(row, col) {
 	var type = BOARD[row][col].type
 	if (type == 'w') { return 'hexagon color-blue' }
@@ -42,15 +47,18 @@ function getHexagonColorString(row, col) {
 	if (type == 'c') { return 'hexagon color-yellow' }
 }
 
+// render the board HTML
 function displayBoard() {
 	const container = document.getElementById("board")
 	while (document.getElementById('board').childNodes.length > 0) {
 		document.getElementById('board').childNodes[0].remove()
 	}
-	rows = BOARD.length
-	cols = BOARD[1].length
+	var rows = BOARD.length
+  var	cols = BOARD[1].length
   container.style.setProperty('--grid_rows', rows)
   container.style.setProperty('--grid_cols', cols)
+  var row
+  var col
   for (row = 0; row < BOARD.length; row++) {
   	for (col = 0; col < BOARD[row].length; col++) {
 	    var cell = document.createElement("div")
@@ -64,36 +72,99 @@ function displayBoard() {
 	    	cell.innerText = 'Enemy'
 	    }
 
+      // handle hex click
+      // force marker placement selection first
+      // then allow building selection, with shape restrictions
 	    cell.onclick = function(cell) {
 	    	return function() {
 	    		var coor = cell.id.split("_")
 		 			var row = +coor[0]
 		 			var col = +coor[1]
-		 			// Clicking on an already selected hex will de-select it.
-	        if (cell.innerText == '*') {
-		 				clearPendingSelections()
-		 				displayResources()
 
-		 				MY_MOVE = undefined
-		 			} else if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacentToFriendly(row, col)) {
-		 				clearPendingSelections()
-		 				cell.innerText = '*'
-		 				
-		 				MY_RESOURCES[BOARD[row][col].type] += 1
-		 				displayResources()
+          // create move object
+          if (MY_MOVE == {}) {
+            MY_MOVE = {
+              'marker_placement': undefined,
+              'building': undefined
+            }
+          }
 
-		 				MY_MOVE = {'marker_placement': {'row': row, 'col': col}}
-		 			}
-	    	}
-	 			
+          // force marker selection first
+          if (MY_MOVE['building']===undefined) {
+						// Clicking on an already selected hex will de-select it.
+		        if (cell.innerText == '*') {
+			 				clearPendingPlacements()
+			 				displayResources()
+			 				MY_MOVE = {}
+			 			} else if (BOARD[row][col].marker == 'empty' && BOARD[row][col].type != 'w' && tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER)['friendly']) {
+			 				clearPendingPlacements()
+			 				cell.innerText = '*'
+			 				
+			 				MY_RESOURCES[BOARD[row][col].type] += 1
+			 				displayResources()
+
+			 				MY_MOVE = {'marker_placement': {'row': row, 'col': col}}
+			 			}
+          } else {
+
+            // handle building selection
+            // check if first tile selected
+            if (MY_MOVE['building']['location_array'].length == 0) {
+              if (validateBuilding(
+                    MY_MOVE['building']['name'],
+                    [{'row': row, 'col': col}],
+                    MY_MOVE,
+                    BOARD,
+                    STARTING_PLAYER
+                  )) {
+                MY_MOVE['building']['location_array'] = [{'row': row, 'col': col}]
+                cell.innerText = 'B'
+              }
+            } else {
+              // if tile have already been selected, check if click is to remove
+              var locationArray = MY_MOVE['building']['location_array']
+              var newLocationArray = []
+              var found = false
+              var i
+              for (i = 0; i < locationArray.length; i++) {
+                if (locationArray[i]['row'] == row && locationArray[i]['col'] == col) {
+                  found = true
+                } else {
+                  newLocationArray.push(locationArray[i])
+                }
+              }
+              // if tile already selected, use new array with selection removed
+              if (found) {
+                MY_MOVE['building']['location_array'] = newLocationArray
+                cell.innerText = ""
+              // otherwise, check validity and add new tile to array
+              } else {
+                newLocationArray.push({'row': row, 'col': col})
+                if (validateBuilding(
+                      MY_MOVE['building']['name'], 
+                      newLocationArray,
+                      MY_MOVE,
+                      BOARD,
+                      STARTING_PLAYER
+                    )) {
+                  MY_MOVE['building']['location_array'] = newLocationArray
+                  cell.innerText = 'B'
+                }
+              }
+            }
+          }
+        }
 	  	}(cell) // immediatlly invoke this function to tie it to correct cell
 	    container.appendChild(cell).className = getHexagonColorString(row, col)
 	  }
 	}
 }
 
-function clearPendingSelections() {
+// remove * marker from selected tiles
+function clearPendingPlacements() {
+  var row
 	for (row = 0; row < BOARD.length; row++) {
+    var col
 		for (col = 0; col < BOARD[row].length; col++) {
 			if (document.getElementById(row + "_" + col).innerText == "*") {
 				document.getElementById(row + "_" + col).innerText = ""
@@ -103,46 +174,72 @@ function clearPendingSelections() {
 	}
 }
 
+// remove B marker from selected tiles
+function clearPendingBuildings() {
+  var row
+	for (row = 0; row < BOARD.length; row++) {
+    var col
+		for (col = 0; col < BOARD[row].length; col++) {
+			if (document.getElementById(row + "_" + col).innerText == "B") {
+				 document.getElementById(row + "_" + col).innerText = ""
+			}
+		}
+	}
+}
+
+// Iterate through BOARD object and draw svg lines for buildings
 function displayBuildings() {
-	// Iterate through BOARD object and draw svg lines for buildings
+  // just playing around with svg lines
+  var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+  newLine.setAttribute('id','line');
+  newLine.setAttribute('x1','35');
+  newLine.setAttribute('y1','35');
+  newLine.setAttribute('x2','130');
+  newLine.setAttribute('y2','200');
+  newLine.setAttribute("stroke", "black");
+  newLine.setAttribute("stroke-width", '40');
+  $("svg").append(newLine);
 }
 
-function adjacent(row, col) {
-	try {
-		if (STARTING_PLAYER) {
-  		return BOARD[row][col].marker == 'player_one'
-  	} else {
-  		return BOARD[row][col].marker == 'player_two'
-  	}
-	} catch(e) {
-		return false
-	}
-}
 
-function tileAdjacentToFriendly(row, col) {
-	if (adjacent(row, col+1) || adjacent(row, col-1)) {
-		return true
-	}
-	if (row%2 == 0) {
-		return (adjacent(row-1, col-1) || adjacent(row+1, col-1) || adjacent(row-1, col) || adjacent(row+1, col))
-	} else {
-	  return (adjacent(row-1, col) || adjacent(row+1, col) || adjacent(row-1, col+1) || adjacent(row+1, col+1))
-	}
-}
-
+// render shop HTML
 function displayShop() {
 	var shop = document.getElementById('shop')
 	while (document.getElementById('shop').childNodes.length > 2) {
 		document.getElementById('shop').childNodes[2].remove()
 	}
+  var i
 	for (i = 0; i < SHOP.length; i++) { 
 		var row = document.createElement("tr")
+    row.id = SHOP[i]['name']
+    row.style.backgroundColor = 'white'
+
+    // onclick function to handle building selection
 		row.onclick = function(row) {
 			return function() {
-				console.log(row)
-    	}
+        var buildingName = row.id
+        if (MY_MOVE['marker_placement'] !== undefined) {
+          try {
+            if (MY_MOVE['building']['name'] === buildingName) {
+		 		      MY_MOVE['building'] = undefined
+              row.style.backgroundColor = 'white'
+              clearPendingBuildings()
+            } else {
+		          document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'
+		 		      MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
+              row.style.backgroundColor = 'red'
+              clearPendingBuildings()
+            }
+          } catch (x) {
+		 		    MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
+            row.style.backgroundColor = 'red'
+            clearPendingBuildings()
+          }
+        }
+      }
 		}(row)
 		var datum
+    var attribute
 		for (attribute of Object.keys(SHOP[i])) {
 			datum = document.createElement("th")
 			datum.innerText = SHOP[i][attribute]
@@ -153,6 +250,7 @@ function displayShop() {
 	}
 }
 
+// render resource list HTML
 function displayResources() {
 	document.getElementById('resource_bm').innerText = "Building Materials: " + MY_RESOURCES.bm
 	document.getElementById('resource_l').innerText = "Labor: " + MY_RESOURCES.l
@@ -162,6 +260,7 @@ function displayResources() {
 // Reconcile global variables to server's values. Display elements.
 function ingestServerResponse(server_response) {
 	BOARD = server_response.game_state.board
+  BUILDINGS = server_response.game_state.buildings
   SHOP = server_response.game_state.shop
 
 	if (STARTING_PLAYER) {
@@ -171,6 +270,7 @@ function ingestServerResponse(server_response) {
   }
 
   displayBoard()
+  displayBuildings()
   displayShop()
   displayResources()
 }
@@ -214,7 +314,8 @@ window.onload = () => {
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
     socket.emit('submit_move', MY_MOVE);
-    MY_MOVE = undefined
+    MY_MOVE['marker_placement'] = undefined
+    MY_MOVE['building'] = undefined
   }
 
   document.getElementById('message_btn').onclick = function() {
