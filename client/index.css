@@ -56,6 +56,13 @@ p {
   color: var(--back_color);
 }
 
+/* Buildings container*/
+svg {
+    position: absolute;
+    left: 0;
+    top: 400;
+    z-index: 1;
+}
 
 .center {
   display: block;
@@ -72,14 +79,6 @@ p {
 #shop_div {
   display: inline-block;
   float: right;
-}
-
-/* Buildings container*/
-svg {
-    position: absolute;
-    left: 0;
-    top: 400;
-    z-index: 1;
 }
 
 /* Hexagons */

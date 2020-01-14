@@ -13,7 +13,7 @@
 
   method.validateMove = function(socket_id, active_player_id) {
     // If it's the active player's turn to submit
-    if (this.client_object && active_player_id === socket_id){
+    if (this.client_object && this.client_object.marker_placement && active_player_id === socket_id){
       var row = this.client_object.marker_placement.row
       var col = this.client_object.marker_placement.col 
       
