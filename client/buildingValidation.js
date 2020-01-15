@@ -8,7 +8,7 @@ const BuildingValidation = {
 }
 export default BuildingValidation 
 
-function Harbor(coords, move, board, startingPlayer) {
+function harbor(coords, move, board, startingPlayer) {
   if (coords.length != 1) {
     return false
   } else { 
@@ -59,7 +59,6 @@ function wall(coords, move, board, startingPlayer) {return true}
 function church(coords, move, board, startingPlayer) {return true}
 function boulevard(coords, move, board, startingPlayer) {return true}
 function aqueduct(coords, move, board, startingPlayer) {return true}
-function harbor(coords, move, board, startingPlayer) {return true}
 function shipyard(coords, move, board, startingPlayer) {return true}
 function trolley(coords, move, board, startingPlayer) {return true}
 function cityHall(coords, move, board, startingPlayer) {return true}
