@@ -183,16 +183,21 @@ function clearPendingBuildings() {
 
 // Iterate through BOARD object and draw svg lines for buildings
 function displayBuildings() {
+  var lineWidth = 45
   for (var i = 0; i < BUILDINGS.length; i++) {
     var locationArray = BUILDINGS[i]['location_array']
-    for (var j = 0; j < locationArray.length; j++) {
-      for (var k = j+1; k < locationArray.length; k++) {
-        var tile1 = locationArray[j]
-        var tile2 = locationArray[k]
-        var lineWidth = 35
-        // draw line between adjacent tiles
-        if (ShapeUtils.adjacent(tile1, tile2)) {
-          drawLineBetweenTiles(tile1, tile2, lineWidth)
+    var lineColor = (BUILDINGS[i]['player'] === 'player_one') ? 'white' : 'black'
+    if (locationArray.length == 1) {
+        drawLineOnTile(locationArray[0], lineWidth, lineColor)
+    } else {
+      for (var j = 0; j < locationArray.length; j++) {
+        for (var k = j+1; k < locationArray.length; k++) {
+          var tile1 = locationArray[j]
+          var tile2 = locationArray[k]
+          // draw line between adjacent tiles
+          if (ShapeUtils.adjacent(tile1, tile2)) {
+            drawLineBetweenTiles(tile1, tile2, lineWidth, lineColor)
+          }
         }
       }
     }
@@ -200,35 +205,56 @@ function displayBuildings() {
 }
 
 // draw SVG line between two tiles
-function drawLineBetweenTiles(tile1, tile2, lineWidth) {
-  var row1 = tile1.row
-  var row2 = tile2.row
-  var col1 = tile1.col
-  var col2 = tile2.col
-
+function drawLineBetweenTiles(tile1, tile2, lineWidth, lineColor) {
   var hexWidth = 100 // must match css file
   var spacing = 5 // must match css file
   var widthMultiplier = hexWidth + spacing
   var heightMultiplier = 90.5 // trial and error bullshit
-  var x1 = hexWidth/2 + spacing + widthMultiplier*(col1)
-  var x2 = hexWidth/2 + spacing + widthMultiplier*(col2)
-  var y1 = 80 + heightMultiplier*(row1)
-  var y2 = 80 + heightMultiplier*(row2)
+  var x1 = hexWidth/2 + spacing + widthMultiplier*(tile1.col)
+  var x2 = hexWidth/2 + spacing + widthMultiplier*(tile2.col)
+  var y1 = 80 + heightMultiplier*(tile1.row)
+  var y2 = 80 + heightMultiplier*(tile2.row)
 
-  if (row1%2 != 0) {
+  if (tile1.row%2 != 0) {
     x1 += widthMultiplier/2
   }
-  if (row2%2 != 0) {
+  if (tile2.row%2 != 0) {
     x2 += widthMultiplier/2
   }
 
+  drawLine(x1, y1, x2, y2, lineWidth, lineColor)
+}
+
+// draw SVG line on single tile
+function drawLineOnTile(tile, lineWidth, lineColor) {
+  var hexWidth = 100 // must match css file
+  var spacing = 5 // must match css file
+  var widthMultiplier = hexWidth + spacing
+  var heightMultiplier = 90.5 // trial and error bullshit
+  var x = hexWidth/2 + spacing + widthMultiplier*(tile.col)
+  var y = 80 + heightMultiplier*(tile.row)
+
+  if (tile.row%2 != 0) {
+    x += widthMultiplier/2
+  }
+
+  var x1 = x - lineWidth/2
+  var x2 = x + lineWidth/2
+  var y1 = y - lineWidth/2
+  var y2 = y + lineWidth/2
+
+  drawLine(x1, y1, x2, y2, lineWidth, lineColor)
+}
+
+// draw SVG line
+function drawLine(x1, y1, x2, y2, lineWidth, lineColor) {
   var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
   newLine.setAttribute('id','line');
   newLine.setAttribute('x1', x1);
   newLine.setAttribute('y1', y1);
   newLine.setAttribute('x2', x2);
   newLine.setAttribute('y2', y2);
-  newLine.setAttribute("stroke", "black");
+  newLine.setAttribute("stroke", lineColor);
   newLine.setAttribute("stroke-width", lineWidth);
   $("svg").append(newLine);
 }

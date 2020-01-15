@@ -63,6 +63,8 @@ svg {
     top: 400;
     z-index: 1;
     pointer-events: none;
+    -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+    filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
 }
 
 .center {
