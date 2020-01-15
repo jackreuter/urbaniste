@@ -314,7 +314,6 @@ function displayResources() {
 function ingestServerResponse(server_response) {
 	BOARD = server_response.game_state.board
   BUILDINGS = server_response.game_state.buildings
-  console.log(BUILDINGS)
   SHOP = server_response.game_state.shop
 
 	if (STARTING_PLAYER) {
