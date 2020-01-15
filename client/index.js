@@ -23,6 +23,7 @@
 // individual functions to validate building placement in separate local file
 import BuildingValidation from './buildingValidation.js'
 import ShapeUtils from './util.js'
+import ErrorHandler from './errorHandler.js'
 
 // Matrix of Tile objects. Details of board should come from server on game start
 var BOARD = undefined
@@ -105,9 +106,11 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
 		cell.innerText = '*'
 		
 		MY_RESOURCES[BOARD[row][col].type] += 1
-		displayResources()
+		displayResources(BOARD[row][col])
 
 		MY_MOVE['marker_placement'] = {'row': row, 'col': col}
+	} else {
+		ErrorHandler.invalidHexClick(BOARD[row][col], ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly)
 	}
 }
 
@@ -137,7 +140,7 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
   )) {
   	MY_MOVE['building']['location_array'] = locationArray
     cell.innerText = 'B'
-  } 
+  }
 }
 
 function clearBuildingBText(row, col) {
@@ -249,6 +252,7 @@ function displayShop() {
 			return function() {
         var buildingName = row.id
         if (MY_MOVE['marker_placement'] === undefined) {
+        	ErrorHandler.shopError()
         	return
         }
       	// If shop item is already selected, deselect it
@@ -286,6 +290,7 @@ function displayResources() {
 
 // Reconcile global variables to server's values. Display elements.
 function ingestServerResponse(server_response) {
+	$().alert('close')
 	BOARD = server_response.game_state.board
   BUILDINGS = server_response.game_state.buildings
   console.log(BUILDINGS)
@@ -307,6 +312,7 @@ window.onload = () => {
   var socket = io();
 
   socket.on('not_welcome', () => {
+  	ErrorHandler.nowWelcome() // <- TODO
     document.getElementById('not_valid_player_title').innerText = 'You Are Not Connected To Play. In VIEW ONLY Mode.'
   });
 
@@ -345,6 +351,7 @@ window.onload = () => {
 
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
+  	// <- TOD): check my turn first
     socket.emit('submit_move', MY_MOVE);
     MY_MOVE = {}
   }

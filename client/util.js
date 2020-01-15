@@ -50,7 +50,7 @@ const ShapeUtils = {
   getAdjacentCoordinates: getAdjacentCoordinates,
   checkShapeDouble: (tiles) => {
     if (tiles.length != 2) {
-      return false;
+      return false
     } else {
       return adjacent(tiles[0], tiles[1]);
     }
