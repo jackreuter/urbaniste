@@ -128,7 +128,7 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
     }
   }
   locationArray.push({'row': row, 'col': col})
-  if (BuildingValidation.validateBuilding(
+  if (BuildingValidation.validateBuildingSelection(
     MY_MOVE['building']['name'], 
     locationArray,
     MY_MOVE,
