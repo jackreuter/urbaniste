@@ -98,46 +98,50 @@ function displayBoard() {
 			 			}
           } else {
             // handle building selection
-            // check if first tile selected
-            if (MY_MOVE['building']['location_array'] && MY_MOVE['building']['location_array'].length == 0) {
-              if (BuildingValidation.validateBuilding(
-                    MY_MOVE['building']['name'],
-                    [{'row': row, 'col': col}],
-                    MY_MOVE,
-                    BOARD,
-                    STARTING_PLAYER
-                  )) {
-                MY_MOVE['building']['location_array'] = [{'row': row, 'col': col}]
-                cell.innerText = 'B'
-              }
-            } else {
-              // if tile have already been selected, check if click is to remove
-              var locationArray = MY_MOVE['building']['location_array']
-              var newLocationArray = []
-              var found = false
-              for (var i = 0; i < locationArray.length; i++) {
-                if (locationArray[i]['row'] == row && locationArray[i]['col'] == col) {
-                  found = true
-                } else {
-                  newLocationArray.push(locationArray[i])
-                }
-              }
-              // if tile already selected, use new array with selection removed
-              if (found) {
-                MY_MOVE['building']['location_array'] = newLocationArray
-                cell.innerText = ""
-              // otherwise, check validity and add new tile to array
-              } else {
-                newLocationArray.push({'row': row, 'col': col})
+            // check if tile available to build
+            if ( BOARD[row][col].building_id == undefined ) {
+              
+              // check if first tile selected
+              if (MY_MOVE['building']['location_array'] && MY_MOVE['building']['location_array'].length == 0) {
                 if (BuildingValidation.validateBuilding(
-                      MY_MOVE['building']['name'], 
-                      newLocationArray,
+                      MY_MOVE['building']['name'],
+                      [{'row': row, 'col': col}],
                       MY_MOVE,
                       BOARD,
                       STARTING_PLAYER
                     )) {
+                      MY_MOVE['building']['location_array'] = [{'row': row, 'col': col}]
+                      cell.innerText = 'B'
+                    }
+              } else {
+                // if tile have already been selected, check if click is to remove
+                var locationArray = MY_MOVE['building']['location_array']
+                var newLocationArray = []
+                var found = false
+                for (var i = 0; i < locationArray.length; i++) {
+                  if (locationArray[i]['row'] == row && locationArray[i]['col'] == col) {
+                    found = true
+                  } else {
+                    newLocationArray.push(locationArray[i])
+                  }
+                }
+                // if tile already selected, use new array with selection removed
+                if (found) {
                   MY_MOVE['building']['location_array'] = newLocationArray
-                  cell.innerText = 'B'
+                  cell.innerText = ""
+                  // otherwise, check validity and add new tile to array
+                } else {
+                  newLocationArray.push({'row': row, 'col': col})
+                  if (BuildingValidation.validateBuilding(
+                        MY_MOVE['building']['name'], 
+                        newLocationArray,
+                        MY_MOVE,
+                        BOARD,
+                        STARTING_PLAYER
+                      )) {
+                        MY_MOVE['building']['location_array'] = newLocationArray
+                        cell.innerText = 'B'
+                      }
                 }
               }
             }
@@ -177,44 +181,52 @@ function displayBuildings() {
   for (var i = 0; i < BUILDINGS.length; i++) {
     var locationArray = BUILDINGS[i].location_array
     for (var j = 0; j < locationArray.length; j++) {
-      var tile1 = locationArray[j]
-      var tile2 = locationArray[(j+1)%locationArray.length]
-      var row1 = tile1.row
-      var row2 = tile2.row
-      var col1 = tile1.col
-      var col2 = tile2.col
-
-      var hexWidth = 100 // must match css file
-      var lineWidth = hexWidth/2 + spacing*2
-      var spacing = 5 // must match css file
-      var widthMultiplier = hexWidth + spacing
-      var heightMultiplier = 90.5 // trial and error bullshit
-      var x1 = hexWidth/2 + spacing + widthMultiplier*(col1)
-      var x2 = hexWidth/2 + spacing + widthMultiplier*(col2)
-      var y1 = 80 + heightMultiplier*(row1)
-      var y2 = 80 + heightMultiplier*(row2)
-
-      if (row1%2 != 0) {
-        x1 += hexWidth/2
+      for (var k = j+1; k < locationArray.length; k++) {
+        var tile1 = locationArray[j]
+        var tile2 = locationArray[k]
+        var lineWidth = 65
+        // draw line between adjacent tiles
+        if (ShapeUtils.adjacent(tile1, tile2)) {
+          drawLineBetweenTiles(tile1, tile2, lineWidth)
+        }
       }
-      if (row2%2 != 0) {
-        x2 += hexWidth/2
-      }
-
-      // just playing around with svg lines
-      var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
-      newLine.setAttribute('id','line');
-      newLine.setAttribute('x1', x1);
-      newLine.setAttribute('y1', y1);
-      newLine.setAttribute('x2', x2);
-      newLine.setAttribute('y2', y2);
-      newLine.setAttribute("stroke", "black");
-      newLine.setAttribute("stroke-width", lineWidth);
-      $("svg").append(newLine);
     }
   }
 }
 
+// draw SVG line between two tiles
+function drawLineBetweenTiles(tile1, tile2, lineWidth) {
+  var row1 = tile1.row
+  var row2 = tile2.row
+  var col1 = tile1.col
+  var col2 = tile2.col
+
+  var hexWidth = 100 // must match css file
+  var spacing = 5 // must match css file
+  var widthMultiplier = hexWidth + spacing
+  var heightMultiplier = 90.5 // trial and error bullshit
+  var x1 = hexWidth/2 + spacing + widthMultiplier*(col1)
+  var x2 = hexWidth/2 + spacing + widthMultiplier*(col2)
+  var y1 = 80 + heightMultiplier*(row1)
+  var y2 = 80 + heightMultiplier*(row2)
+
+  if (row1%2 != 0) {
+    x1 += widthMultiplier/2
+  }
+  if (row2%2 != 0) {
+    x2 += widthMultiplier/2
+  }
+
+  var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
+  newLine.setAttribute('id','line');
+  newLine.setAttribute('x1', x1);
+  newLine.setAttribute('y1', y1);
+  newLine.setAttribute('x2', x2);
+  newLine.setAttribute('y2', y2);
+  newLine.setAttribute("stroke", "black");
+  newLine.setAttribute("stroke-width", lineWidth);
+  $("svg").append(newLine);
+}
 
 // render shop HTML
 function displayShop() {

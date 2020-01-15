@@ -19,6 +19,7 @@ function getAdjacentCoordinates(row, col) {
   return adjacents
 }
 
+// check if tile with given coordinates has a friendly marker
 function friendly(row, col, board, startingPlayer) {
   try {
     if (startingPlayer) {
@@ -33,6 +34,18 @@ function friendly(row, col, board, startingPlayer) {
 
 // Exported methods. Accessed via "e.g. ShapeUtils.checkShapeDouble(tiles)"
 const ShapeUtils = {
+  // check if two tiles are adjacent
+  adjacent: (tileA, tileB) => {
+    var adjacentToA = getAdjacentCoordinates(tileA.row, tileA.col)
+    for (var i = 0; i < adjacentToA.length; i++) {
+      if (adjacentToA[i].row == tileB.row 
+          && adjacentToA[i].col == tileB.col) {
+        return true;
+      }
+    }
+    return false;
+  },
+
   checkShapeDouble: (tiles) => {
     if (tiles.length != 2) {
       return false;
@@ -63,6 +76,7 @@ const ShapeUtils = {
     } else {
     }
   },
+
   friendly: friendly,
   // check if tile at coordinates is adjacent to friendly marker, pending placement, or water tile
   tileAdjacencyCheck: (row, col, move, board, startingPlayer) => {
