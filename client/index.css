@@ -62,6 +62,7 @@ svg {
     left: 0;
     top: 400;
     z-index: 1;
+    pointer-events: none;
 }
 
 .center {
