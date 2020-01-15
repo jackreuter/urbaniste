@@ -110,7 +110,6 @@ function displayBoard() {
                       BOARD,
                       STARTING_PLAYER
                     )){
-
                       MY_MOVE['building']['location_array'] = [{'row': row, 'col': col}]
                       cell.innerText = 'B'
                     }
