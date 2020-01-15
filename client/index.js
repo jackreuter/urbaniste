@@ -77,79 +77,83 @@ function displayBoard() {
 		 			var col = +coor[1]
 
           // force marker selection first
-          if (!MY_MOVE['building']) {
-						// Clicking on an already selected hex will de-select it.
-		        if (cell.innerText == '*') {
-			 				clearPendingPlacements()
-			 				displayResources()
-			 				MY_MOVE = {}
-			 			} else if (
-              BOARD[row][col].marker == 'empty'
-                && BOARD[row][col].type != 'w' 
-                && BOARD[row][col].building_id == undefined
-                && ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly) {
-			 				clearPendingPlacements()
-			 				cell.innerText = '*'
-			 				
-			 				MY_RESOURCES[BOARD[row][col].type] += 1
-			 				displayResources()
-
-			 				MY_MOVE['marker_placement'] = {'row': row, 'col': col}
-			 			}
+          if (MY_MOVE['building'] === undefined) {
+						handleHexClickForMarkerPlacement(cell, row, col) 
           } else {
-            // handle building selection
-            // check if tile available to build
-            if ( BOARD[row][col].building_id == undefined ) {
-              
-              // check if first tile selected
-              if (MY_MOVE['building']['location_array'] && MY_MOVE['building']['location_array'].length == 0) {
-                if (BuildingValidation.validateBuildingSelection(
-                      MY_MOVE['building']['name'], 
-                      [{'row': row, 'col': col}],
-                      MY_MOVE,
-                      BOARD,
-                      STARTING_PLAYER
-                    )){
-                      MY_MOVE['building']['location_array'] = [{'row': row, 'col': col}]
-                      cell.innerText = 'B'
-                    }
-              } else {
-                // if tile have already been selected, check if click is to remove
-                var locationArray = MY_MOVE['building']['location_array']
-                var newLocationArray = []
-                var found = false
-                for (var i = 0; i < locationArray.length; i++) {
-                  if (locationArray[i]['row'] == row && locationArray[i]['col'] == col) {
-                    found = true
-                  } else {
-                    newLocationArray.push(locationArray[i])
-                  }
-                }
-                // if tile already selected, use new array with selection removed
-                if (found) {
-                  MY_MOVE['building']['location_array'] = newLocationArray
-                  cell.innerText = ""
-                  // otherwise, check validity and add new tile to array
-                } else {
-                  newLocationArray.push({'row': row, 'col': col})
-                  if (BuildingValidation.validateBuildingSelection(
-                        MY_MOVE['building']['name'], 
-                        newLocationArray,
-                        MY_MOVE,
-                        BOARD,
-                        STARTING_PLAYER
-                      )) {
-                        MY_MOVE['building']['location_array'] = newLocationArray
-                        cell.innerText = 'B'
-                      }
-                }
-              }
-            }
+						handleHexClickForBuildingPlacement(cell, row, col)
           }
         }
 	  	}(cell) // immediatlly invoke this function to tie it to correct cell
 	    container.appendChild(cell).className = getHexagonColorString(row, col)
 	  }
+	}
+}
+
+function handleHexClickForMarkerPlacement(cell, row, col) {
+	// Clicking on an already selected hex will de-select it.
+  if (cell.innerText == '*') {
+		clearPendingPlacements()
+		displayResources()
+		MY_MOVE = {}
+	} else if (
+  	BOARD[row][col].marker == 'empty'
+    && BOARD[row][col].type != 'w' 
+    && BOARD[row][col].building_id == undefined
+    && ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly
+  ) {
+		clearPendingPlacements()
+		cell.innerText = '*'
+		
+		MY_RESOURCES[BOARD[row][col].type] += 1
+		displayResources()
+
+		MY_MOVE['marker_placement'] = {'row': row, 'col': col}
+	}
+}
+
+function handleHexClickForBuildingPlacement(cell, row, col) {
+	// check if tile available to build
+  if ( BOARD[row][col].building_id !== undefined ) {
+  	return
+  }
+  // if tile have already been selected, check if click is to remove
+  var locationArray = []
+  for (var coordinate of MY_MOVE['building']['location_array']) {
+  	locationArray.push(coordinate)
+  }
+  for (var i = 0; i < locationArray.length; i++) {
+    if (locationArray[i]['row'] == row && locationArray[i]['col'] == col) {
+    	clearBuildingBText(row, col)
+    	return
+    }
+  }
+  locationArray.push({'row': row, 'col': col})
+  if (BuildingValidation.validateBuildingSelection(
+    MY_MOVE['building']['name'], 
+    locationArray,
+    MY_MOVE,
+    BOARD,
+    STARTING_PLAYER
+  )) {
+  	MY_MOVE['building']['location_array'] = locationArray
+    cell.innerText = 'B'
+  } 
+}
+
+function clearBuildingBText(row, col) {
+	if (
+		MY_MOVE['marker_placement']
+		&& MY_MOVE['marker_placement'].row === row
+		&& MY_MOVE['marker_placement'].col === col
+	) {
+	  document.getElementById(row + "_" + col).innerText = "*"
+	} else {
+		document.getElementById(row + "_" + col).innerText = ""
+	}
+	for (var i=0; i<MY_MOVE['building']['location_array'].length; i++) {
+		if (MY_MOVE['building']['location_array'][i].row == row && MY_MOVE['building']['location_array'][i].col == col) {
+			MY_MOVE['building']['location_array'].splice(i, 1)
+		}
 	}
 }
 
@@ -170,7 +174,8 @@ function clearPendingBuildings() {
 	for (var row = 0; row < BOARD.length; row++) {
 		for (var col = 0; col < BOARD[row].length; col++) {
 			if (document.getElementById(row + "_" + col).innerText == "B") {
-				 document.getElementById(row + "_" + col).innerText = ""
+				// If tile was selected for move and building was previously selected over it, go back to tile placement display
+				clearBuildingBText(MY_MOVE['marker_placement'], row, col)
 			}
 		}
 	}
@@ -179,12 +184,12 @@ function clearPendingBuildings() {
 // Iterate through BOARD object and draw svg lines for buildings
 function displayBuildings() {
   for (var i = 0; i < BUILDINGS.length; i++) {
-    var locationArray = BUILDINGS[i].location_array
+    var locationArray = BUILDINGS[i]['location_array']
     for (var j = 0; j < locationArray.length; j++) {
       for (var k = j+1; k < locationArray.length; k++) {
         var tile1 = locationArray[j]
         var tile2 = locationArray[k]
-        var lineWidth = 65
+        var lineWidth = 35
         // draw line between adjacent tiles
         if (ShapeUtils.adjacent(tile1, tile2)) {
           drawLineBetweenTiles(tile1, tile2, lineWidth)
@@ -243,24 +248,22 @@ function displayShop() {
 		row.onclick = function(row) {
 			return function() {
         var buildingName = row.id
-        if (MY_MOVE['marker_placement']) {
-          try {
-            if (MY_MOVE['building']['name'] === buildingName) {
-		 		      MY_MOVE['building'] = undefined
-              row.style.backgroundColor = 'white'
-              clearPendingBuildings()
-            } else {
-		          document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'
-		 		      MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
-              row.style.backgroundColor = 'red'
-              clearPendingBuildings()
-            }
-          } catch (x) {
-		 		    MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
-            row.style.backgroundColor = 'red'
-            clearPendingBuildings()
-          }
+        if (MY_MOVE['marker_placement'] === undefined) {
+        	return
         }
+      	// If shop item is already selected, deselect it
+        if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
+ 		      MY_MOVE['building'] = undefined
+          row.style.backgroundColor = 'white'
+        } else { // Select Shop Item
+        	if (MY_MOVE['building'] && MY_MOVE['building']['name']) {
+         		document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'
+        	}
+ 		      MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
+          row.style.backgroundColor = 'red'
+        }
+        clearPendingBuildings()
+        
       }
 		}(row)
 		var datum

@@ -48,7 +48,6 @@ function adjacent(tileA, tileB) {
 const ShapeUtils = {
   adjacent: adjacent,
   getAdjacentCoordinates: getAdjacentCoordinates,
-
   checkShapeDouble: (tiles) => {
     if (tiles.length != 2) {
       return false;
