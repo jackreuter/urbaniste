@@ -123,6 +123,7 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
   }
   for (var i = 0; i < locationArray.length; i++) {
     if (locationArray[i]['row'] == row && locationArray[i]['col'] == col) {
+			MY_MOVE['building']['location_array'].splice(i, 1)
     	clearBuildingBText(row, col)
     	return
     }
@@ -147,13 +148,12 @@ function clearBuildingBText(row, col) {
 		&& MY_MOVE['marker_placement'].col === col
 	) {
 	  document.getElementById(row + "_" + col).innerText = "*"
+  } else if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
+	  document.getElementById(row + "_" + col).innerText = "Mine"
+  } else if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_two') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_one')) {
+	  document.getElementById(row + "_" + col).innerText = "Enemy"
 	} else {
 		document.getElementById(row + "_" + col).innerText = ""
-	}
-	for (var i=0; i<MY_MOVE['building']['location_array'].length; i++) {
-		if (MY_MOVE['building']['location_array'][i].row == row && MY_MOVE['building']['location_array'][i].col == col) {
-			MY_MOVE['building']['location_array'].splice(i, 1)
-		}
 	}
 }
 
@@ -175,7 +175,7 @@ function clearPendingBuildings() {
 		for (var col = 0; col < BOARD[row].length; col++) {
 			if (document.getElementById(row + "_" + col).innerText == "B") {
 				// If tile was selected for move and building was previously selected over it, go back to tile placement display
-				clearBuildingBText(MY_MOVE['marker_placement'], row, col)
+				clearBuildingBText(row, col)
 			}
 		}
 	}

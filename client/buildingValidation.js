@@ -18,8 +18,7 @@ function validateBuildingSelection(buildingName, coords, move, board, startingPl
     return true
   } else {
     for (var row = 0; row < board.length; row++) {
-      var rowObject = board[row]
-      for (var col = 0; col < rowObject.length; col++) {
+      for (var col = 0; col < board[row].length; col++) {
         var newTileNeighborsSelection = false
         for (var i = 0; i < coords.length; i++) {
           if (row == coords[i].row && col == coords[i].col) {
