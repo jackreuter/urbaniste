@@ -140,6 +140,10 @@ function bridge(coords, move, board, startingPlayer) {
   return ShapeUtils.checkShape3Line(coords)
 }
 
+function sewers(coords, move, board, startingPlayer) {
+  return ShapeUtils.checkShape3Line(coords)
+}
+
 function docks(coords, move, board, startingPlayer) {return true}
 function settlement(coords, move, board, startingPlayer) {return true}
 function bazaar(coords, move, board, startingPlayer) {return true}
@@ -157,7 +161,6 @@ function aqueduct(coords, move, board, startingPlayer) {return true}
 function shipyard(coords, move, board, startingPlayer) {return true}
 function cityHall(coords, move, board, startingPlayer) {return true}
 function tunnel(coords, move, board, startingPlayer) {return true}
-function sewers(coords, move, board, startingPlayer) {return true}
 function plaza(coords, move, board, startingPlayer) {return true}
 
 var buildingData = {
