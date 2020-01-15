@@ -104,8 +104,8 @@ function handlePlayerConnect(socket) {
       'socket_id': socket.id,
       'active': true
     })
-  }
-  if (PLAYER_IDS.length >= 2) {
+  } else if (PLAYER_IDS.length >= 2) {
+    console.log(socket.id)
     socket.emit('not_welcome')
   }
 }
