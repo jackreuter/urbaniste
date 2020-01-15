@@ -103,13 +103,13 @@ function displayBoard() {
               
               // check if first tile selected
               if (MY_MOVE['building']['location_array'] && MY_MOVE['building']['location_array'].length == 0) {
-                if (BuildingValidation.validateBuilding(
-                      MY_MOVE['building']['name'],
+                if (BuildingValidation.validateBuildingSelection(
+                      MY_MOVE['building']['name'], 
                       [{'row': row, 'col': col}],
                       MY_MOVE,
                       BOARD,
                       STARTING_PLAYER
-                    )) {
+                    )){
                       MY_MOVE['building']['location_array'] = [{'row': row, 'col': col}]
                       cell.innerText = 'B'
                     }
@@ -132,7 +132,7 @@ function displayBoard() {
                   // otherwise, check validity and add new tile to array
                 } else {
                   newLocationArray.push({'row': row, 'col': col})
-                  if (BuildingValidation.validateBuilding(
+                  if (BuildingValidation.validateBuildingSelection(
                         MY_MOVE['building']['name'], 
                         newLocationArray,
                         MY_MOVE,
