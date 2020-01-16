@@ -56,17 +56,6 @@ p {
   color: var(--back_color);
 }
 
-/* Buildings container*/
-svg {
-    position: absolute;
-    left: 0;
-    top: 400;
-    z-index: 1;
-    pointer-events: none;
-    -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
-    filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
-}
-
 .center {
   display: block;
   margin-left: auto;
@@ -84,9 +73,25 @@ svg {
   float: right;
 }
 
+/* Buildings container*/
+/* absolute positioning to match board position */
+svg {
+    position: absolute;
+    left: 5;
+    top: 450;
+    z-index: 1;
+    pointer-events: none;
+    -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+    filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
+}
+
 /* Hexagons */
+/* absolute positioning to match buildings SVG position */
 /* modified from https://codepen.io/ericornelissen/pen/vWbWKv */
 #board {
+  position: absolute;
+  left: 5;
+  top: 450;
   display: grid;
   grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);
   grid-auto-rows: calc(var(--hex-width) - 28.87px/2);
