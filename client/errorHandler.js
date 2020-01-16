@@ -22,6 +22,9 @@ const ErrorHandler = {
     if (invalidBuildingOptions.tooFewCoordinates) {
       displayError("Too few hexes selected for this " + buildingName + ".")
     }
+  },
+  notWelcome: () => {
+    displayError("You are not one of the two connected players. You are in VIEW ONLY mode.")
   }
 
 }

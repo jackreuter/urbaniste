@@ -145,8 +145,7 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
 }
 
 function clearBuildingBText(row, col) {
-	if (
-			MY_MOVE['marker_placement']
+	if (MY_MOVE['marker_placement']
 			&& MY_MOVE['marker_placement'].row === row
 			&& MY_MOVE['marker_placement'].col === col
 	) {
@@ -354,7 +353,7 @@ window.onload = () => {
   var socket = io();
 
   socket.on('not_welcome', () => {
-  	ErrorHandler.nowWelcome() // <- TODO
+  	ErrorHandler.notWelcome() // <- TODO
     document.getElementById('not_valid_player_title').innerText = 'You Are Not Connected To Play. In VIEW ONLY Mode.'
   });
 
