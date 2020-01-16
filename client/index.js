@@ -97,16 +97,16 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
 		displayResources()
 		MY_MOVE = {}
 	} else if (
-  	BOARD[row][col].marker == 'empty'
-    && BOARD[row][col].type != 'w' 
-    && BOARD[row][col].building_id == undefined
-    && ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly
+  		BOARD[row][col].marker == 'empty'
+    	&& BOARD[row][col].type != 'w' 
+    	&& BOARD[row][col].building_id == undefined
+    	&& ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly
   ) {
 		clearPendingPlacements()
 		cell.innerText = '*'
 		
 		MY_RESOURCES[BOARD[row][col].type] += 1
-		displayResources(BOARD[row][col])
+		displayResources()
 
 		MY_MOVE['marker_placement'] = {'row': row, 'col': col}
 	} else {
@@ -133,11 +133,11 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
   }
   locationArray.push({'row': row, 'col': col})
   if (BuildingValidation.validateBuildingSelection(
-    MY_MOVE['building']['name'], 
-    locationArray,
-    MY_MOVE,
-    BOARD,
-    STARTING_PLAYER
+    	MY_MOVE['building']['name'], 
+    	locationArray,
+    	MY_MOVE,
+    	BOARD,
+    	STARTING_PLAYER
   )) {
   	MY_MOVE['building']['location_array'] = locationArray
     cell.innerText = 'B'
@@ -146,9 +146,9 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
 
 function clearBuildingBText(row, col) {
 	if (
-		MY_MOVE['marker_placement']
-		&& MY_MOVE['marker_placement'].row === row
-		&& MY_MOVE['marker_placement'].col === col
+			MY_MOVE['marker_placement']
+			&& MY_MOVE['marker_placement'].row === row
+			&& MY_MOVE['marker_placement'].col === col
 	) {
 	  document.getElementById(row + "_" + col).innerText = "*"
   } else if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {

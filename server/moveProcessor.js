@@ -55,6 +55,7 @@
         var r = newBuilding.location_array[i].row
         var c = newBuilding.location_array[i].col
         this.game_state.board[r][c].building_id = newBuilding.id
+        this.game_state.board[r][c].marker = player
       }
     }
     
