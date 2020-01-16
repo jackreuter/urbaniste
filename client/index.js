@@ -11,10 +11,9 @@
 
 	TILE object:
 		{
-			marker: , // unoccupied or which playe has a marker on this tile
+			marker: , // unoccupied or which player has a marker on this tile
 			building_id: ,
 			type: , // w, bm, c, l, other?
-			dom_id: , // id of dom element associated to this tile
 		}
 
 	BOARD object:  Matrix of Tiles.
@@ -59,15 +58,16 @@ function displayBoard() {
   container.style.setProperty('--grid_cols', cols)
   for (var row = 0; row < BOARD.length; row++) {
   	for (var col = 0; col < BOARD[row].length; col++) {
-	    var cell = document.createElement("div")
+  		var cell = document.createElement("div")
 	    cell.id = row + "_" + col
-	    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
-	    	cell.innerText = 'Mine'
-	    }
-	    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_two') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_one')) {
-	    	cell.innerText = 'Enemy'
-	    }
-
+	    if (BOARD[row][col].building_id === undefined) {
+	    	if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
+		    	cell.innerText = 'Mine'
+		    }
+		    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_two') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_one')) {
+		    	cell.innerText = 'Enemy'
+		    }
+  		}
       // handle hex click
       // force marker placement selection first
       // then allow building selection, with shape restrictions
@@ -290,7 +290,7 @@ function displayResources() {
 
 // Reconcile global variables to server's values. Display elements.
 function ingestServerResponse(server_response) {
-	$().alert('close')
+	// $().alert('close') <- TODO
 	BOARD = server_response.game_state.board
   BUILDINGS = server_response.game_state.buildings
   console.log(BUILDINGS)
