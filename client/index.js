@@ -181,14 +181,21 @@ function clearPendingBuildings() {
 	}
 }
 
-// Iterate through BOARD object and draw svg lines for buildings
+
+var SVG_HEX_WIDTH = 100 // must match css file
+var SVG_SPACING = 5 // must match css file
+var SVG_WIDTH_MULTIPLIER = SVG_HEX_WIDTH + SVG_SPACING
+var SVG_HEIGHT_MULTIPLIER = 90.5 // trial and error bullshit
+var SVG_HEIGHT_BUFFER = 55 // trial and error bullshit
+var SVG_LINE_WIDTH = 45
+
+// Iterate through BOARD object and draw SVG lines for buildings
 function displayBuildings() {
-  var lineWidth = 45
   for (var i = 0; i < BUILDINGS.length; i++) {
     var locationArray = BUILDINGS[i]['location_array']
     var lineColor = (BUILDINGS[i]['player'] === 'player_one') ? 'white' : 'black'
     if (locationArray.length == 1) {
-        drawLineOnTile(locationArray[0], lineWidth, lineColor)
+      drawLineOnTile(locationArray[0], lineColor)
     } else {
       for (var j = 0; j < locationArray.length; j++) {
         for (var k = j+1; k < locationArray.length; k++) {
@@ -196,7 +203,7 @@ function displayBuildings() {
           var tile2 = locationArray[k]
           // draw line between adjacent tiles
           if (ShapeUtils.adjacent(tile1, tile2)) {
-            drawLineBetweenTiles(tile1, tile2, lineWidth, lineColor)
+            drawLineBetweenTiles(tile1, tile2, lineColor)
           }
         }
       }
@@ -205,49 +212,40 @@ function displayBuildings() {
 }
 
 // draw SVG line between two tiles
-function drawLineBetweenTiles(tile1, tile2, lineWidth, lineColor) {
-  var hexWidth = 100 // must match css file
-  var spacing = 5 // must match css file
-  var widthMultiplier = hexWidth + spacing
-  var heightMultiplier = 90.5 // trial and error bullshit
-  var x1 = hexWidth/2 + spacing + widthMultiplier*(tile1.col)
-  var x2 = hexWidth/2 + spacing + widthMultiplier*(tile2.col)
-  var y1 = 80 + heightMultiplier*(tile1.row)
-  var y2 = 80 + heightMultiplier*(tile2.row)
+function drawLineBetweenTiles(tile1, tile2, lineColor) {
+  var x1 = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile1.col)
+  var x2 = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile2.col)
+  var y1 = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile1.row)
+  var y2 = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile2.row)
 
   if (tile1.row%2 != 0) {
-    x1 += widthMultiplier/2
+    x1 += SVG_WIDTH_MULTIPLIER/2 - SVG_SPACING
   }
   if (tile2.row%2 != 0) {
-    x2 += widthMultiplier/2
+    x2 += SVG_WIDTH_MULTIPLIER/2 - SVG_SPACING
   }
 
-  drawLine(x1, y1, x2, y2, lineWidth, lineColor)
+  drawLine(x1, y1, x2, y2, lineColor)
 }
 
 // draw SVG line on single tile
-function drawLineOnTile(tile, lineWidth, lineColor) {
-  var hexWidth = 100 // must match css file
-  var spacing = 5 // must match css file
-  var widthMultiplier = hexWidth + spacing
-  var heightMultiplier = 90.5 // trial and error bullshit
-  var x = hexWidth/2 + spacing + widthMultiplier*(tile.col)
-  var y = 80 + heightMultiplier*(tile.row)
-
+function drawLineOnTile(tile, lineColor) {
+  var x = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile.col)
+  var y = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile.row)
   if (tile.row%2 != 0) {
-    x += widthMultiplier/2
+    x += SVG_WIDTH_MULTIPLIER/2 - SVG_SPACING
   }
 
-  var x1 = x - lineWidth/2
-  var x2 = x + lineWidth/2
-  var y1 = y - lineWidth/2
-  var y2 = y + lineWidth/2
+  var x1 = x - SVG_LINE_WIDTH/2
+  var x2 = x + SVG_LINE_WIDTH/2
+  var y1 = y - SVG_LINE_WIDTH/2
+  var y2 = y + SVG_LINE_WIDTH/2
 
-  drawLine(x1, y1, x2, y2, lineWidth, lineColor)
+  drawLine(x1, y1, x2, y2, lineColor)
 }
 
 // draw SVG line
-function drawLine(x1, y1, x2, y2, lineWidth, lineColor) {
+function drawLine(x1, y1, x2, y2, lineColor) {
   var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
   newLine.setAttribute('id','line');
   newLine.setAttribute('x1', x1);
@@ -255,8 +253,26 @@ function drawLine(x1, y1, x2, y2, lineWidth, lineColor) {
   newLine.setAttribute('x2', x2);
   newLine.setAttribute('y2', y2);
   newLine.setAttribute("stroke", lineColor);
-  newLine.setAttribute("stroke-width", lineWidth);
+  newLine.setAttribute("stroke-width", SVG_LINE_WIDTH);
   $("svg").append(newLine);
+
+}
+
+// render SVG text element
+// not in use yet, just playing around with SVG text
+function drawTextOnTile(tile, text) {
+  var x = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile.col)
+  var y = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile.row)
+  if (tile.row%2 != 0) {
+    x += SVG_WIDTH_MULTIPLIER/2 - SPACING
+  }
+  var textSVG = document.createElementNS('http://www.w3.org/2000/svg','text');
+  textSVG.setAttribute('id','text');
+  textSVG.setAttribute('x', x);
+  textSVG.setAttribute('y', y);
+  textSVG.setAttribute('fill', 'red');
+  textSVG.textContent=text
+  $("svg").append(textSVG);
 }
 
 // render shop HTML
