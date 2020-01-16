@@ -11,10 +11,9 @@
 
 	TILE object:
 		{
-			marker: , // unoccupied or which playe has a marker on this tile
+			marker: , // unoccupied or which player has a marker on this tile
 			building_id: ,
 			type: , // w, bm, c, l, other?
-			dom_id: , // id of dom element associated to this tile
 		}
 
 	BOARD object:  Matrix of Tiles.
@@ -23,6 +22,7 @@
 // individual functions to validate building placement in separate local file
 import BuildingValidation from './buildingValidation.js'
 import ShapeUtils from './util.js'
+import ErrorHandler from './errorHandler.js'
 
 // Matrix of Tile objects. Details of board should come from server on game start
 var BOARD = undefined
@@ -58,15 +58,16 @@ function displayBoard() {
   container.style.setProperty('--grid_cols', cols)
   for (var row = 0; row < BOARD.length; row++) {
   	for (var col = 0; col < BOARD[row].length; col++) {
-	    var cell = document.createElement("div")
+  		var cell = document.createElement("div")
 	    cell.id = row + "_" + col
-	    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
-	    	cell.innerText = 'Mine'
-	    }
-	    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_two') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_one')) {
-	    	cell.innerText = 'Enemy'
-	    }
-
+	    if (BOARD[row][col].building_id === undefined) {
+	    	if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
+		    	cell.innerText = 'Mine'
+		    }
+		    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_two') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_one')) {
+		    	cell.innerText = 'Enemy'
+		    }
+  		}
       // handle hex click
       // force marker placement selection first
       // then allow building selection, with shape restrictions
@@ -96,10 +97,10 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
 		displayResources()
 		MY_MOVE = {}
 	} else if (
-  	BOARD[row][col].marker == 'empty'
-    && BOARD[row][col].type != 'w' 
-    && BOARD[row][col].building_id == undefined
-    && ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly
+  		BOARD[row][col].marker == 'empty'
+    	&& BOARD[row][col].type != 'w' 
+    	&& BOARD[row][col].building_id == undefined
+    	&& ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly
   ) {
 		clearPendingPlacements()
 		cell.innerText = '*'
@@ -108,6 +109,8 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
 		displayResources()
 
 		MY_MOVE['marker_placement'] = {'row': row, 'col': col}
+	} else {
+		ErrorHandler.invalidHexClick(BOARD[row][col], ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly)
 	}
 }
 
@@ -130,22 +133,21 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
   }
   locationArray.push({'row': row, 'col': col})
   if (BuildingValidation.validateBuildingSelection(
-    MY_MOVE['building']['name'], 
-    locationArray,
-    MY_MOVE,
-    BOARD,
-    STARTING_PLAYER
+    	MY_MOVE['building']['name'], 
+    	locationArray,
+    	MY_MOVE,
+    	BOARD,
+    	STARTING_PLAYER
   )) {
   	MY_MOVE['building']['location_array'] = locationArray
     cell.innerText = 'B'
-  } 
+  }
 }
 
 function clearBuildingBText(row, col) {
-	if (
-		MY_MOVE['marker_placement']
-		&& MY_MOVE['marker_placement'].row === row
-		&& MY_MOVE['marker_placement'].col === col
+	if (MY_MOVE['marker_placement']
+			&& MY_MOVE['marker_placement'].row === row
+			&& MY_MOVE['marker_placement'].col === col
 	) {
 	  document.getElementById(row + "_" + col).innerText = "*"
   } else if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
@@ -292,6 +294,7 @@ function displayShop() {
 			return function() {
         var buildingName = row.id
         if (MY_MOVE['marker_placement'] === undefined) {
+        	ErrorHandler.shopError()
         	return
         }
       	// If shop item is already selected, deselect it
@@ -329,6 +332,7 @@ function displayResources() {
 
 // Reconcile global variables to server's values. Display elements.
 function ingestServerResponse(server_response) {
+	// $().alert('close') <- TODO
 	BOARD = server_response.game_state.board
   BUILDINGS = server_response.game_state.buildings
   SHOP = server_response.game_state.shop
@@ -349,6 +353,7 @@ window.onload = () => {
   var socket = io();
 
   socket.on('not_welcome', () => {
+  	ErrorHandler.notWelcome() // <- TODO
     document.getElementById('not_valid_player_title').innerText = 'You Are Not Connected To Play. In VIEW ONLY Mode.'
   });
 
@@ -387,6 +392,7 @@ window.onload = () => {
 
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
+  	// <- TOD): check my turn first
     socket.emit('submit_move', MY_MOVE);
     MY_MOVE = {}
   }
