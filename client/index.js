@@ -191,6 +191,7 @@ var SVG_LINE_WIDTH = 45
 
 // Iterate through BOARD object and draw SVG lines for buildings
 function displayBuildings() {
+  var lineWidth = 45
   for (var i = 0; i < BUILDINGS.length; i++) {
     var locationArray = BUILDINGS[i]['location_array']
     var lineColor = (BUILDINGS[i]['player'] === 'player_one') ? 'white' : 'black'
