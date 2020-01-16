@@ -1,5 +1,6 @@
 /* Building validation functions */
 import ShapeUtils from './util.js'
+import ErrorHandler from './ErrorHandler.js'
 
 // check that given coordinate selection is valid for building placement
 function validateBuilding(buildingName, coords, move, board, startingPlayer) {
@@ -13,6 +14,7 @@ function validateBuilding(buildingName, coords, move, board, startingPlayer) {
 // recursively checks if any possible valid building could exist using given tiles
 function validateBuildingSelection(buildingName, coords, move, board, startingPlayer) {
   if (coords.length > buildingData[buildingName]['length']) {
+    ErrorHandler.invalidBuilding(buildingName, {'tooFewCoordinates': true})
     return false
   } else if (validateBuilding(buildingName, coords, move, board, startingPlayer)) {
     return true
