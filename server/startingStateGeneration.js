@@ -42,7 +42,7 @@
       {'name': 'Monument', 'type': 'Civic', 'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2}
     ]
 
-    for (i=0; i<num_items; i++) {
+    for (i=0; i<5; i++) {
       var x = Math.floor(Math.random() * buildings.length)
       results.push(buildings[x])
       buildings.splice(x, 1)

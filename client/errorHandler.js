@@ -25,6 +25,9 @@ const ErrorHandler = {
   },
   notWelcome: () => {
     displayError("You are not one of the two connected players. You are in VIEW ONLY mode.")
+  },
+  notEnoughMoney: (building_name) => {
+    displayError("You cannot pay the cost for that " + building_name + ".")
   }
 
 }

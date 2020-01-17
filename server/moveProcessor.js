@@ -43,6 +43,9 @@
 
     // building
     if (this.client_object.building) {
+      if (!validateCost(this.game_state, this.active_player_index, this.client_object.building.name)) {
+        return this.game_state
+      }
       var newBuilding = {
         'player': player,
         'name': this.client_object.building.name,
@@ -61,6 +64,32 @@
   }
 
   // Private helper function
+
+  function validateCost(game_state, active_player_index, building_name) {
+    var player_resources
+    if (active_player_index == 0) {
+      player_resources = game_state.p1_resources
+    } else {
+      player_resources = game_state.p2_resources
+    }  
+    for (var i=0; i<game_state.shop.length; i++) {
+      if (game_state.shop[i].name == building_name) {
+        if (canPayCost(game_state.shop[i], player_resources)) {
+          game_state.p1_resources.bm -= game_state.shop[i].bm
+          game_state.p1_resources.l -= game_state.shop[i].l
+          game_state.p1_resources.c -= game_state.shop[i].c
+          return true
+        } else {
+          return false
+        }
+      }
+    }
+    return false
+  }
+
+  function canPayCost(cost, player_resources) {
+    return player_resources.bm >= cost.bm && player_resources.l >= cost.l && player_resources.c >= cost.c
+  }
 
   function tileAdjacentToFriendly(row, col, active_player_index, game_state) {
     if (adjacent(row, col+1, active_player_index, game_state) || adjacent(row, col-1, active_player_index, game_state)) {

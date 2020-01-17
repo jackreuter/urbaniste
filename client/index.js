@@ -302,11 +302,17 @@ function displayShop() {
  		      MY_MOVE['building'] = undefined
           row.style.backgroundColor = 'white'
         } else { // Select Shop Item
-        	if (MY_MOVE['building'] && MY_MOVE['building']['name']) {
-         		document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'
+        	responseResources = BuildingValidation.canPayForBuilding(MY_MOVE['building']['name'], MY_RESOURCES, SHOP)
+        	if (responseResources) {
+        		MY_RESOURCES = responseResources
+        		if (MY_MOVE['building'] && MY_MOVE['building']['name']) {
+	         		document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'
+	        	}
+	 		      MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
+	          row.style.backgroundColor = 'red'
+        	} else {
+        		ErrorHandler.notEnoughMoney(MY_MOVE['building']['name'])
         	}
- 		      MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
-          row.style.backgroundColor = 'red'
         }
         clearPendingBuildings()
         
@@ -353,7 +359,7 @@ window.onload = () => {
   var socket = io();
 
   socket.on('not_welcome', () => {
-  	ErrorHandler.notWelcome() // <- TODO
+  	ErrorHandler.notWelcome()
     document.getElementById('not_valid_player_title').innerText = 'You Are Not Connected To Play. In VIEW ONLY Mode.'
   });
 
@@ -392,7 +398,7 @@ window.onload = () => {
 
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
-  	// <- TOD): check my turn first
+  	// <- TODO: check my turn first
     socket.emit('submit_move', MY_MOVE);
     MY_MOVE = {}
   }
