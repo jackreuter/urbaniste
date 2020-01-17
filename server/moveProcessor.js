@@ -75,9 +75,15 @@
     for (var i=0; i<game_state.shop.length; i++) {
       if (game_state.shop[i].name == building_name) {
         if (canPayCost(game_state.shop[i], player_resources)) {
-          game_state.p1_resources.bm -= game_state.shop[i].bm
-          game_state.p1_resources.l -= game_state.shop[i].l
-          game_state.p1_resources.c -= game_state.shop[i].c
+          if (active_player_index == 0) {
+            game_state.p1_resources.bm -= game_state.shop[i].bm
+            game_state.p1_resources.l -= game_state.shop[i].l
+            game_state.p1_resources.c -= game_state.shop[i].c
+          } else {
+            game_state.p2_resources.bm -= game_state.shop[i].bm
+            game_state.p2_resources.l -= game_state.shop[i].l
+            game_state.p2_resources.c -= game_state.shop[i].c
+          }
           return true
         } else {
           return false

@@ -302,7 +302,7 @@ function displayShop() {
  		      MY_MOVE['building'] = undefined
           row.style.backgroundColor = 'white'
         } else { // Select Shop Item
-        	responseResources = BuildingValidation.canPayForBuilding(MY_MOVE['building']['name'], MY_RESOURCES, SHOP)
+        	var responseResources = BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)
         	if (responseResources) {
         		MY_RESOURCES = responseResources
         		if (MY_MOVE['building'] && MY_MOVE['building']['name']) {
@@ -311,7 +311,7 @@ function displayShop() {
 	 		      MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
 	          row.style.backgroundColor = 'red'
         	} else {
-        		ErrorHandler.notEnoughMoney(MY_MOVE['building']['name'])
+        		ErrorHandler.notEnoughMoney(buildingName)
         	}
         }
         clearPendingBuildings()
