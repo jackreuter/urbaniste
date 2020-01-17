@@ -363,6 +363,26 @@ window.onload = () => {
     document.getElementById('not_valid_player_title').innerText = 'You Are Not Connected To Play. In VIEW ONLY Mode.'
   });
 
+  socket.on('game_ended', (final_score) => {
+  	console.log(final_score)
+  	var your_score
+  	var opponent_score
+  	if (STARTING_PLAYER) {
+  		your_score = final_score.p1_vps
+  		opponent_score = final_score.p2_vps
+  	} else {
+  		your_score = final_score.p2_vps
+  		opponent_score = final_score.p1_vps
+  	}
+  	if (your_score > opponent_score) {
+  		document.getElementById('not_valid_player_title').innerText = "YOU WIN. Your score: " + your_score + ". Your opponent's score: " + opponent_score + "."
+  	} else if (your_score < opponent_score) {
+  		document.getElementById('not_valid_player_title').innerText = "YOU LOSE. Your score: " + your_score + ". Your opponent's score: " + opponent_score + "."
+  	} else {
+  		document.getElementById('not_valid_player_title').innerText = "You tied with score: " + your_score + ". Lame."
+  	}
+  });
+
 	// handle different messages from server
 	socket.on('your_turn', () => {
     MY_TURN = true
@@ -396,11 +416,26 @@ window.onload = () => {
 		console.log(message)
 	})
 
+	document.getElementById("pass_btn").onclick = () => {
+		if (MY_TURN) {
+			if (confirm("Are you sure you want to pass forever??")) {
+			  socket.emit("pass_forever")
+			}
+		} else {
+	  	ErrorHandler.notYourTurn()
+	  }
+	}
+
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
-  	// <- TODO: check my turn first
-    socket.emit('submit_move', MY_MOVE);
-    MY_MOVE = {}
+  	console.log("HERE")
+  	if (MY_TURN) {
+  		console.log('B')
+	    socket.emit('submit_move', MY_MOVE);
+	    MY_MOVE = {}
+	  } else {
+	  	ErrorHandler.notYourTurn()
+	  }
   }
 
   document.getElementById('message_btn').onclick = function() {
