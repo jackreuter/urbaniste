@@ -44,8 +44,29 @@ function validateBuildingSelection(buildingName, coords, move, board, startingPl
   }
 }
 
+function canPayForBuilding(building_name, my_resources, shop) {
+  for (var i=0; i<shop.length; i++) {
+    if (shop[i].name == building_name) {
+      if (canPayCost(shop[i], my_resources)) {
+        my_resources.bm -= shop[i].bm
+        my_resources.l -= shop[i].l
+        my_resources.c -= shop[i].c
+        return my_resources
+      } else {
+        return null
+      }
+    }
+  }
+  return null
+}
+
+function canPayCost(cost, my_resources) {
+  return my_resources.bm >= cost.bm && my_resources.l >= cost.l && my_resources.c >= cost.c
+}
+
 const BuildingValidation = { 
-  'validateBuildingSelection': validateBuildingSelection
+  'validateBuildingSelection': validateBuildingSelection,
+  'canPayForBuilding': canPayForBuilding
 }
 
 export default BuildingValidation 
