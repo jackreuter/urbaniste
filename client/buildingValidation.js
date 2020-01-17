@@ -200,7 +200,7 @@ function boulevard(coords, move, board, startingPlayer) {
 function tunnel(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   var adjacentTo = builtAdjacentTo(coords, move, board, startingPlayer)
-  return on.friendly == 1 && adjacentTo.enemyBuildings.length >= 1 && coords.length == 1
+  return on.friendly == 1 && adjacentTo.enemyBuildings.length >= 1 && coords.length == 1 // TODO built next to exactly one building
 }
 function prison(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
