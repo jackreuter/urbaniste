@@ -311,7 +311,7 @@ function displayShop() {
 	 		      MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
 	          row.style.backgroundColor = 'red'
         	} else {
-        		// TODO <- where the error calls go?
+        		ErrorHandler.notEnoughMoney(MY_MOVE['building']['name'])
         	}
         }
         clearPendingBuildings()
@@ -359,7 +359,7 @@ window.onload = () => {
   var socket = io();
 
   socket.on('not_welcome', () => {
-  	ErrorHandler.notWelcome() // <- TODO
+  	ErrorHandler.notWelcome()
     document.getElementById('not_valid_player_title').innerText = 'You Are Not Connected To Play. In VIEW ONLY Mode.'
   });
 
@@ -398,7 +398,7 @@ window.onload = () => {
 
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
-  	// <- TOD): check my turn first
+  	// <- TODO: check my turn first
     socket.emit('submit_move', MY_MOVE);
     MY_MOVE = {}
   }
