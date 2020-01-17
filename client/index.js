@@ -3,7 +3,6 @@
 /*
 	BUILDING object:
 		{
-			id: ,
 			player: ,
 			name: ,
 			location_array: , // unordered list of coordinates this building exists on
@@ -12,7 +11,7 @@
 	TILE object:
 		{
 			marker: , // unoccupied or which player has a marker on this tile
-			building_id: ,
+			building: ,
 			type: , // w, bm, c, l, other?
 		}
 
@@ -60,7 +59,7 @@ function displayBoard() {
   	for (var col = 0; col < BOARD[row].length; col++) {
   		var cell = document.createElement("div")
 	    cell.id = row + "_" + col
-	    if (BOARD[row][col].building_id === undefined) {
+	    if (BOARD[row][col].building === undefined) {
 	    	if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
 		    	cell.innerText = 'Mine'
 		    }
@@ -99,7 +98,7 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
 	} else if (
   		BOARD[row][col].marker == 'empty'
     	&& BOARD[row][col].type != 'w' 
-    	&& BOARD[row][col].building_id == undefined
+    	&& BOARD[row][col].building == undefined
     	&& ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly
   ) {
 		clearPendingPlacements()
@@ -116,7 +115,7 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
 
 function handleHexClickForBuildingPlacement(cell, row, col) {
 	// check if tile available to build
-  if ( BOARD[row][col].building_id !== undefined ) {
+  if ( BOARD[row][col].building !== undefined ) {
   	return
   }
   // if tile have already been selected, check if click is to remove
@@ -187,6 +186,7 @@ function clearPendingBuildings() {
 var SVG_HEX_WIDTH = 100 // must match css file
 var SVG_SPACING = 5 // must match css file
 var SVG_WIDTH_MULTIPLIER = SVG_HEX_WIDTH + SVG_SPACING
+var SVG_WIDTH_BUFFER = SVG_WIDTH_MULTIPLIER/2
 var SVG_HEIGHT_MULTIPLIER = 90.5 // trial and error bullshit
 var SVG_HEIGHT_BUFFER = 55 // trial and error bullshit
 var SVG_LINE_WIDTH = 45
@@ -216,16 +216,16 @@ function displayBuildings() {
 
 // draw SVG line between two tiles
 function drawLineBetweenTiles(tile1, tile2, lineColor) {
-  var x1 = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile1.col)
-  var x2 = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile2.col)
+  var x1 = SVG_HEX_WIDTH/2 + SVG_SPACING/2 + SVG_WIDTH_MULTIPLIER*(tile1.col)
+  var x2 = SVG_HEX_WIDTH/2 + SVG_SPACING/2 + SVG_WIDTH_MULTIPLIER*(tile2.col)
   var y1 = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile1.row)
   var y2 = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile2.row)
 
   if (tile1.row%2 != 0) {
-    x1 += SVG_WIDTH_MULTIPLIER/2 - SVG_SPACING
+    x1 += SVG_WIDTH_BUFFER
   }
   if (tile2.row%2 != 0) {
-    x2 += SVG_WIDTH_MULTIPLIER/2 - SVG_SPACING
+    x2 += SVG_WIDTH_BUFFER
   }
 
   drawLine(x1, y1, x2, y2, lineColor)
@@ -233,10 +233,10 @@ function drawLineBetweenTiles(tile1, tile2, lineColor) {
 
 // draw SVG line on single tile
 function drawLineOnTile(tile, lineColor) {
-  var x = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile.col)
+  var x = SVG_HEX_WIDTH/2 + SVG_SPACING/2 + SVG_WIDTH_MULTIPLIER*(tile.col)
   var y = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile.row)
   if (tile.row%2 != 0) {
-    x += SVG_WIDTH_MULTIPLIER/2 - SVG_SPACING
+    x += SVG_WIDTH_BUFFER
   }
 
   var x1 = x - SVG_LINE_WIDTH/2
@@ -264,10 +264,10 @@ function drawLine(x1, y1, x2, y2, lineColor) {
 // render SVG text element
 // not in use yet, just playing around with SVG text
 function drawTextOnTile(tile, text) {
-  var x = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile.col)
+  var x = SVG_HEX_WIDTH/2 + SVG_SPACING/2 + SVG_WIDTH_MULTIPLIER*(tile.col)
   var y = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile.row)
   if (tile.row%2 != 0) {
-    x += SVG_WIDTH_MULTIPLIER/2 - SPACING
+    x += SVG_WIDTH_BUFFER
   }
   var textSVG = document.createElementNS('http://www.w3.org/2000/svg','text');
   textSVG.setAttribute('id','text');

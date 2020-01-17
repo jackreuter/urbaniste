@@ -47,7 +47,6 @@
         return this.game_state
       }
       var newBuilding = {
-        'id': this.game_state.buildings.length, // not a real solution
         'player': player,
         'name': this.client_object.building.name,
         'location_array': this.client_object.building.location_array
@@ -56,7 +55,7 @@
       for (var i = 0; i < newBuilding.location_array.length; i++) {
         var r = newBuilding.location_array[i].row
         var c = newBuilding.location_array[i].col
-        this.game_state.board[r][c].building_id = newBuilding.id
+        this.game_state.board[r][c].building = newBuilding
         this.game_state.board[r][c].marker = player
       }
     }
