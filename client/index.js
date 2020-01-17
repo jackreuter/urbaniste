@@ -428,9 +428,7 @@ window.onload = () => {
 
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
-  	console.log("HERE")
   	if (MY_TURN) {
-  		console.log('B')
 	    socket.emit('submit_move', MY_MOVE);
 	    MY_MOVE = {}
 	  } else {
