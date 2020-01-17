@@ -42,6 +42,14 @@
       {'name': 'Monument', 'type': 'Civic', 'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2}
     ]
 
+    // return [
+    //   {'name': 'Boulevard', 'type': 'Infrastructure', 'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+    //   {'name': 'Bridge', 'type': 'Aquatic', 'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 3},
+    //   {'name': 'Cathedral', 'type': 'Cultural', 'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 5},
+    //   {'name': 'City Hall', 'type': 'Cultural', 'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
+    //   {'name': 'Tax House', 'type': 'Civic', 'bm': 0, 'c': 3, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+    // ]
+
     for (i=0; i<5; i++) {
       var x = Math.floor(Math.random() * buildings.length)
       results.push(buildings[x])

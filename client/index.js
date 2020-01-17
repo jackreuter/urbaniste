@@ -35,6 +35,8 @@ var MY_MOVE = {}
 
 var STARTING_PLAYER = false
 var MY_RESOURCES = {'bm':0, 'l':0, 'c':0}
+var ENEMY_RESOURCES = {'bm':0, 'l':0, 'c':0}
+
 
 // creates HTML class name for hexagons, referenced by CSS
 function getHexagonColorString(row, col) {
@@ -334,6 +336,10 @@ function displayResources() {
 	document.getElementById('resource_bm').innerText = "Building Materials: " + MY_RESOURCES.bm
 	document.getElementById('resource_l').innerText = "Labor: " + MY_RESOURCES.l
 	document.getElementById('resource_c').innerText = "Coin: " + MY_RESOURCES.c
+
+	document.getElementById('resource_bm_e').innerText = "Building Materials: " + ENEMY_RESOURCES.bm
+	document.getElementById('resource_l_e').innerText = "Labor: " + ENEMY_RESOURCES.l
+	document.getElementById('resource_c_e').innerText = "Coin: " + ENEMY_RESOURCES.c
 }
 
 // Reconcile global variables to server's values. Display elements.
@@ -345,8 +351,10 @@ function ingestServerResponse(server_response) {
 
 	if (STARTING_PLAYER) {
     MY_RESOURCES = server_response.game_state.p1_resources
+    ENEMY_RESOURCES = server_response.game_state.p2_resources
   } else {
     MY_RESOURCES = server_response.game_state.p2_resources
+    ENEMY_RESOURCES = server_response.game_state.p1_resources
   }
 
   displayBoard()
@@ -412,10 +420,6 @@ window.onload = () => {
     ingestServerResponse(server_response)  
   });
 
-	socket.on('received_message', function(message) {
-		console.log(message)
-	})
-
 	document.getElementById("pass_btn").onclick = () => {
 		if (MY_TURN) {
 			if (confirm("Are you sure you want to pass forever??")) {
@@ -434,9 +438,5 @@ window.onload = () => {
 	  } else {
 	  	ErrorHandler.notYourTurn()
 	  }
-  }
-
-  document.getElementById('message_btn').onclick = function() {
-  	socket.emit('chat_message', document.getElementById('message_block').value)
   }
 }

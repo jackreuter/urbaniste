@@ -107,11 +107,6 @@ io.on('connection', function(socket) {
     }
     emitMoveToPlayers(socket)
   })
-
-  socket.on('chat_message', function(message) {
-    io.sockets.emit('received_message', message)
-  })
-
 })
 
 // Starta a client by going to localhost:8080 in a browser 
@@ -167,10 +162,10 @@ function gameEnded() {
     for (var j=0; j<GAME_STATE.shop.length; j++) {
       if (GAME_STATE.shop[j].name == GAME_STATE.buildings[i].name) {
         if (GAME_STATE.buildings[i].player == 'player_one') {
-          p1_vps += GAME_STATE.shop[i].vp
+          p1_vps += GAME_STATE.shop[j].vp
         }
         if (GAME_STATE.buildings[i].player == 'player_two') {
-          p2_vps += GAME_STATE.shop[i].vp
+          p2_vps += GAME_STATE.shop[j].vp
         }
       }
     }

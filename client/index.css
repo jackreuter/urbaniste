@@ -63,6 +63,9 @@ p {
   width: 50%;
 }
 
+#turn_title {
+  font-size: 30;
+}
 
 #player_spot {
   display: inline-block;

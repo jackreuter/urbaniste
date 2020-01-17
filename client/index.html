@@ -11,18 +11,18 @@
 			<div>
 				<input type="submit" id='pass_btn' value="Pass Forever">
 			</div>
-			<h1>Resources</h1>
+			<h1>My Resources</h1>
 			<div id='resource_bm'>Building Materials: 0</div>
 			<div id='resource_c'>Coin: 0</div>
 			<div id='resource_l'>Labor: 0</div>
+			<h1>Enemy Resources</h1>
+			<div id='resource_bm_e'>Building Materials: 0</div>
+			<div id='resource_c_e'>Coin: 0</div>
+			<div id='resource_l_e'>Labor: 0</div>
 			<div>
 				<input type="submit" id='submit_btn' value="Submit Move">
 			</div>
 			<br>
-			<div>
-				<textarea id='message_block' rows="2" cols="25"></textarea>
-				<input type="submit" id="message_btn" value="Send Message">
-			</div>
 		</div>
 		<div id="shop_div">
 			<h1>Shop</h1>
@@ -38,12 +38,13 @@
 					<th>VP</th>
 				</tr>
 			</table>
+			<br>
+			<br>
+			<h1 id=turn_title></h1>
+			<h1 id=not_valid_player_title></h1>
 		</div>
 		<br>
 		<br>
-		<br>
-		<h1 id=turn_title></h1>
-		<h1 id=not_valid_player_title></h1>
 		<div id="board">
     </div>
     <svg id="buildings" width="100%" height="300%">
