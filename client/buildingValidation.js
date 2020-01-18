@@ -44,6 +44,14 @@ function validateBuildingSelection(buildingName, coords, move, board, startingPl
   }
 }
 
+function buildingAvailable(building_name, shop) {
+  for (var i=0; i<shop.length; i++) {
+    if (shop[i].name == building_name) {
+      return shop[i].limit > 0
+    }
+  }
+}
+
 function canPayForBuilding(building_name, my_resources, shop) {
   for (var i=0; i<shop.length; i++) {
     if (shop[i].name == building_name) {
@@ -66,7 +74,8 @@ function canPayCost(cost, my_resources) {
 
 const BuildingValidation = { 
   'validateBuildingSelection': validateBuildingSelection,
-  'canPayForBuilding': canPayForBuilding
+  'canPayForBuilding': canPayForBuilding,
+  'buildingAvailable': buildingAvailable
 }
 
 export default BuildingValidation 

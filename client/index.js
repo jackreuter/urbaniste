@@ -306,6 +306,10 @@ function displayShop() {
         } else { // Select Shop Item
         	var responseResources = BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)
         	if (responseResources) {
+        		if (!BuildingValidation.buildingAvailable(buildingName, SHOP)) {
+							ErrorHandler.buildingNotAvailable(buildingName)
+        			return
+        		}
         		MY_RESOURCES = responseResources
         		if (MY_MOVE['building'] && MY_MOVE['building']['name']) {
 	         		document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'

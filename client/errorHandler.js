@@ -29,6 +29,9 @@ const ErrorHandler = {
   notEnoughMoney: (building_name) => {
     displayError("You cannot pay the cost for that " + building_name + ".")
   },
+  buildingNotAvailable: (building_name) => {
+    displayError("No more " + building_name + "s left to build.")
+  }
   notYourTurn: () => {
     displayError("Not your turn. Wait until opponent has made their move to make yours.")
   }

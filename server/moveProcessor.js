@@ -43,13 +43,21 @@
 
     // building
     if (this.client_object.building) {
-      if (!validateCost(this.game_state, this.active_player_index, this.client_object.building.name)) {
+      if (
+          !validateCost(this.game_state, this.active_player_index, this.client_object.building.name)
+          || !validateAvailable(this.game_state, this.client_object.building.name)
+      ) {
         return this.game_state
       }
       var newBuilding = {
         'player': player,
         'name': this.client_object.building.name,
         'location_array': this.client_object.building.location_array
+      }
+      for (var i=0; i<this.game_state.shop.length; i++) {
+        if (this.game_state.shop[i].name == this.client_object.building.name) {
+          this.game_state.shop[i].limit -= 1
+        }
       }
       this.game_state.buildings.push(newBuilding)
       for (var i = 0; i < newBuilding.location_array.length; i++) {
@@ -64,6 +72,14 @@
   }
 
   // Private helper function
+
+  function validateAvailable(game_state, building_name) {
+    for (var i=0; i<game_state.shop.length; i++) {
+      if (game_state.shop[i].name == building_name) {
+        return game_state.shop[i].limit > 0
+      }
+    }
+  }
 
   function validateCost(game_state, active_player_index, building_name) {
     var player_resources
