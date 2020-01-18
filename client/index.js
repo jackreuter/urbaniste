@@ -69,26 +69,30 @@ function displayBoard() {
 		    	cell.innerText = 'Enemy'
 		    }
   		}
-      // handle hex click
-      // force marker placement selection first
-      // then allow building selection, with shape restrictions
 	    cell.onclick = function(cell) {
 	    	return function() {
-	    		var coor = cell.id.split("_")
-		 			var row = +coor[0]
-		 			var col = +coor[1]
-
-          // force marker selection first
-          if (MY_MOVE['building'] === undefined) {
-						handleHexClickForMarkerPlacement(cell, row, col) 
-          } else {
-						handleHexClickForBuildingPlacement(cell, row, col)
-          }
+          handleHexClick(cell)
         }
 	  	}(cell) // immediatlly invoke this function to tie it to correct cell
 	    container.appendChild(cell).className = getHexagonColorString(row, col)
 	  }
 	}
+}
+
+// handle hex click
+// force marker placement selection first
+// then allow building selection, with shape restrictions
+function handleHexClick(cell) {
+	var coor = cell.id.split("_")
+	var row = +coor[0]
+	var col = +coor[1]
+
+  // force marker selection first
+  if (MY_MOVE['building'] === undefined) {
+		handleHexClickForMarkerPlacement(cell, row, col) 
+  } else {
+		handleHexClickForBuildingPlacement(cell, row, col)
+  }
 }
 
 function handleHexClickForMarkerPlacement(cell, row, col) {
@@ -113,6 +117,7 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
 	} else {
 		ErrorHandler.invalidHexClick(BOARD[row][col], ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly)
 	}
+  displayShop()
 }
 
 function handleHexClickForBuildingPlacement(cell, row, col) {
@@ -289,37 +294,21 @@ function displayShop() {
 	for (var i = 0; i < SHOP.length; i++) { 
 		var row = document.createElement("tr")
     row.id = SHOP[i]['name']
-    row.style.backgroundColor = 'white'
+    if (MY_MOVE['building'] && MY_MOVE['building']['name'] && MY_MOVE['building']['name'] === row.id) {
+      row.style.backgroundColor = 'red'
+    } else if (BuildingValidation.canPayCost(SHOP[i], MY_RESOURCES)) {
+      row.style.backgroundColor = 'yellow'
+    } else {
+      row.style.backgroundColor = 'white'
+    }
 
     // onclick function to handle building selection
 		row.onclick = function(row) {
 			return function() {
-        var buildingName = row.id
-        if (MY_MOVE['marker_placement'] === undefined) {
-        	ErrorHandler.shopError()
-        	return
-        }
-      	// If shop item is already selected, deselect it
-        if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
- 		      MY_MOVE['building'] = undefined
-          row.style.backgroundColor = 'white'
-        } else { // Select Shop Item
-        	var responseResources = BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)
-        	if (responseResources) {
-        		MY_RESOURCES = responseResources
-        		if (MY_MOVE['building'] && MY_MOVE['building']['name']) {
-	         		document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'
-	        	}
-	 		      MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
-	          row.style.backgroundColor = 'red'
-        	} else {
-        		ErrorHandler.notEnoughMoney(buildingName)
-        	}
-        }
-        clearPendingBuildings()
-        
+        onClickShopRow(row)
       }
 		}(row)
+
 		var datum
 		for (var attribute of Object.keys(SHOP[i])) {
 			datum = document.createElement("th")
@@ -329,6 +318,27 @@ function displayShop() {
 
 		shop.appendChild(row)
 	}
+}
+
+// handle shop row click
+function onClickShopRow(row) {
+  var buildingName = row.id
+  if (MY_MOVE['marker_placement'] === undefined) {
+    ErrorHandler.shopError()
+    return
+  }
+  // If shop item is already selected, deselect it
+  if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
+ 		MY_MOVE['building'] = undefined
+  } else { // Select Shop Item
+    if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {
+	 		MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
+    } else {
+      ErrorHandler.notEnoughMoney(buildingName)
+    }
+  }
+  displayShop()
+  clearPendingBuildings()
 }
 
 // render resource list HTML
