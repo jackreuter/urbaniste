@@ -2,6 +2,7 @@ Jack - make board have less clumps <= Joe said maybe not to do this. But idk if 
 Jack - make board have no water on edge <= Joe also said maybe not to do this, but idk if I agree
 Jack - sound ping on your turn
 
+Jack - Bug: If you select less tiles than required, building still gets build. Example is select 2 of the 3 hexes for City Hall and it totally lets you build a 2 shape building. Related to that is the entire "invalidBuilding" errorHandler method does not function as expected.
 
 Tom - Closeable alert
 Tom - highlight last opponents move
