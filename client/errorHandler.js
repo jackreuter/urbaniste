@@ -38,7 +38,6 @@ const ErrorHandler = {
   buildingNotAvailable: (building_name) => {
     displayError("No more " + building_name + "s left to build.")
   }
-
 }
 
 export default ErrorHandler;
