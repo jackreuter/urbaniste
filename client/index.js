@@ -3,7 +3,6 @@
 /*
 	BUILDING object:
 		{
-			id: ,
 			player: ,
 			name: ,
 			location_array: , // unordered list of coordinates this building exists on
@@ -12,7 +11,7 @@
 	TILE object:
 		{
 			marker: , // unoccupied or which player has a marker on this tile
-			building_id: ,
+			building: ,
 			type: , // w, bm, c, l, other?
 		}
 
@@ -36,6 +35,8 @@ var MY_MOVE = {}
 
 var STARTING_PLAYER = false
 var MY_RESOURCES = {'bm':0, 'l':0, 'c':0}
+var ENEMY_RESOURCES = {'bm':0, 'l':0, 'c':0}
+
 
 // creates HTML class name for hexagons, referenced by CSS
 function getHexagonColorString(row, col) {
@@ -60,7 +61,7 @@ function displayBoard() {
   	for (var col = 0; col < BOARD[row].length; col++) {
   		var cell = document.createElement("div")
 	    cell.id = row + "_" + col
-	    if (BOARD[row][col].building_id === undefined) {
+	    if (BOARD[row][col].building === undefined) {
 	    	if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
 		    	cell.innerText = 'Mine'
 		    }
@@ -68,26 +69,31 @@ function displayBoard() {
 		    	cell.innerText = 'Enemy'
 		    }
   		}
-      // handle hex click
-      // force marker placement selection first
-      // then allow building selection, with shape restrictions
 	    cell.onclick = function(cell) {
 	    	return function() {
-	    		var coor = cell.id.split("_")
-		 			var row = +coor[0]
-		 			var col = +coor[1]
-
-          // force marker selection first
-          if (MY_MOVE['building'] === undefined) {
-						handleHexClickForMarkerPlacement(cell, row, col) 
-          } else {
-						handleHexClickForBuildingPlacement(cell, row, col)
-          }
+          handleHexClick(cell)
         }
 	  	}(cell) // immediatlly invoke this function to tie it to correct cell
 	    container.appendChild(cell).className = getHexagonColorString(row, col)
 	  }
 	}
+}
+
+// handle hex click
+// force marker placement selection first
+// then allow building selection, with shape restrictions
+function handleHexClick(cell) {
+	ErrorHandler.clearErrorDisplay()
+	var coor = cell.id.split("_")
+	var row = +coor[0]
+	var col = +coor[1]
+
+  // force marker selection first
+  if (MY_MOVE['building'] === undefined) {
+		handleHexClickForMarkerPlacement(cell, row, col) 
+  } else {
+		handleHexClickForBuildingPlacement(cell, row, col)
+  }
 }
 
 function handleHexClickForMarkerPlacement(cell, row, col) {
@@ -99,7 +105,7 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
 	} else if (
   		BOARD[row][col].marker == 'empty'
     	&& BOARD[row][col].type != 'w' 
-    	&& BOARD[row][col].building_id == undefined
+    	&& BOARD[row][col].building == undefined
     	&& ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly
   ) {
 		clearPendingPlacements()
@@ -112,11 +118,12 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
 	} else {
 		ErrorHandler.invalidHexClick(BOARD[row][col], ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly)
 	}
+  displayShop()
 }
 
 function handleHexClickForBuildingPlacement(cell, row, col) {
 	// check if tile available to build
-  if ( BOARD[row][col].building_id !== undefined ) {
+  if ( BOARD[row][col].building !== undefined ) {
   	return
   }
   // if tile have already been selected, check if click is to remove
@@ -187,6 +194,7 @@ function clearPendingBuildings() {
 var SVG_HEX_WIDTH = 100 // must match css file
 var SVG_SPACING = 5 // must match css file
 var SVG_WIDTH_MULTIPLIER = SVG_HEX_WIDTH + SVG_SPACING
+var SVG_WIDTH_BUFFER = SVG_WIDTH_MULTIPLIER/2
 var SVG_HEIGHT_MULTIPLIER = 90.5 // trial and error bullshit
 var SVG_HEIGHT_BUFFER = 55 // trial and error bullshit
 var SVG_LINE_WIDTH = 45
@@ -216,16 +224,16 @@ function displayBuildings() {
 
 // draw SVG line between two tiles
 function drawLineBetweenTiles(tile1, tile2, lineColor) {
-  var x1 = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile1.col)
-  var x2 = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile2.col)
+  var x1 = SVG_HEX_WIDTH/2 + SVG_SPACING/2 + SVG_WIDTH_MULTIPLIER*(tile1.col)
+  var x2 = SVG_HEX_WIDTH/2 + SVG_SPACING/2 + SVG_WIDTH_MULTIPLIER*(tile2.col)
   var y1 = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile1.row)
   var y2 = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile2.row)
 
   if (tile1.row%2 != 0) {
-    x1 += SVG_WIDTH_MULTIPLIER/2 - SVG_SPACING
+    x1 += SVG_WIDTH_BUFFER
   }
   if (tile2.row%2 != 0) {
-    x2 += SVG_WIDTH_MULTIPLIER/2 - SVG_SPACING
+    x2 += SVG_WIDTH_BUFFER
   }
 
   drawLine(x1, y1, x2, y2, lineColor)
@@ -233,10 +241,10 @@ function drawLineBetweenTiles(tile1, tile2, lineColor) {
 
 // draw SVG line on single tile
 function drawLineOnTile(tile, lineColor) {
-  var x = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile.col)
+  var x = SVG_HEX_WIDTH/2 + SVG_SPACING/2 + SVG_WIDTH_MULTIPLIER*(tile.col)
   var y = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile.row)
   if (tile.row%2 != 0) {
-    x += SVG_WIDTH_MULTIPLIER/2 - SVG_SPACING
+    x += SVG_WIDTH_BUFFER
   }
 
   var x1 = x - SVG_LINE_WIDTH/2
@@ -264,10 +272,10 @@ function drawLine(x1, y1, x2, y2, lineColor) {
 // render SVG text element
 // not in use yet, just playing around with SVG text
 function drawTextOnTile(tile, text) {
-  var x = SVG_HEX_WIDTH/2 + SVG_SPACING + SVG_WIDTH_MULTIPLIER*(tile.col)
+  var x = SVG_HEX_WIDTH/2 + SVG_SPACING/2 + SVG_WIDTH_MULTIPLIER*(tile.col)
   var y = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile.row)
   if (tile.row%2 != 0) {
-    x += SVG_WIDTH_MULTIPLIER/2 - SPACING
+    x += SVG_WIDTH_BUFFER
   }
   var textSVG = document.createElementNS('http://www.w3.org/2000/svg','text');
   textSVG.setAttribute('id','text');
@@ -287,31 +295,21 @@ function displayShop() {
 	for (var i = 0; i < SHOP.length; i++) { 
 		var row = document.createElement("tr")
     row.id = SHOP[i]['name']
-    row.style.backgroundColor = 'white'
+    if (MY_MOVE['building'] && MY_MOVE['building']['name'] && MY_MOVE['building']['name'] === row.id) {
+      row.style.backgroundColor = 'red'
+    } else if (BuildingValidation.canPayCost(SHOP[i], MY_RESOURCES)) {
+      row.style.backgroundColor = 'yellow'
+    } else {
+      row.style.backgroundColor = 'white'
+    }
 
     // onclick function to handle building selection
 		row.onclick = function(row) {
 			return function() {
-        var buildingName = row.id
-        if (MY_MOVE['marker_placement'] === undefined) {
-        	ErrorHandler.shopError()
-        	return
-        }
-      	// If shop item is already selected, deselect it
-        if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
- 		      MY_MOVE['building'] = undefined
-          row.style.backgroundColor = 'white'
-        } else { // Select Shop Item
-        	if (MY_MOVE['building'] && MY_MOVE['building']['name']) {
-         		document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'
-        	}
- 		      MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
-          row.style.backgroundColor = 'red'
-        }
-        clearPendingBuildings()
-        
+        onClickShopRow(row)
       }
 		}(row)
+
 		var datum
 		for (var attribute of Object.keys(SHOP[i])) {
 			datum = document.createElement("th")
@@ -323,11 +321,40 @@ function displayShop() {
 	}
 }
 
+// handle shop row click
+function onClickShopRow(row) {
+	ErrorHandler.clearErrorDisplay()
+  var buildingName = row.id
+  if (MY_MOVE['marker_placement'] === undefined) {
+    ErrorHandler.shopError()
+    return
+  }
+  // If shop item is already selected, deselect it
+  if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
+ 		MY_MOVE['building'] = undefined
+  } else { // Select Shop Item
+    if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {
+    	if (!BuildingValidation.buildingAvailable(buildingName, SHOP)) {
+      	ErrorHandler.buildingNotAvailable(buildingName)
+    	}
+	 		MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
+    } else {
+      ErrorHandler.notEnoughMoney(buildingName)
+    }
+  }
+  displayShop()
+  clearPendingBuildings()
+}
+
 // render resource list HTML
 function displayResources() {
 	document.getElementById('resource_bm').innerText = "Building Materials: " + MY_RESOURCES.bm
 	document.getElementById('resource_l').innerText = "Labor: " + MY_RESOURCES.l
 	document.getElementById('resource_c').innerText = "Coin: " + MY_RESOURCES.c
+
+	document.getElementById('resource_bm_e').innerText = "Building Materials: " + ENEMY_RESOURCES.bm
+	document.getElementById('resource_l_e').innerText = "Labor: " + ENEMY_RESOURCES.l
+	document.getElementById('resource_c_e').innerText = "Coin: " + ENEMY_RESOURCES.c
 }
 
 // Reconcile global variables to server's values. Display elements.
@@ -339,8 +366,10 @@ function ingestServerResponse(server_response) {
 
 	if (STARTING_PLAYER) {
     MY_RESOURCES = server_response.game_state.p1_resources
+    ENEMY_RESOURCES = server_response.game_state.p2_resources
   } else {
     MY_RESOURCES = server_response.game_state.p2_resources
+    ENEMY_RESOURCES = server_response.game_state.p1_resources
   }
 
   displayBoard()
@@ -353,8 +382,28 @@ window.onload = () => {
   var socket = io();
 
   socket.on('not_welcome', () => {
-  	ErrorHandler.notWelcome() // <- TODO
+  	ErrorHandler.notWelcome()
     document.getElementById('not_valid_player_title').innerText = 'You Are Not Connected To Play. In VIEW ONLY Mode.'
+  });
+
+  socket.on('game_ended', (final_score) => {
+  	console.log(final_score)
+  	var your_score
+  	var opponent_score
+  	if (STARTING_PLAYER) {
+  		your_score = final_score.p1_vps
+  		opponent_score = final_score.p2_vps
+  	} else {
+  		your_score = final_score.p2_vps
+  		opponent_score = final_score.p1_vps
+  	}
+  	if (your_score > opponent_score) {
+  		document.getElementById('not_valid_player_title').innerText = "YOU WIN. Your score: " + your_score + ". Your opponent's score: " + opponent_score + "."
+  	} else if (your_score < opponent_score) {
+  		document.getElementById('not_valid_player_title').innerText = "YOU LOSE. Your score: " + your_score + ". Your opponent's score: " + opponent_score + "."
+  	} else {
+  		document.getElementById('not_valid_player_title').innerText = "You tied with score: " + your_score + ". Lame."
+  	}
   });
 
 	// handle different messages from server
@@ -386,18 +435,23 @@ window.onload = () => {
     ingestServerResponse(server_response)  
   });
 
-	socket.on('received_message', function(message) {
-		console.log(message)
-	})
+	document.getElementById("pass_btn").onclick = () => {
+		if (MY_TURN) {
+			if (confirm("Are you sure you want to pass forever??")) {
+			  socket.emit("pass_forever")
+			}
+		} else {
+	  	ErrorHandler.notYourTurn()
+	  }
+	}
 
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
-  	// <- TOD): check my turn first
-    socket.emit('submit_move', MY_MOVE);
-    MY_MOVE = {}
-  }
-
-  document.getElementById('message_btn').onclick = function() {
-  	socket.emit('chat_message', document.getElementById('message_block').value)
+  	if (MY_TURN) {
+	    socket.emit('submit_move', MY_MOVE);
+	    MY_MOVE = {}
+	  } else {
+	  	ErrorHandler.notYourTurn()
+	  }
   }
 }

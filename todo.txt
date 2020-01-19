@@ -1,0 +1,14 @@
+Jack - make board have less clumps <= Joe said maybe not to do this. But idk if I agree
+Jack - make board have no water on edge <= Joe also said maybe not to do this, but idk if I agree
+Jack - sound ping on your turn
+
+
+Tom - Closeable alert
+Tom - highlight last opponents move
+Tom - on hover show the png card of the buildings
+
+
+
+unassigned - make above-board displays not shit
+unassigned - have buildings on board be labeled somehow to tell what they are
+unassigned - get other buildings with follow-up interface working

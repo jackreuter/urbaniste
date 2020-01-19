@@ -1,9 +1,12 @@
 
 function displayError(message) {
-  console.log(message)
+  document.getElementById('error').innerText = message
 }
 
 const ErrorHandler = {
+  clearErrorDisplay: () => {
+    displayError("")
+  },
   invalidHexClick: (boardTile, isAdjacentToFriendly) => {
     if (boardTile.marker !== 'empty') {
       displayError("Cannot place marker over an existing marker.")
@@ -25,6 +28,15 @@ const ErrorHandler = {
   },
   notWelcome: () => {
     displayError("You are not one of the two connected players. You are in VIEW ONLY mode.")
+  },
+  notEnoughMoney: (building_name) => {
+    displayError("You cannot pay the cost for that " + building_name + ".")
+  },
+  notYourTurn: () => {
+    displayError("Not your turn. Wait until opponent has made their move to make yours.")
+  },
+  buildingNotAvailable: (building_name) => {
+    displayError("No more " + building_name + "s left to build.")
   }
 
 }

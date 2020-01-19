@@ -17,7 +17,7 @@ var ACTIVE_PLAYER_INDEX = 0
 var PLAYER_IDS = []
 
 var GAME_STATE = {
-  'board': startingStateGeneration.generateBoard(13, 8),
+  'board': startingStateGeneration.generateBoard(8, 12),
   'buildings': [],
   'shop': startingStateGeneration.generateShop(5),
   'p1_resources': {'bm':0, 'l':0, 'c':0},
@@ -66,7 +66,20 @@ io.on('connection', function(socket) {
     
     if (moveProcessor.validateMove(socket.id, PLAYER_IDS[ACTIVE_PLAYER_INDEX].socket_id)) {
       GAME_STATE = moveProcessor.processMove(client_object)
-      emitMoveToPlayers(GAME_STATE, socket)
+      emitMoveToPlayers(socket)
+    }
+
+    for (var i=0; i<PLAYER_IDS.length; i++) {
+      if (PLAYER_IDS[i].pass_forever) {
+        io.sockets.emit('server_response', {
+          'game_state': GAME_STATE,
+          'socket_id': PLAYER_IDS[i].socket_id
+        })
+        io.sockets.emit('not_your_turn')
+        socket.emit('your_turn')
+
+        ACTIVE_PLAYER_INDEX = +(!ACTIVE_PLAYER_INDEX)
+      }
     }
   })
   // When a client disconnects, clean that connection up
@@ -77,10 +90,23 @@ io.on('connection', function(socket) {
 
   })
 
-  socket.on('chat_message', function(message) {
-    io.sockets.emit('received_message', message)
+  socket.on('pass_forever', function() {
+    for (var i=0; i<PLAYER_IDS.length; i++) {
+      if (PLAYER_IDS[i].socket_id == socket.id) {
+        PLAYER_IDS[i].pass_forever = true
+      }
+    }
+    var game_end = true
+    for (var i=0; i<PLAYER_IDS.length; i++) {
+      if (!PLAYER_IDS[i].pass_forever) {
+        game_end = false
+      }
+    }
+    if (game_end) {
+      gameEnded() 
+    }
+    emitMoveToPlayers(socket)
   })
-
 })
 
 // Starta a client by going to localhost:8080 in a browser 
@@ -105,7 +131,6 @@ function handlePlayerConnect(socket) {
       'active': true
     })
   } else if (PLAYER_IDS.length >= 2) {
-    console.log(socket.id)
     socket.emit('not_welcome')
   }
 }
@@ -120,13 +145,32 @@ function handleDisconnect(socket_id) {
   }
 }
 
-function emitMoveToPlayers(GAME_STATE, socket) {  
+function emitMoveToPlayers(socket) { 
   io.sockets.emit('server_response', {
     'game_state': GAME_STATE,
     'socket_id': socket.id
   })
   socket.emit('not_your_turn')
   ACTIVE_PLAYER_INDEX = +(!ACTIVE_PLAYER_INDEX)
+}
+
+function gameEnded() {
+  console.log("Game has ended.")
+  p1_vps = 0
+  p2_vps = 0
+  for (var i=0; i<GAME_STATE.buildings.length; i++) {
+    for (var j=0; j<GAME_STATE.shop.length; j++) {
+      if (GAME_STATE.shop[j].name == GAME_STATE.buildings[i].name) {
+        if (GAME_STATE.buildings[i].player == 'player_one') {
+          p1_vps += GAME_STATE.shop[j].vp
+        }
+        if (GAME_STATE.buildings[i].player == 'player_two') {
+          p2_vps += GAME_STATE.shop[j].vp
+        }
+      }
+    }
+  }
+  io.sockets.emit('game_ended', {'p1_vps': p1_vps, 'p2_vps': p2_vps})
 }
 
 
