@@ -55,6 +55,14 @@ function canPayForBuilding(building_name, my_resources, shop) {
   return false
 }
 
+function buildingAvailable(building_name, shop) {
+  for (var i=0; i<shop.length; i++) {
+    if (shop[i].name == building_name) {
+      return shop[i].limit > 0
+    }
+  }
+}
+
 function canPayCost(cost, my_resources) {
   return my_resources.bm >= cost.bm && my_resources.l >= cost.l && my_resources.c >= cost.c
 }
@@ -62,6 +70,7 @@ function canPayCost(cost, my_resources) {
 const BuildingValidation = { 
   'validateBuildingSelection': validateBuildingSelection,
   'canPayForBuilding': canPayForBuilding,
+  'buildingAvailable': buildingAvailable,
   'canPayCost': canPayCost
 }
 

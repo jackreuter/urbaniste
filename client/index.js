@@ -332,9 +332,12 @@ function onClickShopRow(row) {
  		MY_MOVE['building'] = undefined
   } else { // Select Shop Item
     if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {
+    	if (!BuildingValidation.buildingAvailable(buildingName, SHOP)) {
+      	ErrorHandler.notEnoughMoney(buildingName)
+    	}
 	 		MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
     } else {
-      ErrorHandler.notEnoughMoney(buildingName)
+      ErrorHandler.buildingNotAvailable(buildingName)
     }
   }
   displayShop()
