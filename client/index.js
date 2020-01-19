@@ -287,6 +287,7 @@ function drawTextOnTile(tile, text) {
 
 // render shop HTML
 function displayShop() {
+	console.log("HI. In displayshop")
 	var shop = document.getElementById('shop')
 	while (document.getElementById('shop').childNodes.length > 2) {
 		document.getElementById('shop').childNodes[2].remove()
@@ -322,6 +323,7 @@ function displayShop() {
 
 // handle shop row click
 function onClickShopRow(row) {
+	console.log(MY_RESOURCES)
   var buildingName = row.id
   if (MY_MOVE['marker_placement'] === undefined) {
   	ErrorHandler.shopError()
@@ -329,21 +331,27 @@ function onClickShopRow(row) {
   }
 	// If shop item is already selected, deselect it
   if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
-      MY_MOVE['building'] = undefined
+    MY_MOVE['building'] = undefined
     row.style.backgroundColor = 'white'
   } else { // Select Shop Item
-  	var responseResources = BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)
-  	if (responseResources) {
+  	console.log('ler')
+  	console.log(MY_RESOURCES)
+  	var resources = MY_RESOURCES
+  	var derp = BuildingValidation.canPayForBuilding(buildingName, resources, SHOP)
+  	console.log('ler2')
+  	console.log(MY_RESOURCES)
+  	console.log(derp)
+  	if (derp) {
   		if (!BuildingValidation.buildingAvailable(buildingName, SHOP)) {
 				ErrorHandler.buildingNotAvailable(buildingName)
   			return
   		}
-  		MY_RESOURCES = responseResources
-  		if (MY_MOVE['building'] && MY_MOVE['building']['name']) {
-     		document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'
-    	}
-	      MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
-      row.style.backgroundColor = 'red'
+  		// MY_RESOURCES = responseResources
+  		// if (MY_MOVE['building'] && MY_MOVE['building']['name']) {
+    	//  		document.getElementById(MY_MOVE['building']['name']).style.backgroundColor = 'white'
+    	// 	}
+	    MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
+      // row.style.backgroundColor = 'red'
   	} else {
   		ErrorHandler.notEnoughMoney(buildingName)
   	}

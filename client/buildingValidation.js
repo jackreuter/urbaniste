@@ -53,9 +53,14 @@ function buildingAvailable(building_name, shop) {
 }
 
 function canPayForBuilding(building_name, my_resources, shop) {
+  console.log('hi')
+  console.log(my_resources)
   for (var i=0; i<shop.length; i++) {
     if (shop[i].name == building_name) {
       if (canPayCost(shop[i], my_resources)) {
+        my_resources.bm -= shop[i].bm
+        my_resources.l -= shop[i].l
+        my_resources.c -= shop[i].c
         return true
       }
     }
