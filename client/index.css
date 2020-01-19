@@ -63,6 +63,13 @@ p {
   width: 50%;
 }
 
+.error {
+  height: 30px;
+  font-size: 20px;
+  text-align: center;
+  border: 3px solid black;
+}
+
 .red_resource {
   color: #990000;
 }

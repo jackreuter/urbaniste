@@ -1,9 +1,12 @@
 
 function displayError(message) {
-  console.log(message)
+  document.getElementById('error').innerText = message
 }
 
 const ErrorHandler = {
+  clearErrorDisplay: () => {
+    displayError("")
+  },
   invalidHexClick: (boardTile, isAdjacentToFriendly) => {
     if (boardTile.marker !== 'empty') {
       displayError("Cannot place marker over an existing marker.")
@@ -34,8 +37,7 @@ const ErrorHandler = {
   },
   buildingNotAvailable: (building_name) => {
     displayError("No more " + building_name + "s left to build.")
-  },
-
+  }
 }
 
 export default ErrorHandler;

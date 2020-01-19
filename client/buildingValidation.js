@@ -14,6 +14,7 @@ function validateBuilding(buildingName, coords, move, board, startingPlayer) {
 // recursively checks if any possible valid building could exist using given tiles
 function validateBuildingSelection(buildingName, coords, move, board, startingPlayer) {
   if (coords.length > buildingData[buildingName]['length']) {
+    ErrorHandler.invalidBuilding(buildingName, {'tooFewCoordinates': true})
     return false
   } else if (coords.length == buildingData[buildingName]['length']) {
     return validateBuilding(buildingName, coords, move, board, startingPlayer)

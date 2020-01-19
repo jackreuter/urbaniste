@@ -83,6 +83,7 @@ function displayBoard() {
 // force marker placement selection first
 // then allow building selection, with shape restrictions
 function handleHexClick(cell) {
+	ErrorHandler.clearErrorDisplay()
 	var coor = cell.id.split("_")
 	var row = +coor[0]
 	var col = +coor[1]
@@ -322,6 +323,7 @@ function displayShop() {
 
 // handle shop row click
 function onClickShopRow(row) {
+	ErrorHandler.clearErrorDisplay()
   var buildingName = row.id
   if (MY_MOVE['marker_placement'] === undefined) {
     ErrorHandler.shopError()
@@ -333,11 +335,11 @@ function onClickShopRow(row) {
   } else { // Select Shop Item
     if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {
     	if (!BuildingValidation.buildingAvailable(buildingName, SHOP)) {
-      	ErrorHandler.notEnoughMoney(buildingName)
+      	ErrorHandler.buildingNotAvailable(buildingName)
     	}
 	 		MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
     } else {
-      ErrorHandler.buildingNotAvailable(buildingName)
+      ErrorHandler.notEnoughMoney(buildingName)
     }
   }
   displayShop()
