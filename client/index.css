@@ -63,6 +63,16 @@ p {
   width: 50%;
 }
 
+.red_resource {
+  color: #990000;
+}
+.yellow_resource {
+  color: #b3b300;
+}
+.green_resource {
+  color: #006600;
+}
+
 #turn_title {
   font-size: 30;
 }
