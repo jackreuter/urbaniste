@@ -31,7 +31,10 @@ const ErrorHandler = {
   },
   notYourTurn: () => {
     displayError("Not your turn. Wait until opponent has made their move to make yours.")
-  }
+  },
+  buildingNotAvailable: (building_name) => {
+    displayError("No more " + building_name + "s left to build.")
+  },
 
 }
 
