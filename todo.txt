@@ -21,6 +21,7 @@ lock, lighthouse, watchtower --> marker placement & building effects. I'm thinki
 
 plaza --> unique, have server repeat turn
 refinery --> unique, have server give player extra resources
+casino --> similar tunnel/tramway/etc., but require extra click on enemy resource text rather than hex
 
 tenement, bazaar --> build in checks in cost validation
 
