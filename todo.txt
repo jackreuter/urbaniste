@@ -1,6 +1,4 @@
 <<<<-------------------------ACTIVE---------------------------->>>>
-Tom - Closeable alert
-Tom - highlight last opponents move
 Tom - on hover show the png card of the buildings
 
 unassigned - make above-board displays not shit

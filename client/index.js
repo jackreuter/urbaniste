@@ -61,6 +61,12 @@ function displayBoard() {
   	for (var col = 0; col < BOARD[row].length; col++) {
   		var cell = document.createElement("div")
 	    cell.id = row + "_" + col
+	    if (BOARD[row][col].most_recent) {
+	    	console.log(row)
+	    	console.log(col)
+	    	cell.style.fontSize = '30'
+	    }
+
 	    if (BOARD[row][col].building === undefined) {
 	    	if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
 		    	cell.innerText = 'Mine'

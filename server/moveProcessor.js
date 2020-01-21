@@ -29,7 +29,7 @@
   }
 
   method.processMove = function() {
-    // marker placement
+    // handle marker placement
     var row = this.client_object.marker_placement.row
     var col = this.client_object.marker_placement.col
     var player
@@ -39,9 +39,15 @@
       player = 'player_two'
     }    
     this.game_state.board[row][col].marker = player
+    for (var i=0; i<this.game_state.board.length; i++) {
+      for (var j=0; j<this.game_state.board[i].length; j++) {
+        this.game_state.board[i][j].most_recent = false
+      }
+    }
+    this.game_state.board[row][col].most_recent = true
     incrementResource(this.game_state.board[row][col].type, this.active_player_index, this.game_state)
 
-    // building
+    // handle buildings
     if (this.client_object.building) {
       if (!validateCost(this.game_state, this.active_player_index, this.client_object.building.name)
           || !validateAvailable(this.game_state, this.client_object.building.name)
