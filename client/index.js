@@ -454,22 +454,26 @@ window.onload = () => {
   // handle submit button click
   document.getElementById("submit_btn").onclick = () => {
   	if (MY_TURN) {
-      if (MY_MOVE['building'] !== undefined) {
-        if (BuildingValidation.validateBuilding(
-    	        MY_MOVE['building']['name'], 
-    	        MY_MOVE['building']['location_array'],
-    	        MY_MOVE,
-    	        BOARD,
-    	        STARTING_PLAYER)) {
-	        socket.emit('submit_move', MY_MOVE);
-	        MY_MOVE = {}
-        } else {
-          ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'tooFewCoordinates': true})
-        }
-      } else {
-	        socket.emit('submit_move', MY_MOVE);
-	        MY_MOVE = {}
-      }
+  		if (MY_MOVE['marker_placement']) {
+	      if (MY_MOVE['building'] !== undefined) {
+	        if (BuildingValidation.validateBuilding(
+	    	        MY_MOVE['building']['name'], 
+	    	        MY_MOVE['building']['location_array'],
+	    	        MY_MOVE,
+	    	        BOARD,
+	    	        STARTING_PLAYER)) {
+		        socket.emit('submit_move', MY_MOVE);
+		        MY_MOVE = {}
+	        } else {
+	          ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'tooFewCoordinates': true})
+	        }
+	      } else {
+		        socket.emit('submit_move', MY_MOVE);
+		        MY_MOVE = {}
+	      }
+	    } else {
+				ErrorHandler.noMarker()
+	    }
 	  } else {
 	  	ErrorHandler.notYourTurn()
 	  }
