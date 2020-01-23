@@ -4,7 +4,7 @@
   --main_font: 'Goudy Old Style';
 
   /* Change this to change the appearance of the hexaons */
-  --hex-width: 100px; 
+  --hex-width: 80px; 
   --hex-between: 5px;
   
   /* Other hexagon dimensions */
@@ -34,6 +34,11 @@ h1 {
   text-align: center;
   font-size: 20;
 }
+h2 {
+  text-align: center;
+  font-size: 18;
+  margin: 5px;
+}
 
 table {
   text-align: center;
@@ -50,10 +55,69 @@ th {
 
 img {
   border: 3px solid var(--txt_color);
+  height: 80px;
 }
 
 p {
   color: var(--back_color);
+}
+
+#top-section {
+  position: relative;
+  width: 100%;
+  height: 300px;
+  margin: 0 auto;
+}
+
+#left-block {
+  position: absolute;
+  left: 0px;
+  width: 20%;
+  height: 300px;
+}
+#center-block {
+  position: absolute;
+  padding: 5px;
+  left: 20%;
+  width: 75%;
+  height: 300px;
+}
+
+#turn_title {
+  position: absolute;
+  padding: 5px;
+  left: 2%;
+  top: 20%;
+  display: inline-block;
+  font-size: 30;
+}
+
+#shop_div {
+  position: absolute;
+  padding: 5px;
+  right: 20px;
+  top: 10%;
+  display: inline-block;
+  float: right;
+}
+
+#shop_header {
+  background-color: grey;
+}
+
+#shop_label {
+  margin-right: 0;
+  text-align: right;
+}
+
+#shop_text_wrapper {
+  margin-right: 20%;
+}
+
+.resource_box {
+  padding-left: 5px;
+  margin-top: 3px;
+  border: 3px solid black;
 }
 
 .center {
@@ -68,30 +132,11 @@ p {
   font-size: 20px;
   text-align: center;
   border: 3px solid black;
+  margin-top: 5px;
+  width: 615px;
+  margin-left: 0px;
 }
 
-.red_resource {
-  color: #990000;
-}
-.yellow_resource {
-  color: #b3b300;
-}
-.green_resource {
-  color: #006600;
-}
-
-#turn_title {
-  font-size: 30;
-}
-
-#player_spot {
-  display: inline-block;
-}
-
-#shop_div {
-  display: inline-block;
-  float: right;
-}
 
 /* Buildings container*/
 /* absolute positioning to match board position */
@@ -111,7 +156,7 @@ svg {
 #board {
   position: absolute;
   left: 5;
-  top: 450;
+  top: 350;
   display: grid;
   grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);
   grid-auto-rows: calc(var(--hex-width) - 28.87px/2);
@@ -225,4 +270,13 @@ svg {
 }
 .color-blue:hover {
   fill: var(--water_color);
+}
+.red_resource {
+  color: #990000;
+}
+.yellow_resource {
+  color: #b3b300;
+}
+.green_resource {
+  color: #006600;
 }
