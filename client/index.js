@@ -62,8 +62,6 @@ function displayBoard() {
   		var cell = document.createElement("div")
 	    cell.id = row + "_" + col
 	    if (BOARD[row][col].most_recent) {
-	    	console.log(row)
-	    	console.log(col)
 	    	cell.style.fontSize = '30'
 	    }
 
@@ -430,14 +428,15 @@ window.onload = () => {
     document.getElementById('turn_title').innerText = 'Your Turn'
 
 		ingestServerResponse(server_response)  
+
+		if ((STARTING_PLAYER && server_response.game_state.p1_immediately_passes) || (!STARTING_PLAYER && server_response.game_state.p2_immediately_passes)) {
+			socket.emit('pass')
+		}
   });
 
-	socket.on('starting_info', (server_response) => {
-    console.log(server_response)
-    
+	socket.on('starting_info', (server_response) => {    
     STARTING_PLAYER = server_response.starting_player
     SOCKET_ID = server_response.socket_id
-
     ingestServerResponse(server_response)  
   });
 

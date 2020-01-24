@@ -4,7 +4,7 @@
   --main_font: 'Goudy Old Style';
 
   /* Change this to change the appearance of the hexaons */
-  --hex-width: 80px; 
+  --hex-width: 100px; 
   --hex-between: 5px;
   
   /* Other hexagon dimensions */
@@ -143,7 +143,7 @@ p {
 svg {
     position: absolute;
     left: 5;
-    top: 450;
+    top: 350;
     z-index: 1;
     pointer-events: none;
     -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
