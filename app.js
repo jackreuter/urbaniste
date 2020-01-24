@@ -93,7 +93,6 @@ io.on('connection', function(socket) {
     handleDisconnect(socket.id)
     console.log("Players: ")
     console.log(PLAYER_IDS)
-
   })
 
   socket.on('pass_forever', function() {
