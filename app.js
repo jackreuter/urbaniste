@@ -59,6 +59,12 @@ io.on('connection', function(socket) {
     socket.emit('not_your_turn')
   }
 
+  socket.on("pass", function() {
+    GAME_STATE.p1_immediately_passes = false
+    GAME_STATE.p2_immediately_passes = false
+    emitMoveToPlayers(socket)
+  })
+
   // When "submit_move" message comes in, call a function
   socket.on('submit_move', function(client_object) {
 
@@ -87,7 +93,6 @@ io.on('connection', function(socket) {
     handleDisconnect(socket.id)
     console.log("Players: ")
     console.log(PLAYER_IDS)
-
   })
 
   socket.on('pass_forever', function() {

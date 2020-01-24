@@ -38,53 +38,6 @@ var MY_RESOURCES = {'bm':0, 'l':0, 'c':0}
 var ENEMY_RESOURCES = {'bm':0, 'l':0, 'c':0}
 
 
-// creates HTML class name for hexagons, referenced by CSS
-function getHexagonColorString(row, col) {
-	var type = BOARD[row][col].type
-	if (type == 'w') { return 'hexagon color-blue' }
-	if (type == 'bm') { return 'hexagon color-red' }
-	if (type == 'l') { return 'hexagon color-green' }
-	if (type == 'c') { return 'hexagon color-yellow' }
-}
-
-// render the board HTML
-function displayBoard() {
-	const container = document.getElementById("board")
-	while (document.getElementById('board').childNodes.length > 0) {
-		document.getElementById('board').childNodes[0].remove()
-	}
-	var rows = BOARD.length
-  var	cols = BOARD[1].length
-  container.style.setProperty('--grid_rows', rows)
-  container.style.setProperty('--grid_cols', cols)
-  for (var row = 0; row < BOARD.length; row++) {
-  	for (var col = 0; col < BOARD[row].length; col++) {
-  		var cell = document.createElement("div")
-	    cell.id = row + "_" + col
-	    if (BOARD[row][col].most_recent) {
-	    	console.log(row)
-	    	console.log(col)
-	    	cell.style.fontSize = '30'
-	    }
-
-	    if (BOARD[row][col].building === undefined) {
-	    	if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
-		    	cell.innerText = 'Mine'
-		    }
-		    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_two') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_one')) {
-		    	cell.innerText = 'Enemy'
-		    }
-  		}
-	    cell.onclick = function(cell) {
-	    	return function() {
-          handleHexClick(cell)
-        }
-	  	}(cell) // immediatlly invoke this function to tie it to correct cell
-	    container.appendChild(cell).className = getHexagonColorString(row, col)
-	  }
-	}
-}
-
 // handle hex click
 // force marker placement selection first
 // then allow building selection, with shape restrictions
@@ -157,6 +110,124 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
   }
 }
 
+// DISPLAY 
+
+// creates HTML class name for hexagons, referenced by CSS
+function getHexagonColorString(row, col) {
+	var type = BOARD[row][col].type
+	if (type == 'w') { return 'hexagon color-blue' }
+	if (type == 'bm') { return 'hexagon color-red' }
+	if (type == 'l') { return 'hexagon color-green' }
+	if (type == 'c') { return 'hexagon color-yellow' }
+}
+
+// render the board HTML
+function displayBoard() {
+	const container = document.getElementById("board")
+	while (document.getElementById('board').childNodes.length > 0) {
+		document.getElementById('board').childNodes[0].remove()
+	}
+	var rows = BOARD.length
+  var	cols = BOARD[1].length
+  container.style.setProperty('--grid_rows', rows)
+  container.style.setProperty('--grid_cols', cols)
+  for (var row = 0; row < BOARD.length; row++) {
+  	for (var col = 0; col < BOARD[row].length; col++) {
+  		var cell = document.createElement("div")
+	    cell.id = row + "_" + col
+	    if (BOARD[row][col].most_recent) {
+	    	cell.style.fontSize = '30'
+	    }
+
+	    if (BOARD[row][col].building === undefined) {
+	    	if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
+		    	cell.innerText = 'Mine'
+		    }
+		    if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_two') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_one')) {
+		    	cell.innerText = 'Enemy'
+		    }
+  		}
+	    cell.onclick = function(cell) {
+	    	return function() {
+          handleHexClick(cell)
+        }
+	  	}(cell) // immediatlly invoke this function to tie it to correct cell
+	    container.appendChild(cell).className = getHexagonColorString(row, col)
+	  }
+	}
+}
+
+// render shop HTML
+function displayShop() {
+	var shop = document.getElementById('shop')
+	while (document.getElementById('shop').childNodes.length > 2) {
+		document.getElementById('shop').childNodes[2].remove()
+	}
+	for (var i = 0; i < SHOP.length; i++) { 
+		var row = document.createElement("tr")
+    row.id = SHOP[i]['name']
+    if (MY_MOVE['building'] && MY_MOVE['building']['name'] && MY_MOVE['building']['name'] === row.id) {
+      row.style.backgroundColor = 'red'
+    } else if (BuildingValidation.canPayCost(SHOP[i], MY_RESOURCES)) {
+      row.style.backgroundColor = 'yellow'
+    } else {
+      row.style.backgroundColor = 'white'
+    }
+
+    // onclick function to handle building selection
+		row.onclick = function(row) {
+			return function() {
+        onClickShopRow(row)
+      }
+		}(row)
+
+		var datum
+		for (var attribute of Object.keys(SHOP[i])) {
+			datum = document.createElement("th")
+			datum.innerText = SHOP[i][attribute]
+			row.appendChild(datum)
+		}
+
+		shop.appendChild(row)
+	}
+}
+
+// handle shop row click
+function onClickShopRow(row) {
+	ErrorHandler.clearErrorDisplay()
+  var buildingName = row.id
+  if (MY_MOVE['marker_placement'] === undefined) {
+    ErrorHandler.shopError()
+    return
+  }
+  // If shop item is already selected, deselect it
+  if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
+ 		MY_MOVE['building'] = undefined
+  } else { // Select Shop Item
+    if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {
+    	if (!BuildingValidation.buildingAvailable(buildingName, SHOP)) {
+      	ErrorHandler.buildingNotAvailable(buildingName)
+    	}
+	 		MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
+    } else {
+      ErrorHandler.notEnoughMoney(buildingName)
+    }
+  }
+  displayShop()
+  clearPendingBuildings()
+}
+
+// render resource list HTML
+function displayResources() {
+	document.getElementById('resource_bm').innerText = "Building Materials: " + MY_RESOURCES.bm
+	document.getElementById('resource_l').innerText = "Labor: " + MY_RESOURCES.l
+	document.getElementById('resource_c').innerText = "Coin: " + MY_RESOURCES.c
+
+	document.getElementById('resource_bm_e').innerText = "Building Materials: " + ENEMY_RESOURCES.bm
+	document.getElementById('resource_l_e').innerText = "Labor: " + ENEMY_RESOURCES.l
+	document.getElementById('resource_c_e').innerText = "Coin: " + ENEMY_RESOURCES.c
+}
+
 function clearBuildingBText(row, col) {
 	if (MY_MOVE['marker_placement']
 			&& MY_MOVE['marker_placement'].row === row
@@ -196,6 +267,7 @@ function clearPendingBuildings() {
 	}
 }
 
+// SVG DRAWING
 
 var SVG_HEX_WIDTH = 100 // must match css file
 var SVG_SPACING = 5 // must match css file
@@ -292,77 +364,6 @@ function drawTextOnTile(tile, text) {
   $("svg").append(textSVG);
 }
 
-// render shop HTML
-function displayShop() {
-	var shop = document.getElementById('shop')
-	while (document.getElementById('shop').childNodes.length > 2) {
-		document.getElementById('shop').childNodes[2].remove()
-	}
-	for (var i = 0; i < SHOP.length; i++) { 
-		var row = document.createElement("tr")
-    row.id = SHOP[i]['name']
-    if (MY_MOVE['building'] && MY_MOVE['building']['name'] && MY_MOVE['building']['name'] === row.id) {
-      row.style.backgroundColor = 'red'
-    } else if (BuildingValidation.canPayCost(SHOP[i], MY_RESOURCES)) {
-      row.style.backgroundColor = 'yellow'
-    } else {
-      row.style.backgroundColor = 'white'
-    }
-
-    // onclick function to handle building selection
-		row.onclick = function(row) {
-			return function() {
-        onClickShopRow(row)
-      }
-		}(row)
-
-		var datum
-		for (var attribute of Object.keys(SHOP[i])) {
-			datum = document.createElement("th")
-			datum.innerText = SHOP[i][attribute]
-			row.appendChild(datum)
-		}
-
-		shop.appendChild(row)
-	}
-}
-
-// handle shop row click
-function onClickShopRow(row) {
-	ErrorHandler.clearErrorDisplay()
-  var buildingName = row.id
-  if (MY_MOVE['marker_placement'] === undefined) {
-    ErrorHandler.shopError()
-    return
-  }
-  // If shop item is already selected, deselect it
-  if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
- 		MY_MOVE['building'] = undefined
-  } else { // Select Shop Item
-    if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {
-    	if (!BuildingValidation.buildingAvailable(buildingName, SHOP)) {
-      	ErrorHandler.buildingNotAvailable(buildingName)
-    	}
-	 		MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
-    } else {
-      ErrorHandler.notEnoughMoney(buildingName)
-    }
-  }
-  displayShop()
-  clearPendingBuildings()
-}
-
-// render resource list HTML
-function displayResources() {
-	document.getElementById('resource_bm').innerText = "Building Materials: " + MY_RESOURCES.bm
-	document.getElementById('resource_l').innerText = "Labor: " + MY_RESOURCES.l
-	document.getElementById('resource_c').innerText = "Coin: " + MY_RESOURCES.c
-
-	document.getElementById('resource_bm_e').innerText = "Building Materials: " + ENEMY_RESOURCES.bm
-	document.getElementById('resource_l_e').innerText = "Labor: " + ENEMY_RESOURCES.l
-	document.getElementById('resource_c_e').innerText = "Coin: " + ENEMY_RESOURCES.c
-}
-
 // Reconcile global variables to server's values. Display elements.
 function ingestServerResponse(server_response) {
 	// $().alert('close') <- TODO
@@ -430,16 +431,19 @@ window.onload = () => {
     document.getElementById('turn_title').innerText = 'Your Turn'
 
 		ingestServerResponse(server_response)  
+
+		if ((STARTING_PLAYER && server_response.game_state.p1_immediately_passes) || (!STARTING_PLAYER && server_response.game_state.p2_immediately_passes)) {
+			socket.emit('pass')
+		}
   });
 
-	socket.on('starting_info', (server_response) => {
-    console.log(server_response)
-    
+	socket.on('starting_info', (server_response) => {    
     STARTING_PLAYER = server_response.starting_player
     SOCKET_ID = server_response.socket_id
 
     ingestServerResponse(server_response)  
   });
+  
 
 	document.getElementById("pass_btn").onclick = () => {
 		if (MY_TURN) {

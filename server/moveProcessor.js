@@ -59,11 +59,33 @@
         'name': this.client_object.building.name,
         'location_array': this.client_object.building.location_array
       }
+      // update building availability
       for (var i=0; i<this.game_state.shop.length; i++) {
         if (this.game_state.shop[i].name == this.client_object.building.name) {
           this.game_state.shop[i].limit -= 1
         }
       }
+      // handle building-specific interactions
+      if (newBuilding.name == 'Refinery') {
+        for (var i=0; i<newBuilding.location_array.length; i++) {
+          var r = newBuilding.location_array[i].row
+          var c = newBuilding.location_array[i].col
+          var resource_type = this.game_state.board[r][c].type
+          if (this.active_player_index == 0) {
+            this.game_state.p1_resources[resource_type] += 1
+          } else {
+            this.game_state.p2_resources[resource_type] += 1
+          }
+        }
+      }
+      if (newBuilding.name == 'Plaza') {
+        if (this.active_player_index == 0) {
+          this.game_state.p2_immediately_passes = true
+        } else {
+          this.game_state.p1_immediately_passes = true
+        }
+      }
+
       this.game_state.buildings.push(newBuilding)
       for (var i = 0; i < newBuilding.location_array.length; i++) {
         var r = newBuilding.location_array[i].row

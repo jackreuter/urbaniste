@@ -1,8 +1,6 @@
 <<<<-------------------------ACTIVE---------------------------->>>>
 Tom - on hover show the png card of the buildings
 
-unassigned - make above-board displays not shit
-
 Jack - make board have less clumps <= Joe said maybe not to do this. But idk if I agree
 Jack - make board have no water on edge <= Joe also said maybe not to do this, but idk if I agree
 Jack - sound ping on your turn
@@ -17,8 +15,6 @@ tunnel, prison, ferry, monument, tramway --> all can be handled by asking for an
 
 lock, lighthouse, watchtower --> marker placement & building effects. I'm thinking in index.js we create a function called canPlaceMarker(tile) or something and check for these specific effects as well as the usual stuff. so check if the tile is empty, non-water, has no building, is adjacent to player or adjacent via lighthouse/lock, and is not blocked by watchtower. then do a similar check for watchtowers during building tile placement
 
-plaza --> unique, have server repeat turn
-refinery --> unique, have server give player extra resources
 casino --> similar tunnel/tramway/etc., but require extra click on enemy resource text rather than hex
 
 tenement, bazaar --> build in checks in cost validation
@@ -29,4 +25,8 @@ tenement, bazaar --> build in checks in cost validation
 <<<<-------------------------RESOLVED---------------------------->>>>
 
 Jack - Bug: If you select less tiles than required, building still gets build. Example is select 2 of the 3 hexes for City Hall and it totally lets you build a 2 shape building. Related to that is the entire "invalidBuilding" errorHandler method does not function as expected. -- resolved
+
+buildings finished by tom:
+refinery --> unique, have server give player extra resources
+plaza --> unique, have server repeat turn
 
