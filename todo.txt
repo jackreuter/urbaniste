@@ -1,5 +1,5 @@
 <<<<-------------------------ACTIVE---------------------------->>>>
-Tom - on hover show the png card of the buildings
+Tom - VPs for * buildings
 
 Jack - make board have less clumps <= Joe said maybe not to do this. But idk if I agree
 Jack - make board have no water on edge <= Joe also said maybe not to do this, but idk if I agree

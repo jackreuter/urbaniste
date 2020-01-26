@@ -24,6 +24,14 @@
   --back_color: #EFF3F4;
 }
 
+a>div { display: none; }
+a:hover>div { 
+  display: block;
+  position:absolute;
+  right:-30px;
+  top:-100px;
+}
+
 body {
   background-color: var(--back_color);
   color: var(--txt_color);
@@ -85,20 +93,36 @@ p {
 
 #turn_title {
   position: absolute;
+  font-weight: bold;
   padding: 5px;
-  left: 2%;
+  left: -2%;
   top: 20%;
   display: inline-block;
+  text-align: center;
+  font-size: 30;
+  width: 180px;
+}
+
+#not_valid_player_title  {
+  position: absolute;
+  font-weight: bold;
+  padding: 5px;
+  left: 10%;
+  top: 100%;
+  z-index: 100;
+  display: inline-block;
+  text-align: center;
   font-size: 30;
 }
 
 #shop_div {
   position: absolute;
   padding: 5px;
-  right: 20px;
+  right: -20px;
   top: 10%;
   display: inline-block;
   float: right;
+  z-index: 99
 }
 
 #shop_header {

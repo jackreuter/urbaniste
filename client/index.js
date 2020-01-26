@@ -165,6 +165,18 @@ function displayShop() {
 	}
 	for (var i = 0; i < SHOP.length; i++) { 
 		var row = document.createElement("tr")
+		row.class = "png-able" // inaddition
+		var image = document.createElement("img")
+		image.style.height = "300px"
+    image.style.width = "230px"
+		image.src = "/pictures/" + SHOP[i]['name'] + ".png"
+		var div = document.createElement("div")
+		div.appendChild(image)
+		var a = document.createElement("a")
+		a.innerText = SHOP[i]['name'] + " Image"
+		a.appendChild(div)
+		row.appendChild(a)
+
     row.id = SHOP[i]['name']
     if (MY_MOVE['building'] && MY_MOVE['building']['name'] && MY_MOVE['building']['name'] === row.id) {
       row.style.backgroundColor = 'red'
@@ -366,7 +378,6 @@ function drawTextOnTile(tile, text) {
 
 // Reconcile global variables to server's values. Display elements.
 function ingestServerResponse(server_response) {
-	// $().alert('close') <- TODO
 	BOARD = server_response.game_state.board
   BUILDINGS = server_response.game_state.buildings
   SHOP = server_response.game_state.shop
