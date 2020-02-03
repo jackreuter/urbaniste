@@ -49,7 +49,7 @@
 
     // handle buildings
     if (this.client_object.building) {
-      if (!validateCost(this.game_state, this.active_player_index, this.client_object.building.name)
+      if (!validateCost(this.game_state, this.active_player_index, this.client_object.building.name, this.client_object.building.variable_cost)
           || !validateAvailable(this.game_state, this.client_object.building.name)
       ) {
         return this.game_state
@@ -108,7 +108,7 @@
       }
     }
 
-  function validateCost(game_state, active_player_index, building_name) {
+  function validateCost(game_state, active_player_index, building_name, variable_cost) {
     var player_resources
     if (active_player_index == 0) {
       player_resources = game_state.p1_resources
@@ -117,7 +117,22 @@
     }  
     for (var i=0; i<game_state.shop.length; i++) {
       if (game_state.shop[i].name == building_name) {
-        if (canPayCost(game_state.shop[i], player_resources)) {
+        if (game_state.shop[i]['?'] > 0) {
+          if (canPayVariableCost(game_state, game_state.shop[i], player_resources, variable_cost, active_player_index)) {
+            if (active_player_index == 0) {
+              game_state.p1_resources.bm -= variable_cost.bm
+              game_state.p1_resources.l -= variable_cost.l
+              game_state.p1_resources.c -= variable_cost.c
+            } else {
+              game_state.p2_resources.bm -= variable_cost.bm
+              game_state.p2_resources.l -= variable_cost.l
+              game_state.p2_resources.c -= variable_cost.c
+            }
+            return true
+          } else {
+            return false
+          } 
+        } else if (canPayCost(game_state.shop[i], player_resources)) {
           if (active_player_index == 0) {
             game_state.p1_resources.bm -= game_state.shop[i].bm
             game_state.p1_resources.l -= game_state.shop[i].l
@@ -126,6 +141,23 @@
             game_state.p2_resources.bm -= game_state.shop[i].bm
             game_state.p2_resources.l -= game_state.shop[i].l
             game_state.p2_resources.c -= game_state.shop[i].c
+          }
+          if (game_state.shop[i].name == "Casino") {
+            if (active_player_index == 0) {
+              game_state.p2_resources.bm -= variable_cost.bm
+              game_state.p2_resources.l -= variable_cost.l
+              game_state.p2_resources.c -= variable_cost.c
+              game_state.p1_resources.bm += variable_cost.bm
+              game_state.p1_resources.l += variable_cost.l
+              game_state.p1_resources.c += variable_cost.c
+            } else {
+              game_state.p1_resources.bm -= variable_cost.bm
+              game_state.p1_resources.l -= variable_cost.l
+              game_state.p1_resources.c -= variable_cost.c
+              game_state.p2_resources.bm += variable_cost.bm
+              game_state.p2_resources.l += variable_cost.l
+              game_state.p2_resources.c += variable_cost.c
+            }
           }
           return true
         } else {
@@ -138,6 +170,24 @@
 
   function canPayCost(cost, player_resources) {
     return player_resources.bm >= cost.bm && player_resources.l >= cost.l && player_resources.c >= cost.c
+  }
+
+  function canPayVariableCost(game_state, shop_item, player_resources, variable_cost, active_player_index) {
+    if (shop_item.name == "Tenement") {
+      var deduction = 0
+      for (var i=0; i<game_state.buildings.length; i++) {
+        if ((game_state.buildings[i].name == 'Tenement') && (
+          (game_state.buildings[i].player == 'player_one' && active_player_index == 0)
+          || (game_state.buildings[i].player == 'player_two' && active_player_index == 1)
+        )) {
+          deduction += 1
+        }
+      }
+    }
+    return player_resources.bm >= variable_cost.bm
+        && player_resources.l >= variable_cost.l
+        && player_resources.c >= variable_cost.c
+        && variable_cost.bm + variable_cost.l + variable_cost.c == (shop_item['?'] - deduction)
   }
 
   function tileAdjacentToFriendly(row, col, active_player_index, game_state) {

@@ -115,6 +115,11 @@ p {
   font-size: 30;
 }
 
+#money_form_input {
+  margin-top: 40px;
+  display: none;
+}
+
 #shop_div {
   position: absolute;
   padding: 5px;

@@ -16,12 +16,14 @@ var MoveProcessor = require('./server/moveProcessor')
 var ACTIVE_PLAYER_INDEX = 0
 var PLAYER_IDS = []
 
+
+var startState = startingStateGeneration.generateBoard(8, 12)
 var GAME_STATE = {
-  'board': startingStateGeneration.generateBoard(8, 12),
+  'board': startState[0],
   'buildings': [],
   'shop': startingStateGeneration.generateShop(5),
-  'p1_resources': {'bm':0, 'l':0, 'c':0},
-  'p2_resources': {'bm':0, 'l':0, 'c':0}
+  'p1_resources': startState[1],
+  'p2_resources': startState[2]
 }
 
 // Express to serve correct client side code
