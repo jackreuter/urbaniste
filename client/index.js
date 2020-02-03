@@ -215,7 +215,9 @@ function onClickShopRow(row) {
   // If shop item is already selected, deselect it
   if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
  		MY_MOVE['building'] = undefined
+    document.getElementById('money_form_input').style.display = "none"
   } else { // Select Shop Item
+    document.getElementById('money_form_input').style.display = "block"
     if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {
     	if (!BuildingValidation.buildingAvailable(buildingName, SHOP)) {
       	ErrorHandler.buildingNotAvailable(buildingName)
@@ -436,8 +438,7 @@ window.onload = () => {
   });
 
   socket.on('server_response', (server_response) => {
-    console.log(server_response.game_state)
-
+    document.getElementById("money_form_input").style.display = "none"
     MY_TURN = true
     document.getElementById('turn_title').innerText = 'Your Turn'
 
@@ -471,14 +472,24 @@ window.onload = () => {
   	if (MY_TURN) {
   		if (MY_MOVE['marker_placement']) {
 	      if (MY_MOVE['building'] !== undefined) {
+          var variable_building_cost = {
+            'bm': parseInt(document.getElementById("money_select_bm").value) || 0,
+            'c': parseInt(document.getElementById("money_select_c").value) || 0,
+            'l': parseInt(document.getElementById("money_select_l").value) || 0
+          }
 	        if (BuildingValidation.validateBuilding(
 	    	        MY_MOVE['building']['name'], 
 	    	        MY_MOVE['building']['location_array'],
 	    	        MY_MOVE,
 	    	        BOARD,
 	    	        STARTING_PLAYER)) {
-		        socket.emit('submit_move', MY_MOVE);
-		        MY_MOVE = {}
+            if (!BuildingValidation.validateVariableCost(MY_MOVE['building']['name'], variable_building_cost, MY_RESOURCES, ENEMY_RESOURCES, BUILDINGS, SHOP, STARTING_PLAYER)) {
+              ErrorHandler.invalidVariableCost()
+            } else {
+              MY_MOVE['building']['variable_cost'] = variable_building_cost
+              socket.emit('submit_move', MY_MOVE);
+              MY_MOVE = {}
+            }
 	        } else {
 	          ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'tooFewCoordinates': true})
 	        }

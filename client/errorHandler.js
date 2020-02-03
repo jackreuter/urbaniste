@@ -40,6 +40,9 @@ const ErrorHandler = {
   },
   buildingNotAvailable: (building_name) => {
     displayError("No more " + building_name + "s left to build.")
+  },
+  invalidVariableCost: () => {
+    displayError("Invalid variable building cost.")
   }
 }
 

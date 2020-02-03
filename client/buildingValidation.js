@@ -3,12 +3,40 @@ import ShapeUtils from './util.js'
 import ErrorHandler from './ErrorHandler.js'
 
 // check that given coordinate selection is valid for building placement
-function validateBuilding(buildingName, coords, move, board, startingPlayer) {
+function validateBuilding(buildingName, coords, move, board, startingPlayer, variableBuildingCost) {
   if (coords.length != buildingData[buildingName]['length']) {
     return false
   } else {
-    return buildingData[buildingName]['validation_function'](coords, move, board, startingPlayer)
+    return buildingData[buildingName]['validation_function'](coords, move, board, startingPlayer, variableBuildingCost)
   }
+}
+
+function validateVariableCost(buildingName, variableBuildingCost, myResources, enemyResources, buildings, shop, startingPlayer) {
+  var totalBuildingCost;
+  for (var i=0; i<shop.length; i++) {
+    if (shop[i].name == buildingName) {
+      totalBuildingCost = shop[i]['?']
+    }
+  }
+  if (buildingName == "Casino") {
+    return variableBuildingCost.bm + variableBuildingCost.l + variableBuildingCost.c == 2
+        &&  enemyResources.bm >= variableBuildingCost.bm
+        &&  enemyResources.l >= variableBuildingCost.l
+        &&  enemyResources.c >= variableBuildingCost.c
+  }
+  if (buildingName == "Tenement") {
+    var deduction = 0
+    for (var i=0; i<buildings.length; i++) {
+      if ((buildings[i].name == 'Tenement') && ((buildings[i].player == 'player_one' && startingPlayer) || (buildings[i].player == 'player_two' && !startingPlayer))) {
+        deduction += 1
+      }
+    }
+  }
+  
+  return myResources.bm >= variableBuildingCost.bm
+      && myResources.l >= variableBuildingCost.l
+      && myResources.c >= variableBuildingCost.c
+      && variableBuildingCost.bm + variableBuildingCost.l + variableBuildingCost.c == (totalBuildingCost - deduction)
 }
 
 // recursively checks if any possible valid building could exist using given tiles
@@ -69,6 +97,7 @@ function canPayCost(cost, my_resources) {
 
 const BuildingValidation = { 
   'validateBuilding': validateBuilding,
+  'validateVariableCost': validateVariableCost,
   'validateBuildingSelection': validateBuildingSelection,
   'canPayForBuilding': canPayForBuilding,
   'buildingAvailable': buildingAvailable,
@@ -329,7 +358,7 @@ function taxHouse(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 1 && on.enemy == 2 && ShapeUtils.checkShapeTriangle(coords)
 }
-function cemetary(coords, move, board, startingPlayer) {
+function cemetery(coords, move, board, startingPlayer) {
  if (coords.length != 3) {
     return false
   } else {
@@ -412,7 +441,7 @@ var buildingData = {
 
   //civic
   'Tax House': {'validation_function': taxHouse, 'length': 3},
-  'Cemetary': {'validation_function': cemetary, 'length': 3},
+  'Cemetery': {'validation_function': cemetery, 'length': 3},
   'Shipyard': {'validation_function': shipyard, 'length': 3},
   'Sewers': {'validation_function': sewers, 'length': 3},
   'Monument': {'validation_function': monument, 'length': 2}
