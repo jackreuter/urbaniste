@@ -65,17 +65,22 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
   		BOARD[row][col].marker == 'empty'
     	&& BOARD[row][col].type != 'w' 
     	&& BOARD[row][col].building == undefined
-    	&& ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly
+      // && notWatchtowerBlocked()
   ) {
-		clearPendingPlacements()
-		cell.innerText = '*'
-		
-		MY_RESOURCES[BOARD[row][col].type] += 1
-		displayResources()
+    var tileAdjacencies = ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER, BUILDINGS)
+    if (tileAdjacencies.adjacentToFriendly || tileAdjacencies.adjacentViaLighthouse || tileAdjacencies.adjacentViaLock) {
+      clearPendingPlacements()
+      cell.innerText = '*'
+      
+      MY_RESOURCES[BOARD[row][col].type] += 1
+      displayResources()
 
-		MY_MOVE['marker_placement'] = {'row': row, 'col': col}
+      MY_MOVE['marker_placement'] = {'row': row, 'col': col}
+    } else {
+      ErrorHandler.invalidHexClick(BOARD[row][col], ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER, BUILDINGS).adjacentToFriendly)
+    }
 	} else {
-		ErrorHandler.invalidHexClick(BOARD[row][col], ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER).adjacentToFriendly)
+		ErrorHandler.invalidHexClick(BOARD[row][col], ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER, BUILDINGS).adjacentToFriendly)
 	}
   displayShop()
 }
@@ -180,7 +185,7 @@ function displayShop() {
     row.id = SHOP[i]['name']
     if (MY_MOVE['building'] && MY_MOVE['building']['name'] && MY_MOVE['building']['name'] === row.id) {
       row.style.backgroundColor = 'red'
-    } else if (BuildingValidation.canPayCost(SHOP[i], MY_RESOURCES)) {
+    } else if (BuildingValidation.canPayCost(SHOP[i], MY_RESOURCES) && BuildingValidation.canPayVariableCost(SHOP[i], BUILDINGS, STARTING_PLAYER, MY_RESOURCES)) {
       row.style.backgroundColor = 'yellow'
     } else {
       row.style.backgroundColor = 'white'
@@ -207,6 +212,7 @@ function displayShop() {
 // handle shop row click
 function onClickShopRow(row) {
 	ErrorHandler.clearErrorDisplay()
+  document.getElementById('money_form_input').style.display = "none"
   var buildingName = row.id
   if (MY_MOVE['marker_placement'] === undefined) {
     ErrorHandler.shopError()
@@ -215,9 +221,10 @@ function onClickShopRow(row) {
   // If shop item is already selected, deselect it
   if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
  		MY_MOVE['building'] = undefined
-    document.getElementById('money_form_input').style.display = "none"
   } else { // Select Shop Item
-    document.getElementById('money_form_input').style.display = "block"
+    if (buildingName == "Casino" || buildingName == "Tenement" || buildingName == "Bazaar") {
+      document.getElementById('money_form_input').style.display = "block"
+    }
     if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {
     	if (!BuildingValidation.buildingAvailable(buildingName, SHOP)) {
       	ErrorHandler.buildingNotAvailable(buildingName)
