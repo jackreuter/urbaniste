@@ -20,7 +20,6 @@
       if (this.game_state.board[row][col].marker == 'empty'
           && this.game_state.board[row][col].type != 'w'
           && this.game_state.board[row][col].building_id == undefined
-          && tileAdjacentToFriendly(row, col, this.active_player_index, this.game_state)
       ) {
         return true
       }

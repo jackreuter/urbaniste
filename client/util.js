@@ -258,13 +258,16 @@ const ShapeUtils = {
   friendly: friendly,
 
   // check if tile at coordinates is adjacent to friendly marker, pending placement, or water tile
-  tileAdjacencyCheck: (row, col, move, board, startingPlayer) => {
+  tileAdjacencyCheck: (row, col, move, board, startingPlayer, buildings) => {
     var adjacentCoordinates = getAdjacentCoordinates(row, col)
     var adjacentToFriendly = false
     var adjacentToPlacement = false
     var adjacentToWater = false
+    var adjacentViaLighthouse = false
+    var adjacentViaLock = false
     for (var i = 0; i < adjacentCoordinates.length; i++) {
       var coords = adjacentCoordinates[i]
+      var twoAway = getAdjacentCoordinates(coords['row'], coords['col'])
       
       // check if adjacent tile is friendly
       adjacentToFriendly = adjacentToFriendly || friendly(coords['row'], coords['col'], board, startingPlayer)
@@ -279,11 +282,39 @@ const ShapeUtils = {
         adjacentToWater = adjacentToWater || board[coords['row']][coords['col']].type === 'w'
       } catch (e) {
       }
+
+      if (buildings) {
+        for (var j=0; j<twoAway.length; j++) {
+          for (var building=0; building<buildings.length; building++) {
+            if (buildings[building].location_array[0].row == twoAway[j].row
+                && buildings[building].location_array[0].col == twoAway[j].col
+                && buildings[building].name == "Lighthouse"
+                && ((buildings[building].player == "player_one" && startingPlayer) || (buildings[building].player == "player_two" && !startingPlayer))) {
+              adjacentViaLighthous = true
+            }
+          }
+        }
+        for (var j=0; j<twoAway.length; j++) {
+          for (var building=0; building<buildings.length; building++) {
+            if (board[coords['row']] && board[coords['row']][coords['col']] && board[coords['row']][coords['col']].type === 'w'
+                && buildings[building].name == "Lock"
+                && ((buildings[building].player == "player_one" && startingPlayer) || (buildings[building].player == "player_two" && !startingPlayer))) {
+              for (var h=0; h<buildings[building].location_array.length; h++) {
+                if (buildings[building].location_array[h].row == twoAway[j].row && buildings[building].location_array[h].col == twoAway[j].col) {
+                  adjacentViaLock = true
+                }
+              }
+            }
+          }
+        }
+      }
     }
     return {
       'adjacentToFriendly': adjacentToFriendly,
       'adjacentToPlacement': adjacentToPlacement,
-      'adjacentToWater': adjacentToWater
+      'adjacentToWater': adjacentToWater,
+      'adjacentViaLighthouse': adjacentViaLighthouse,
+      'adjacentViaLock': adjacentViaLock
     }
   }
 }

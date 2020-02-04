@@ -18,6 +18,10 @@ function validateVariableCost(buildingName, variableBuildingCost, myResources, e
       totalBuildingCost = shop[i]['?']
     }
   }
+  if (!totalBuildingCost) {
+    return true
+  }
+  
   if (buildingName == "Casino") {
     return variableBuildingCost.bm + variableBuildingCost.l + variableBuildingCost.c == 2
         &&  enemyResources.bm >= variableBuildingCost.bm
@@ -95,13 +99,31 @@ function canPayCost(cost, my_resources) {
   return my_resources.bm >= cost.bm && my_resources.l >= cost.l && my_resources.c >= cost.c
 }
 
+function canPayVariableCost(building, buildings, starting_player, my_resources) {
+  var deductions = 0
+  if (building.name == "Tenement") {
+    for (var i=0; i<buildings.length; i++) {
+      if ((buildings[i].name == 'Tenement') && ((buildings[i].player == 'player_one' && starting_player) || (buildings[i].player == 'player_two' && !starting_player))) {
+        deductions += 1
+      }
+    }
+  }
+  if (building.name == "Bazaar") {
+      deductions = 0
+      // TODO: MAKE BAZAAR WORK
+    }
+ 
+  return my_resources.bm + my_resources.l + my_resources.c >= building['?'] - deductions
+}
+
 const BuildingValidation = { 
   'validateBuilding': validateBuilding,
   'validateVariableCost': validateVariableCost,
   'validateBuildingSelection': validateBuildingSelection,
   'canPayForBuilding': canPayForBuilding,
   'buildingAvailable': buildingAvailable,
-  'canPayCost': canPayCost
+  'canPayCost': canPayCost,
+  'canPayVariableCost': canPayVariableCost
 }
 
 export default BuildingValidation 
