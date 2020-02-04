@@ -28,3 +28,5 @@ refinery --> unique, have server give player extra resources
 plaza --> unique, have server repeat turn
 casino --> check for user input on what to steal and if legit, then steal on server side
 tenement --> working and deductions working
+lock --> ugly adjacency test on client. Check two away, and if a one away is water, and the two away is adjacent to that water, count it
+light house --> somewhat ugly adjacenty test on client. if two away count it
