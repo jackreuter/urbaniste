@@ -16,7 +16,7 @@
       {'name': 'Bridge', 'type': 'Aquatic', 'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 3},
       {'name': 'Harbor', 'type': 'Aquatic', 'bm': 2, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
       {'name': 'Canal', 'type': 'Aquatic', 'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 4},
-      {'name': 'Lock', 'type': 'Aquatic', 'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2}, //
+      {'name': 'Lock', 'type': 'Aquatic', 'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
       {'name': 'Ferry', 'type': 'Aquatic', 'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3}, //
       {'name': 'Lighthouse', 'type': 'Aquatic', 'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
 
@@ -32,7 +32,7 @@
       {'name': 'Bazaar', 'type': 'Commercial', 'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3}, //
       {'name': 'Refinery', 'type': 'Commercial', 'bm': 0, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 2}, 
       {'name': 'Casino', 'type': 'Commercial', 'bm': 1, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 0},
-      {'name': 'Watchtower', 'type': 'Commercial', 'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3}, //
+      {'name': 'Watchtower', 'type': 'Commercial', 'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
 
       //civic
       {'name': 'Tax House', 'type': 'Civic', 'bm': 0, 'c': 3, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
@@ -46,8 +46,8 @@
       {'name': 'Plaza', 'type': 'Infrastructure', 'bm': 3, 'c': 0, 'l': 2, '?': 0, 'limit': 5, 'vp': 4},
       {'name': 'Lighthouse', 'type': 'Aquatic', 'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
       {'name': 'Tenement', 'type': 'Commercial', 'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 4, 'vp': 3},
-      {'name': 'Cemetery', 'type': 'Civic', 'bm': 2, 'c': 0, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
-      {'name': 'Lock', 'type': 'Aquatic', 'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2}, //
+      {'name': 'Watchtower', 'type': 'Commercial', 'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
+      {'name': 'Lock', 'type': 'Aquatic', 'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
     ]
 
     // for (i=0; i<5; i++) {

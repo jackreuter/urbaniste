@@ -116,10 +116,28 @@ function canPayVariableCost(building, buildings, starting_player, my_resources) 
   return my_resources.bm + my_resources.l + my_resources.c >= building['?'] - deductions
 }
 
+function isWatchtowerBlocked(row, col, buildings, startingPlayer) {
+  var adjacent = ShapeUtils.getAdjacentCoordinates(row, col)
+  for (var building=0; building<buildings.length; building++) {
+    if (buildings[building].name == "Watchtower") {
+      if ((startingPlayer && buildings[building]['player'] == 'player_two') || (!startingPlayer && buildings[building]['player'] == 'player_one')) {
+        for (var index=0; index<adjacent.length; index++) {
+          if ((buildings[building]['location_array'][0]['row'] == adjacent[index]['row']) && (buildings[building]['location_array'][0]['col'] == adjacent[index]['col'])) {
+            return true
+          }
+        }
+      }
+    }
+  }
+  return false
+}
+
+
 const BuildingValidation = { 
   'validateBuilding': validateBuilding,
   'validateVariableCost': validateVariableCost,
   'validateBuildingSelection': validateBuildingSelection,
+  'isWatchtowerBlocked': isWatchtowerBlocked,
   'canPayForBuilding': canPayForBuilding,
   'buildingAvailable': buildingAvailable,
   'canPayCost': canPayCost,
