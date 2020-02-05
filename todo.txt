@@ -10,8 +10,6 @@ Jack - have buildings on board be labeled somehow to tell what they are --> I'll
 
 tunnel, prison, ferry, monument, tramway --> all can be handled by asking for an extra hex click (2 clicks for tramway), with validation. I think this happening before submit button click would be easier to code but be less intuitive
 
-lock, lighthouse, watchtower --> marker placement & building effects. I'm thinking in index.js we create a function called canPlaceMarker(tile) or something and check for these specific effects as well as the usual stuff. so check if the tile is empty, non-water, has no building, is adjacent to player or adjacent via lighthouse/lock, and is not blocked by watchtower. then do a similar check for watchtowers during building tile placement
-
 
 bazaar --> half working. working only at full cost. need to ADD CODE TO DECREMENT COST
 
@@ -29,4 +27,5 @@ plaza --> unique, have server repeat turn
 casino --> check for user input on what to steal and if legit, then steal on server side
 tenement --> working and deductions working
 lock --> ugly adjacency test on client. Check two away, and if a one away is water, and the two away is adjacent to that water, count it
-light house --> somewhat ugly adjacenty test on client. if two away count it
+lighthouse --> somewhat ugly adjacenty test on client. if two away count it
+watchtower --> hex click and building click validation for if-adjacent-to-enemy-watchtower dont allow 

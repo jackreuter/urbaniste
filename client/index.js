@@ -65,7 +65,7 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
   		BOARD[row][col].marker == 'empty'
     	&& BOARD[row][col].type != 'w' 
     	&& BOARD[row][col].building == undefined
-      // && notWatchtowerBlocked()
+      && !BuildingValidation.isWatchtowerBlocked(row, col, BUILDINGS, STARTING_PLAYER)
   ) {
     var tileAdjacencies = ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER, BUILDINGS)
     if (tileAdjacencies.adjacentToFriendly || tileAdjacencies.adjacentViaLighthouse || tileAdjacencies.adjacentViaLock) {
@@ -87,9 +87,13 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
 
 function handleHexClickForBuildingPlacement(cell, row, col) {
 	// check if tile available to build
-  if ( BOARD[row][col].building !== undefined ) {
+  if (BOARD[row][col].building !== undefined) {
   	return
   }
+  if (BuildingValidation.isWatchtowerBlocked(row, col, BUILDINGS, STARTING_PLAYER)) {
+    return
+  }
+
   // if tile have already been selected, check if click is to remove
   var locationArray = []
   for (var coordinate of MY_MOVE['building']['location_array']) {
@@ -425,11 +429,11 @@ window.onload = () => {
   		opponent_score = final_score.p1_vps
   	}
   	if (your_score > opponent_score) {
-  		document.getElementById('not_valid_player_title').innerText = "YOU WIN. Your score: " + your_score + ". Your opponent's score: " + opponent_score + "."
+  		document.getElementById('not_valid_player_title').innerText = "YOU WIN. Your score: " + your_score + ". Your opponent's score: " + opponent_score + ". (does not count * vps)"
   	} else if (your_score < opponent_score) {
-  		document.getElementById('not_valid_player_title').innerText = "YOU LOSE. Your score: " + your_score + ". Your opponent's score: " + opponent_score + "."
+  		document.getElementById('not_valid_player_title').innerText = "YOU LOSE. Your score: " + your_score + ". Your opponent's score: " + opponent_score + ". (does not count * vps)"
   	} else {
-  		document.getElementById('not_valid_player_title').innerText = "You tied with score: " + your_score + ". Lame."
+  		document.getElementById('not_valid_player_title').innerText = "You tied with score: " + your_score + ". Lame. (does not count * vps)"
   	}
   });
 
