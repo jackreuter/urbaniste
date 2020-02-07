@@ -17,7 +17,7 @@ var ACTIVE_PLAYER_INDEX = 0
 var PLAYER_IDS = []
 
 
-var startState = startingStateGeneration.generateBoard(8, 12)
+var startState = startingStateGeneration.generateBoard(8, 12, 20)
 var GAME_STATE = {
   'board': startState[0],
   'buildings': [],
