@@ -11,8 +11,11 @@ function validateBuilding(buildingName, coords, move, board, startingPlayer, var
   }
 }
 
-function validateVariableCost(buildingName, variableBuildingCost, myResources, enemyResources, buildings, shop, startingPlayer) {
-  var totalBuildingCost;
+function validateVariableCost(building, variableBuildingCost, myResources, enemyResources, buildings, shop, startingPlayer, board) {
+  var buildingName = building['name']
+  var totalBuildingCost
+  var deduction = 0
+
   for (var i=0; i<shop.length; i++) {
     if (shop[i].name == buildingName) {
       totalBuildingCost = shop[i]['?']
@@ -29,12 +32,16 @@ function validateVariableCost(buildingName, variableBuildingCost, myResources, e
         &&  enemyResources.c >= variableBuildingCost.c
   }
   if (buildingName == "Tenement") {
-    var deduction = 0
     for (var i=0; i<buildings.length; i++) {
       if ((buildings[i].name == 'Tenement') && ((buildings[i].player == 'player_one' && startingPlayer) || (buildings[i].player == 'player_two' && !startingPlayer))) {
         deduction += 1
       }
     }
+  }
+  if (buildingName == "Bazaar") {
+    var numNextTo = ShapeUtils.numNextTo(buildings, board, buildings.length, building, startingPlayer)
+    deduction += numNextTo.numAdjacentEnemyBuildings
+    deduction += numNextTo.numAdjacentFriendlyBuildings
   }
   
   return myResources.bm >= variableBuildingCost.bm
@@ -108,11 +115,6 @@ function canPayVariableCost(building, buildings, starting_player, my_resources) 
       }
     }
   }
-  if (building.name == "Bazaar") {
-      deductions = 0
-      // TODO: MAKE BAZAAR WORK
-    }
- 
   return my_resources.bm + my_resources.l + my_resources.c >= building['?'] - deductions
 }
 

@@ -1,5 +1,4 @@
 <<<<-------------------------ACTIVE---------------------------->>>>
-Tom - VPs for * buildings
 
 Jack - make board have less clumps <= Joe said maybe not to do this. But idk if I agree
 Jack - make board have no water on edge <= Joe also said maybe not to do this, but idk if I agree
@@ -11,16 +10,13 @@ Jack - have buildings on board be labeled somehow to tell what they are --> I'll
 tunnel, prison, ferry, monument, tramway --> all can be handled by asking for an extra hex click (2 clicks for tramway), with validation. I think this happening before submit button click would be easier to code but be less intuitive
 
 
-bazaar --> half working. working only at full cost. need to ADD CODE TO DECREMENT COST
-
-
 
 
 <<<<-------------------------RESOLVED---------------------------->>>>
 
 Jack - Bug: If you select less tiles than required, building still gets build. Example is select 2 of the 3 hexes for City Hall and it totally lets you build a 2 shape building. Related to that is the entire "invalidBuilding" errorHandler method does not function as expected. -- resolved
 
-buildings finished by tom:
+buildings finished:
 
 refinery --> unique, have server give player extra resources
 plaza --> unique, have server repeat turn
@@ -28,4 +24,8 @@ casino --> check for user input on what to steal and if legit, then steal on ser
 tenement --> working and deductions working
 lock --> ugly adjacency test on client. Check two away, and if a one away is water, and the two away is adjacent to that water, count it
 lighthouse --> somewhat ugly adjacenty test on client. if two away count it
-watchtower --> hex click and building click validation for if-adjacent-to-enemy-watchtower dont allow 
+watchtower --> hex click and building click validation for if-adjacent-to-enemy-watchtower dont allow 	
+
+bazaar --> working. turns yellow on 6 still, but is discounted by 
+embassy --> check number of adajcent buildings in score counting
+docks --> check number of adjacent water in score counting

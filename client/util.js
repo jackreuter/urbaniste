@@ -44,6 +44,44 @@ function adjacent(tileA, tileB) {
   return false;
 }
 
+function numNextTo(buildings, board, building_index, building, startingPlayer) {
+  var adjacentEnemyBuildingIndices = new Set()
+  var adjacentFriendlyBuildingIndices = new Set()
+  var adjacentWater = new Set()
+
+  for (var index=0; index<building['location_array'].length; index++) {
+    var adjacentHexes = getAdjacentCoordinates(building['location_array'][index]['row'], building['location_array'][index]['col'])
+    for (var i=0; i<adjacentHexes.length; i++) {
+      for (var buildingIndex=0; buildingIndex<buildings.length; buildingIndex++) {
+        if (building_index != buildingIndex) {
+          for (var hex=0; hex<buildings[buildingIndex]['location_array'].length; hex++) {
+            if (adjacentHexes[i]['row'] == buildings[buildingIndex]['location_array'][hex]['row'] && adjacentHexes[i]['col'] == buildings[buildingIndex]['location_array'][hex]['col']) {
+              if ((startingPlayer && buildings[buildingIndex]['player'] == 'player_one') || (!startingPlayer && buildings[buildingIndex]['player'] == 'player_two')) {
+                adjacentFriendlyBuildingIndices.add(buildingIndex) 
+              } else {
+                adjacentEnemyBuildingIndices.add(buildingIndex)
+              }
+            }
+          }
+        }
+      } 
+      try {
+        if (board[adjacentHexes[i]['row']][adjacentHexes[i]['col']].type == 'w') {
+          // unique transform of row,col for set uniqueness
+          adjacentWater.add(100*adjacentHexes[i]['row'] + adjacentHexes[i]['col'])
+        }
+      } catch (e) {}
+    }
+  }
+
+  return {
+    'numAdjacentEnemyBuildings': adjacentEnemyBuildingIndices.size,
+    'numAdjacentFriendlyBuildings': adjacentFriendlyBuildingIndices.size,
+    'numAdjacentWater': adjacentWater.size
+  }
+
+}
+
 // check if tiles form a double
 function checkShapeDouble(tiles) {
   if (tiles.length != 2) {
@@ -247,6 +285,7 @@ function checkShapeU(tiles) {
 // Exported methods. Accessed via "e.g. ShapeUtils.checkShapeDouble(tiles)"
 const ShapeUtils = {
   adjacent: adjacent,
+  numNextTo: numNextTo,
   getAdjacentCoordinates: getAdjacentCoordinates,
   checkShapeDouble: checkShapeDouble,
   checkShapeTriangle: checkShapeTriangle,
