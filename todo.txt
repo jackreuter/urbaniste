@@ -27,3 +27,5 @@ lighthouse --> somewhat ugly adjacenty test on client. if two away count it
 watchtower --> hex click and building click validation for if-adjacent-to-enemy-watchtower dont allow 	
 
 bazaar --> working. turns yellow on 6 still, but is discounted by 
+embassy --> check number of adajcent buildings in score counting
+docks --> check number of adjacent water in score counting
