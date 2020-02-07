@@ -43,9 +43,9 @@
     ]
 
     return [
-      {'name': 'Plaza', 'type': 'Infrastructure', 'bm': 3, 'c': 0, 'l': 2, '?': 0, 'limit': 5, 'vp': 4},
+      {'name': 'Bazaar', 'type': 'Commercial', 'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3}, //
       {'name': 'Lighthouse', 'type': 'Aquatic', 'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
-      {'name': 'Tenement', 'type': 'Commercial', 'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 4, 'vp': 3},
+      {'name': 'Embassy', 'type': 'Cultural', 'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': '*'}, //
       {'name': 'Watchtower', 'type': 'Commercial', 'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
       {'name': 'Lock', 'type': 'Aquatic', 'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
     ]

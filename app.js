@@ -162,7 +162,6 @@ function emitMoveToPlayers(socket) {
 }
 
 function gameEnded() {
-  console.log("Game has ended.")
   p1_vps = 0
   p2_vps = 0
   for (var i=0; i<GAME_STATE.buildings.length; i++) {

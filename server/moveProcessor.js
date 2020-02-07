@@ -48,15 +48,15 @@
 
     // handle buildings
     if (this.client_object.building) {
-      if (!validateCost(this.game_state, this.active_player_index, this.client_object.building.name, this.client_object.building.variable_cost)
-          || !validateAvailable(this.game_state, this.client_object.building.name)
-      ) {
-        return this.game_state
-      }
       var newBuilding = {
         'player': player,
         'name': this.client_object.building.name,
         'location_array': this.client_object.building.location_array
+      }
+      if (!validateCost(this.game_state, this.active_player_index, this.client_object.building.name, this.client_object.building.variable_cost, newBuilding)
+          || !validateAvailable(this.game_state, this.client_object.building.name)
+      ) {
+        return this.game_state
       }
       // update building availability
       for (var i=0; i<this.game_state.shop.length; i++) {
@@ -107,7 +107,7 @@
       }
     }
 
-  function validateCost(game_state, active_player_index, building_name, variable_cost) {
+  function validateCost(game_state, active_player_index, building_name, variable_cost, newBuilding) {
     var player_resources
     if (active_player_index == 0) {
       player_resources = game_state.p1_resources
@@ -117,7 +117,7 @@
     for (var i=0; i<game_state.shop.length; i++) {
       if (game_state.shop[i].name == building_name) {
         if (game_state.shop[i]['?'] > 0) {
-          if (canPayVariableCost(game_state, game_state.shop[i], player_resources, variable_cost, active_player_index)) {
+          if (canPayVariableCost(game_state, game_state.shop[i], player_resources, variable_cost, active_player_index, newBuilding)) {
             if (active_player_index == 0) {
               game_state.p1_resources.bm -= variable_cost.bm
               game_state.p1_resources.l -= variable_cost.l
@@ -171,9 +171,37 @@
     return player_resources.bm >= cost.bm && player_resources.l >= cost.l && player_resources.c >= cost.c
   }
 
-  function canPayVariableCost(game_state, shop_item, player_resources, variable_cost, active_player_index) {
+  function adjacentBuildings(buildings, board, building) {
+    
+    var adjacentEnemyBuildingIndices = new Set()
+    var adjacentFriendlyBuildingIndices = new Set()
+
+    for (var index=0; index<building['location_array'].length; index++) {
+      var adjacentHexes = getAdjacentCoordinates(building['location_array'][index]['row'], building['location_array'][index]['col'])
+      for (var i=0; i<adjacentHexes.length; i++) {
+        for (var buildingIndex=0; buildingIndex<buildings.length; buildingIndex++) {
+          for (var hex=0; hex<buildings[buildingIndex]['location_array'].length; hex++) {
+            if (adjacentHexes[i]['row'] == buildings[buildingIndex]['location_array'][hex]['row'] && adjacentHexes[i]['col'] == buildings[buildingIndex]['location_array'][hex]['col']) {
+              if (building.player == buildings[buildingIndex]['player']) {
+                adjacentFriendlyBuildingIndices.add(buildingIndex) 
+              } else {
+                adjacentEnemyBuildingIndices.add(buildingIndex)
+              }
+            }
+          }
+        } 
+      }
+    }
+
+    return {
+      'numAdjacentEnemyBuildings': adjacentEnemyBuildingIndices.size,
+      'numAdjacentFriendlyBuildings': adjacentFriendlyBuildingIndices.size
+    }
+  }
+
+  function canPayVariableCost(game_state, shop_item, player_resources, variable_cost, active_player_index, newBuilding) {
+    var deduction = 0
     if (shop_item.name == "Tenement") {
-      var deduction = 0
       for (var i=0; i<game_state.buildings.length; i++) {
         if ((game_state.buildings[i].name == 'Tenement') && (
           (game_state.buildings[i].player == 'player_one' && active_player_index == 0)
@@ -182,6 +210,11 @@
           deduction += 1
         }
       }
+    }
+    if (shop_item.name == "Bazaar") {
+      var numNextTo = adjacentBuildings(game_state.buildings, game_state.board, newBuilding)
+      deduction += numNextTo.numAdjacentEnemyBuildings
+      deduction += numNextTo.numAdjacentFriendlyBuildings
     }
     return player_resources.bm >= variable_cost.bm
         && player_resources.l >= variable_cost.l
@@ -208,6 +241,22 @@
         || adjacent(row+1, col+1, active_player_index, game_state)
       )
     }
+  }
+
+  function getAdjacentCoordinates(row, col) {
+    var adjacents = [{'row': row, 'col': col-1}, {'row': row, 'col': col+1}]
+    if (row%2 == 0) {
+      adjacents.push({'row': row-1, 'col': col-1})
+      adjacents.push({'row': row+1, 'col': col-1})
+      adjacents.push({'row': row-1, 'col': col})
+      adjacents.push({'row': row+1, 'col': col})
+    } else {
+      adjacents.push({'row': row-1, 'col': col})
+      adjacents.push({'row': row+1, 'col': col})
+      adjacents.push({'row': row-1, 'col': col+1})
+      adjacents.push({'row': row+1, 'col': col+1})
+    }
+    return adjacents
   }
 
   function adjacent(row, col, active_player_index, game_state) {

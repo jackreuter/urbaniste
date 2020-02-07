@@ -226,16 +226,18 @@ function onClickShopRow(row) {
   if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
  		MY_MOVE['building'] = undefined
   } else { // Select Shop Item
-    if (buildingName == "Casino" || buildingName == "Tenement" || buildingName == "Bazaar") {
-      document.getElementById('money_form_input').style.display = "block"
+    if (BuildingValidation.buildingAvailable(buildingName, SHOP)) {
+      if (buildingName == "Casino" || buildingName == "Tenement" || buildingName == "Bazaar") {
+        document.getElementById('money_form_input').style.display = "block"
+      }  
+      if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {  
+        MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
+      } else {
+        ErrorHandler.notEnoughMoney(buildingName)
+      }
     }
-    if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {
-    	if (!BuildingValidation.buildingAvailable(buildingName, SHOP)) {
-      	ErrorHandler.buildingNotAvailable(buildingName)
-    	}
-	 		MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
-    } else {
-      ErrorHandler.notEnoughMoney(buildingName)
+    else {
+      ErrorHandler.buildingNotAvailable(buildingName)
     }
   }
   displayShop()
@@ -421,19 +423,44 @@ window.onload = () => {
   	console.log(final_score)
   	var your_score
   	var opponent_score
+
+    var p1_extra_points = 0
+    var p2_extra_points = 0
+    for (var i=0; i<BUILDINGS.length; i++) {
+      var numNextTo = ShapeUtils.numNextTo(BUILDINGS, BOARD, i, BUILDINGS[i], STARTING_PLAYER)
+      if (BUILDINGS[i].name == "Embassy") {
+        if (BUILDINGS[i].player == "player_one") {
+          p1_extra_points += numNextTo.numAdjacentEnemyBuildings
+          p1_extra_points += numNextTO.numAdjacentFriendlyBuildings
+        }
+        if (BUILDINGS[i].player == "player_two") {
+          p2_extra_points += numNextTo.numAdjacentEnemyBuildings
+          p2_extra_points += numNextTo.numAdjacentFriendlyBuildings
+        }
+      }
+      if (BUILDINGS[i].name == "Docks") {
+        if (BUILDINGS[i].player == "player_one") {
+          p1_extra_points += numNextTo.numAdjacentWater
+        }
+        if (BUILDINGS[i].player == "player_two") {
+          p2_extra_points += numNextTo.numAdjacentWater
+        }
+      }
+    }
+
   	if (STARTING_PLAYER) {
-  		your_score = final_score.p1_vps
-  		opponent_score = final_score.p2_vps
+  		your_score = final_score.p1_vps + p1_extra_points
+  		opponent_score = final_score.p2_vps + p2_extra_points
   	} else {
-  		your_score = final_score.p2_vps
-  		opponent_score = final_score.p1_vps
+  		your_score = final_score.p2_vps + p2_extra_points
+  		opponent_score = final_score.p1_vps + p1_extra_points
   	}
   	if (your_score > opponent_score) {
-  		document.getElementById('not_valid_player_title').innerText = "YOU WIN. Your score: " + your_score + ". Your opponent's score: " + opponent_score + ". (does not count * vps)"
+  		document.getElementById('not_valid_player_title').innerText = "YOU WIN. Your score: " + your_score + ". Your opponent's score: " + opponent_score + "."
   	} else if (your_score < opponent_score) {
-  		document.getElementById('not_valid_player_title').innerText = "YOU LOSE. Your score: " + your_score + ". Your opponent's score: " + opponent_score + ". (does not count * vps)"
+  		document.getElementById('not_valid_player_title').innerText = "YOU LOSE. Your score: " + your_score + ". Your opponent's score: " + opponent_score + "."
   	} else {
-  		document.getElementById('not_valid_player_title').innerText = "You tied with score: " + your_score + ". Lame. (does not count * vps)"
+  		document.getElementById('not_valid_player_title').innerText = "You tied with score: " + your_score + ". Lame."
   	}
   });
 
@@ -494,7 +521,7 @@ window.onload = () => {
 	    	        MY_MOVE,
 	    	        BOARD,
 	    	        STARTING_PLAYER)) {
-            if (!BuildingValidation.validateVariableCost(MY_MOVE['building']['name'], variable_building_cost, MY_RESOURCES, ENEMY_RESOURCES, BUILDINGS, SHOP, STARTING_PLAYER)) {
+            if (!BuildingValidation.validateVariableCost(MY_MOVE['building'], variable_building_cost, MY_RESOURCES, ENEMY_RESOURCES, BUILDINGS, SHOP, STARTING_PLAYER, BOARD)) {
               ErrorHandler.invalidVariableCost()
             } else {
               MY_MOVE['building']['variable_cost'] = variable_building_cost
