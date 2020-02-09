@@ -37,7 +37,6 @@ var STARTING_PLAYER = false
 var MY_RESOURCES = {'bm':0, 'l':0, 'c':0}
 var ENEMY_RESOURCES = {'bm':0, 'l':0, 'c':0}
 
-
 // handle hex click
 // force marker placement selection first
 // then allow building selection, with shape restrictions
@@ -57,6 +56,9 @@ function handleHexClick(cell) {
 
 function handleHexClickForMarkerPlacement(cell, row, col) {
 	// Clicking on an already selected hex will de-select it.
+  if (document.getElementById('slider_checkbox').checked) {
+    console.log("Follow Up Click")
+  }
   if (cell.innerText == '*') {
 		clearPendingPlacements()
 		displayResources()
@@ -217,6 +219,8 @@ function displayShop() {
 function onClickShopRow(row) {
 	ErrorHandler.clearErrorDisplay()
   document.getElementById('money_form_input').style.display = "none"
+  document.getElementById('slider_id_div').style.display = "none"
+
   var buildingName = row.id
   if (MY_MOVE['marker_placement'] === undefined) {
     ErrorHandler.shopError()
@@ -231,6 +235,7 @@ function onClickShopRow(row) {
         document.getElementById('money_form_input').style.display = "block"
       }  
       if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {  
+        document.getElementById('slider_id_div').style.display = "block"
         MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
       } else {
         ErrorHandler.notEnoughMoney(buildingName)
@@ -476,7 +481,9 @@ window.onload = () => {
   });
 
   socket.on('server_response', (server_response) => {
+    console.log(document.getElementById('slider_id'))
     document.getElementById("money_form_input").style.display = "none"
+    document.getElementById("slider_id_div").style.display = "none"
     MY_TURN = true
     document.getElementById('turn_title').innerText = 'Your Turn'
 
