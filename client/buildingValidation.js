@@ -4,6 +4,7 @@ import ErrorHandler from './ErrorHandler.js'
 
 // check that given coordinate selection is valid for building placement
 function validateBuilding(buildingName, coords, move, board, startingPlayer, variableBuildingCost) {
+  console.log("in validateBuilding")
   if (coords.length != buildingData[buildingName]['length']) {
     return false
   } else {
@@ -52,6 +53,7 @@ function validateVariableCost(building, variableBuildingCost, myResources, enemy
 
 // recursively checks if any possible valid building could exist using given tiles
 function validateBuildingSelection(buildingName, coords, move, board, startingPlayer) {
+  console.log("HERE2")
   if (coords.length > buildingData[buildingName]['length']) {
     return false
   } else if (coords.length == buildingData[buildingName]['length']) {
@@ -143,7 +145,8 @@ const BuildingValidation = {
   'canPayForBuilding': canPayForBuilding,
   'buildingAvailable': buildingAvailable,
   'canPayCost': canPayCost,
-  'canPayVariableCost': canPayVariableCost
+  'canPayVariableCost': canPayVariableCost,
+  'validateFerryExtra': validateFerryExtra
 }
 
 export default BuildingValidation 
@@ -287,9 +290,9 @@ function tramway(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 3 && ShapeUtils.checkShape3Line(coords)
 }
-function plaza(coords, move, board, startingPlayer) {
+function foundry(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
-  return on.friendly == 4 && ShapeUtils.checkShapeDiamond(coords)
+  return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
 }
 
 //aquatic
@@ -331,6 +334,25 @@ function ferry(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   var adjacentTo = builtAdjacentTo(coords, move, board, startingPlayer)
   return on.friendly == 2 && adjacentTo.water >= 1 && ShapeUtils.checkShapeDouble(coords)
+}
+function validateFerryExtra(coords, extraArray, board) {
+  console.log("FerryExtra")
+  return extraArray
+      && extraArray.length == 1
+      && (extraArray[0]['row'] != coords[0]['row'] || extraArray[0]['col'] != extraArray[0]['col'])
+      && ferryHelper(coords, extraArray, board) 
+}
+function ferryHelper(coords, extraArray, board) {
+  var adjacentToCoord = ShapeUtils.getAdjacentCoordinates(coords[0]['row'], coords[0]['col'])
+  var adjacentToExtra = ShapeUtils.getAdjacentCoordinates(extraArray[0]['row'], extraArray[0]['col'])
+  for (var c=0; c<adjacentToCoord.length; c++) {
+    for (var e=0; e<adjacentToCoord.length; e++) {
+      if (adjacentToCoord[c]['row'] == adjacentToExtra[e]['row'] && adjacentToCoord[c]['col'] == adjacentToExtra[e]['col'] && board[adjacentToCoord[c]['row']][adjacentToCoord[c]['col']].type == 'w') {
+        return true
+      }
+    }
+  }
+  return false
 }
 function lightHouse(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
@@ -457,14 +479,14 @@ var buildingData = {
   'Tunnel': {'validation_function': tunnel, 'length': 1},
   'Prison': {'validation_function': prison, 'length': 2},
   'Tramway': {'validation_function': tramway, 'length': 3},
-  'Plaza': {'validation_function': plaza, 'length': 4},
+  'Foundry': {'validation_function': foundry, 'length': 2},
 
   //aquatic
   'Bridge': {'validation_function': bridge, 'length': 3},
   'Harbor': {'validation_function': harbor, 'length': 1},
   'Canal': {'validation_function': canal, 'length': 4},
   'Lock': {'validation_function': lock, 'length': 4},
-  'Ferry': {'validation_function': ferry, 'length': 2},
+  'Ferry': {'validation_function': ferry, 'length': 1},
   'Lighthouse': {'validation_function': lightHouse, 'length': 1},
 
   //cultural

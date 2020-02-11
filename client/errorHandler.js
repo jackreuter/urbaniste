@@ -24,6 +24,8 @@ const ErrorHandler = {
   invalidBuilding: (buildingName, invalidBuildingOptions) => {
     if (invalidBuildingOptions.tooFewCoordinates) {
       displayError("Too few hexes selected for this " + buildingName + ".")
+    } else if (invalidBuildingOptions.invalidExtraPlacement) {
+      displayError("Invalid extra placement for this " +buildingName + ".")
     }
   },
   notWelcome: () => {

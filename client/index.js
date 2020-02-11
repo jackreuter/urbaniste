@@ -56,9 +56,6 @@ function handleHexClick(cell) {
 
 function handleHexClickForMarkerPlacement(cell, row, col) {
 	// Clicking on an already selected hex will de-select it.
-  if (document.getElementById('slider_checkbox').checked) {
-    console.log("Follow Up Click")
-  }
   if (cell.innerText == '*') {
 		clearPendingPlacements()
 		displayResources()
@@ -96,28 +93,51 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
     return
   }
 
-  // if tile have already been selected, check if click is to remove
-  var locationArray = []
-  for (var coordinate of MY_MOVE['building']['location_array']) {
-  	locationArray.push(coordinate)
-  }
-  for (var i = 0; i < locationArray.length; i++) {
-    if (locationArray[i]['row'] == row && locationArray[i]['col'] == col) {
-			MY_MOVE['building']['location_array'].splice(i, 1)
-    	clearBuildingBText(row, col)
-    	return
+  if (document.getElementById('slider_checkbox').checked && ['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(MY_MOVE['building']['name'])) {
+    console.log("Follow Up Click")
+    // if tile have already been selected, check if click is to remove
+    var extraArray = []
+    if (MY_MOVE['building']['extra_array']) {
+      for (var coordinate of MY_MOVE['building']['extra_array']) {
+        extraArray.push(coordinate)
+      }
     }
-  }
-  locationArray.push({'row': row, 'col': col})
-  if (BuildingValidation.validateBuildingSelection(
-    	MY_MOVE['building']['name'], 
-    	locationArray,
-    	MY_MOVE,
-    	BOARD,
-    	STARTING_PLAYER
-  )) {
-  	MY_MOVE['building']['location_array'] = locationArray
-    cell.innerText = 'B'
+    for (var i = 0; i < extraArray.length; i++) {
+      if (extraArray[i]['row'] == row && extraArray[i]['col'] == col) {
+        MY_MOVE['building']['extra_array'].splice(i, 1)
+        clearBuildingAndExtraText(row, col)
+        return
+      }
+    }
+    extraArray.push({'row': row, 'col': col})
+    MY_MOVE['building']['extra_array'] = extraArray
+    cell.innerText = '@'
+
+  } else {
+    console.log("HERE?")
+    // if tile have already been selected, check if click is to remove
+    var locationArray = []
+    for (var coordinate of MY_MOVE['building']['location_array']) {
+      locationArray.push(coordinate)
+    }
+    for (var i = 0; i < locationArray.length; i++) {
+      if (locationArray[i]['row'] == row && locationArray[i]['col'] == col) {
+        MY_MOVE['building']['location_array'].splice(i, 1)
+        clearBuildingAndExtraText(row, col)
+        return
+      }
+    }
+    locationArray.push({'row': row, 'col': col})
+    if (BuildingValidation.validateBuildingSelection(
+        MY_MOVE['building']['name'], 
+        locationArray,
+        MY_MOVE,
+        BOARD,
+        STARTING_PLAYER
+    )) {
+      MY_MOVE['building']['location_array'] = locationArray
+      cell.innerText = 'B'
+    }
   }
 }
 
@@ -191,7 +211,7 @@ function displayShop() {
     row.id = SHOP[i]['name']
     if (MY_MOVE['building'] && MY_MOVE['building']['name'] && MY_MOVE['building']['name'] === row.id) {
       row.style.backgroundColor = 'red'
-    } else if (BuildingValidation.canPayCost(SHOP[i], MY_RESOURCES) && BuildingValidation.canPayVariableCost(SHOP[i], BUILDINGS, STARTING_PLAYER, MY_RESOURCES)) {
+    } else if (BuildingValidation.canPayCost(SHOP[i], MY_RESOURCES) && BuildingValidation.canPayVariableCost(SHOP[i], BUILDINGS, STARTING_PLAYER, MY_RESOURCES) && BuildingValidation.buildingAvailable(SHOP[i]['name'], SHOP)) {
       row.style.backgroundColor = 'yellow'
     } else {
       row.style.backgroundColor = 'white'
@@ -260,7 +280,7 @@ function displayResources() {
 	document.getElementById('resource_c_e').innerText = "Coin: " + ENEMY_RESOURCES.c
 }
 
-function clearBuildingBText(row, col) {
+function clearBuildingAndExtraText(row, col) {
 	if (MY_MOVE['marker_placement']
 			&& MY_MOVE['marker_placement'].row === row
 			&& MY_MOVE['marker_placement'].col === col
@@ -291,9 +311,9 @@ function clearPendingPlacements() {
 function clearPendingBuildings() {
 	for (var row = 0; row < BOARD.length; row++) {
 		for (var col = 0; col < BOARD[row].length; col++) {
-			if (document.getElementById(row + "_" + col).innerText == "B") {
+			if (document.getElementById(row + "_" + col).innerText == "B" || document.getElementById(row + "_" + col).innerText == "@") {
 				// If tile was selected for move and building was previously selected over it, go back to tile placement display
-				clearBuildingBText(row, col)
+				clearBuildingAndExtraText(row, col)
 			}
 		}
 	}
@@ -481,7 +501,6 @@ window.onload = () => {
   });
 
   socket.on('server_response', (server_response) => {
-    console.log(document.getElementById('slider_id'))
     document.getElementById("money_form_input").style.display = "none"
     document.getElementById("slider_id_div").style.display = "none"
     MY_TURN = true
@@ -522,6 +541,13 @@ window.onload = () => {
             'c': parseInt(document.getElementById("money_select_c").value) || 0,
             'l': parseInt(document.getElementById("money_select_l").value) || 0
           }
+          if (['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(MY_MOVE['building']['name'])) {
+            if (!BuildingValidation.validateFerryExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD)) {
+              ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
+              return
+            }
+          }
+          console.log("about to validateBuilding")
 	        if (BuildingValidation.validateBuilding(
 	    	        MY_MOVE['building']['name'], 
 	    	        MY_MOVE['building']['location_array'],

@@ -329,7 +329,7 @@ const ShapeUtils = {
                 && buildings[building].location_array[0].col == twoAway[j].col
                 && buildings[building].name == "Lighthouse"
                 && ((buildings[building].player == "player_one" && startingPlayer) || (buildings[building].player == "player_two" && !startingPlayer))) {
-              adjacentViaLighthous = true
+              adjacentViaLighthouse = true
             }
           }
         }
