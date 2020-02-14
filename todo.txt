@@ -7,7 +7,7 @@ Jack - sound ping on your turn
 Jack - have buildings on board be labeled somehow to tell what they are --> I'll take lead on this, already started messing around with SVG text displays
 
 
-tunnel, prison, ferry, monument, tramway --> all can be handled by asking for an extra hex click (2 clicks for tramway), with validation. I think this happening before submit button click would be easier to code but be less intuitive
+tunnel, prison, monument, tramway --> all can be handled by asking for an extra hex click (2 clicks for tramway), with validation. I think this happening before submit button click would be easier to code but be less intuitive
 
 
 
@@ -19,7 +19,7 @@ Jack - Bug: If you select less tiles than required, building still gets build. E
 buildings finished:
 
 refinery --> unique, have server give player extra resources
-plaza --> unique, have server repeat turn
+foundry --> unique, have server repeat turn
 casino --> check for user input on what to steal and if legit, then steal on server side
 tenement --> working and deductions working
 lock --> ugly adjacency test on client. Check two away, and if a one away is water, and the two away is adjacent to that water, count it
@@ -29,3 +29,6 @@ watchtower --> hex click and building click validation for if-adjacent-to-enemy-
 bazaar --> working. turns yellow on 6 still, but is discounted by 
 embassy --> check number of adajcent buildings in score counting
 docks --> check number of adjacent water in score counting
+ferry --> client check for extra hex that is adjacenet to water adajacent to the building
+prison
+monument

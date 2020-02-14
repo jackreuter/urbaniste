@@ -168,10 +168,14 @@ function gameEnded() {
     for (var j=0; j<GAME_STATE.shop.length; j++) {
       if (GAME_STATE.shop[j].name == GAME_STATE.buildings[i].name) {
         if (GAME_STATE.buildings[i].player == 'player_one') {
-          p1_vps += GAME_STATE.shop[j].vp
+          if (GAME_STATE.shop[j].vp != "*") {
+            p1_vps += GAME_STATE.shop[j].vp
+          }
         }
         if (GAME_STATE.buildings[i].player == 'player_two') {
-          p2_vps += GAME_STATE.shop[j].vp
+          if (GAME_STATE.shop[j].vp != "*") {
+            p2_vps += GAME_STATE.shop[j].vp
+          }
         }
       }
     }

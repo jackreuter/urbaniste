@@ -37,7 +37,6 @@ var STARTING_PLAYER = false
 var MY_RESOURCES = {'bm':0, 'l':0, 'c':0}
 var ENEMY_RESOURCES = {'bm':0, 'l':0, 'c':0}
 
-
 // handle hex click
 // force marker placement selection first
 // then allow building selection, with shape restrictions
@@ -94,28 +93,48 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
     return
   }
 
-  // if tile have already been selected, check if click is to remove
   var locationArray = []
   for (var coordinate of MY_MOVE['building']['location_array']) {
-  	locationArray.push(coordinate)
+    locationArray.push(coordinate)
   }
   for (var i = 0; i < locationArray.length; i++) {
     if (locationArray[i]['row'] == row && locationArray[i]['col'] == col) {
-			MY_MOVE['building']['location_array'].splice(i, 1)
-    	clearBuildingBText(row, col)
-    	return
+      locationArray.splice(i, 1)
+      clearBuildingAndExtraText(row, col)
+      MY_MOVE['building']['location_array'] = locationArray
+      return
     }
   }
-  locationArray.push({'row': row, 'col': col})
-  if (BuildingValidation.validateBuildingSelection(
-    	MY_MOVE['building']['name'], 
-    	locationArray,
-    	MY_MOVE,
-    	BOARD,
-    	STARTING_PLAYER
-  )) {
-  	MY_MOVE['building']['location_array'] = locationArray
-    cell.innerText = 'B'
+  var extraArray = []
+  if (MY_MOVE['building']['extra_array']) {
+    for (var coordinate of MY_MOVE['building']['extra_array']) {
+      extraArray.push(coordinate)
+    }
+    for (var i = 0; i < extraArray.length; i++) {
+      if (extraArray[i]['row'] == row && extraArray[i]['col'] == col) {
+        extraArray.splice(i, 1)
+        clearBuildingAndExtraText(row, col)
+        MY_MOVE['building']['extra_array'] = extraArray
+        return
+      }
+    }
+  }
+  if (document.getElementById('slider_checkbox').checked && ['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(MY_MOVE['building']['name'])) {
+    extraArray.push({'row': row, 'col': col})
+    MY_MOVE['building']['extra_array'] = extraArray
+    cell.innerText = '@'
+  } else {
+    locationArray.push({'row': row, 'col': col})
+    if (BuildingValidation.validateBuildingSelection(
+        MY_MOVE['building']['name'], 
+        locationArray,
+        MY_MOVE,
+        BOARD,
+        STARTING_PLAYER
+    )) {
+      MY_MOVE['building']['location_array'] = locationArray
+      cell.innerText = 'B'
+    }
   }
 }
 
@@ -189,7 +208,7 @@ function displayShop() {
     row.id = SHOP[i]['name']
     if (MY_MOVE['building'] && MY_MOVE['building']['name'] && MY_MOVE['building']['name'] === row.id) {
       row.style.backgroundColor = 'red'
-    } else if (BuildingValidation.canPayCost(SHOP[i], MY_RESOURCES) && BuildingValidation.canPayVariableCost(SHOP[i], BUILDINGS, STARTING_PLAYER, MY_RESOURCES)) {
+    } else if (BuildingValidation.canPayCost(SHOP[i], MY_RESOURCES) && BuildingValidation.canPayVariableCost(SHOP[i], BUILDINGS, STARTING_PLAYER, MY_RESOURCES) && BuildingValidation.buildingAvailable(SHOP[i]['name'], SHOP)) {
       row.style.backgroundColor = 'yellow'
     } else {
       row.style.backgroundColor = 'white'
@@ -217,8 +236,10 @@ function displayShop() {
 function onClickShopRow(row) {
 	ErrorHandler.clearErrorDisplay()
   document.getElementById('money_form_input').style.display = "none"
+  document.getElementById('slider_id_div').style.display = "none"
+
   var buildingName = row.id
-  if (MY_MOVE['marker_placement'] === undefined) {
+  if (MY_MOVE['marker_placement'] === undefined) {slider_id_div
     ErrorHandler.shopError()
     return
   }
@@ -231,6 +252,8 @@ function onClickShopRow(row) {
         document.getElementById('money_form_input').style.display = "block"
       }  
       if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {  
+        if (['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(buildingName))
+        document.getElementById('slider_id_div').style.display = "block"
         MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
       } else {
         ErrorHandler.notEnoughMoney(buildingName)
@@ -255,7 +278,7 @@ function displayResources() {
 	document.getElementById('resource_c_e').innerText = "Coin: " + ENEMY_RESOURCES.c
 }
 
-function clearBuildingBText(row, col) {
+function clearBuildingAndExtraText(row, col) {
 	if (MY_MOVE['marker_placement']
 			&& MY_MOVE['marker_placement'].row === row
 			&& MY_MOVE['marker_placement'].col === col
@@ -286,9 +309,9 @@ function clearPendingPlacements() {
 function clearPendingBuildings() {
 	for (var row = 0; row < BOARD.length; row++) {
 		for (var col = 0; col < BOARD[row].length; col++) {
-			if (document.getElementById(row + "_" + col).innerText == "B") {
+			if (document.getElementById(row + "_" + col).innerText == "B" || document.getElementById(row + "_" + col).innerText == "@") {
 				// If tile was selected for move and building was previously selected over it, go back to tile placement display
-				clearBuildingBText(row, col)
+				clearBuildingAndExtraText(row, col)
 			}
 		}
 	}
@@ -477,6 +500,7 @@ window.onload = () => {
 
   socket.on('server_response', (server_response) => {
     document.getElementById("money_form_input").style.display = "none"
+    document.getElementById("slider_id_div").style.display = "none"
     MY_TURN = true
     document.getElementById('turn_title').innerText = 'Your Turn'
 
@@ -514,6 +538,36 @@ window.onload = () => {
             'bm': parseInt(document.getElementById("money_select_bm").value) || 0,
             'c': parseInt(document.getElementById("money_select_c").value) || 0,
             'l': parseInt(document.getElementById("money_select_l").value) || 0
+          }
+          if (MY_MOVE['building']['name'] == "Ferry") {
+            if (!BuildingValidation.validateFerryExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
+              ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
+              return
+            }
+          }
+          if (MY_MOVE['building']['name'] == "Prison") {
+            if (!BuildingValidation.validatePrisonExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
+              ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
+              return
+            }
+          }
+          if (MY_MOVE['building']['name'] == "Tramway") {
+            if (!BuildingValidation.validateTramwayExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
+              ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
+              return
+            }
+          }
+          if (MY_MOVE['building']['name'] == "Tunnel") {
+            if (!BuildingValidation.validateTunnelExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
+              ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
+              return
+            }
+          }
+          if (MY_MOVE['building']['name'] == "Monument") {
+            if (!BuildingValidation.validateMonumentExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'], STARTING_PLAYER)) {
+              ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
+              return
+            }
           }
 	        if (BuildingValidation.validateBuilding(
 	    	        MY_MOVE['building']['name'], 
