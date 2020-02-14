@@ -4,7 +4,6 @@ import ErrorHandler from './ErrorHandler.js'
 
 // check that given coordinate selection is valid for building placement
 function validateBuilding(buildingName, coords, move, board, startingPlayer, variableBuildingCost) {
-  console.log("in validateBuilding")
   if (coords.length != buildingData[buildingName]['length']) {
     return false
   } else {
@@ -53,7 +52,6 @@ function validateVariableCost(building, variableBuildingCost, myResources, enemy
 
 // recursively checks if any possible valid building could exist using given tiles
 function validateBuildingSelection(buildingName, coords, move, board, startingPlayer) {
-  console.log("HERE2")
   if (coords.length > buildingData[buildingName]['length']) {
     return false
   } else if (coords.length == buildingData[buildingName]['length']) {
@@ -146,7 +144,11 @@ const BuildingValidation = {
   'buildingAvailable': buildingAvailable,
   'canPayCost': canPayCost,
   'canPayVariableCost': canPayVariableCost,
-  'validateFerryExtra': validateFerryExtra
+  'validateFerryExtra': validateFerryExtra,
+  'validatePrisonExtra': validatePrisonExtra,
+  'validateTunnelExtra': validateTunnelExtra,
+  'validateTramwayExtra': validateTramwayExtra,
+  'validateMonumentExtra': validateMonumentExtra
 }
 
 export default BuildingValidation 
@@ -280,15 +282,84 @@ function boulevard(coords, move, board, startingPlayer) {
 function tunnel(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   var adjacentTo = builtAdjacentTo(coords, move, board, startingPlayer)
-  return on.friendly == 1 && adjacentTo.enemyBuildings.length >= 1 && coords.length == 1 // TODO built next to exactly one building
+  return on.friendly == 1 && adjacentTo.enemyBuildings.length >= 1 && coords.length == 1
+}
+function validateTunnelExtra(coords, extraArray, board, move) {
+  // return extraArray
+  //     && extraArray.length == 1
+  //     && (extraArray[0]['row'] != coords[0]['row'] || extraArray[0]['col'] != extraArray[0]['col'])
+  //     && (extraArray[0]['row'] != move['row'] || extraArray[0]['col'] != move['col'])
+  //     && ferryHelper(coords, extraArray, board, move) 
+}
+function tunnelHelper(coords, extraArray, board, move) {
+  // var adjacentToCoord = ShapeUtils.getAdjacentCoordinates(coords[0]['row'], coords[0]['col'])
+  // var adjacentToExtra = ShapeUtils.getAdjacentCoordinates(extraArray[0]['row'], extraArray[0]['col'])
+  // for (var c=0; c<adjacentToCoord.length; c++) {
+  //   for (var e=0; e<adjacentToExtra.length; e++) {
+  //     if (adjacentToCoord[c]['row'] == adjacentToExtra[e]['row'] && adjacentToCoord[c]['col'] == adjacentToExtra[e]['col'] && board[adjacentToCoord[c]['row']][adjacentToCoord[c]['col']].type == 'w') {
+  //       return true
+  //     }
+  //   }
+  // }
+  // return false
 }
 function prison(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
 }
+function validatePrisonExtra(coords, extraArray, board, move) {
+  return extraArray
+      && extraArray.length == 1
+      && prisonHelper(coords, extraArray, board, move) 
+}
+function prisonHelper(coords, extraArray, board, move) {
+  for (var c=0; c<coords.length; c++) {
+    var adjacentToCoord = ShapeUtils.getAdjacentCoordinates(coords[c]['row'], coords[c]['col'])
+    for (var a=0; a<adjacentToCoord.length; a++) {
+      if (extraArray[0]['row'] == adjacentToCoord[a]['row'] && extraArray[0]['col'] == adjacentToCoord[a]['col']) {
+        // and a marker is there
+        if (board[extraArray[0]['row']][extraArray[0]['col']].player != 'empty' || (move['row'] == extraArray[0]['row'] && move['col'] == extraArray[0]['col'])) {
+          return true
+        }
+      }
+    }
+  }
+  return false
+}
 function tramway(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 3 && ShapeUtils.checkShape3Line(coords)
+}
+function validateTramwayExtra(coords, extraArray, board, move) {
+  return extraArray
+      && extraArray.length == 2
+      && tramwayHelper(coords, extraArray, board, move) 
+}
+function tramwayHelper(coords, extraArray, board, move) {
+  var fromHexValidated = 0
+  var toHexValidated = 0
+  var adjacentToCoords = false
+  
+  for (var i=0; i<extraArray.length; i++) {
+    if ((board[extraArray[i]['row']][extraArray[i]['col']].marker == 'empty') && !(extraArray[i]['row'] == move['row'] && extraArray[i]['col'] == move['col'])){
+      toHexValidated += 1
+    }
+    if (board[extraArray[i]['row']][extraArray[i]['col']].marker != 'empty' || (extraArray[i]['row'] == move['row'] && extraArray[i]['col'] == move['col'])) {
+      fromHexValidated += 1
+    }
+    for (var j=0; j<coords.length; j++) {
+      if (extraArray[i]['row'] == coords[j]['row'] && extraArray[i]['col'] == coords[j]['col']) {
+        return false
+      }
+      var adjacentToCoord = ShapeUtils.getAdjacentCoordinates(coords[j]['row'], coords[j]['col'])
+      for (var a=0; a<adjacentToCoord.length; a++) {
+        if (adjacentToCoord[a]['row'] == extraArray[i]['row'] && adjacentToCoord[a]['col'] == extraArray[i]['col']) {
+          adjacentToCoords = true
+        }
+      }
+    }
+  }
+  return adjacentToCoord && (fromHexValidated == 1) && (toHexValidated == 1)
 }
 function foundry(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
@@ -333,20 +404,20 @@ function lock(coords, move, board, startingPlayer) {
 function ferry(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   var adjacentTo = builtAdjacentTo(coords, move, board, startingPlayer)
-  return on.friendly == 2 && adjacentTo.water >= 1 && ShapeUtils.checkShapeDouble(coords)
+  return on.friendly == 1 && adjacentTo.water >= 1 && coords.length == 1
 }
-function validateFerryExtra(coords, extraArray, board) {
-  console.log("FerryExtra")
+function validateFerryExtra(coords, extraArray, board, move) {
   return extraArray
       && extraArray.length == 1
       && (extraArray[0]['row'] != coords[0]['row'] || extraArray[0]['col'] != extraArray[0]['col'])
-      && ferryHelper(coords, extraArray, board) 
+      && (extraArray[0]['row'] != move['row'] || extraArray[0]['col'] != move['col'])
+      && ferryHelper(coords, extraArray, board, move) 
 }
-function ferryHelper(coords, extraArray, board) {
+function ferryHelper(coords, extraArray, board, move) {
   var adjacentToCoord = ShapeUtils.getAdjacentCoordinates(coords[0]['row'], coords[0]['col'])
   var adjacentToExtra = ShapeUtils.getAdjacentCoordinates(extraArray[0]['row'], extraArray[0]['col'])
   for (var c=0; c<adjacentToCoord.length; c++) {
-    for (var e=0; e<adjacentToCoord.length; e++) {
+    for (var e=0; e<adjacentToExtra.length; e++) {
       if (adjacentToCoord[c]['row'] == adjacentToExtra[e]['row'] && adjacentToCoord[c]['col'] == adjacentToExtra[e]['col'] && board[adjacentToCoord[c]['row']][adjacentToCoord[c]['col']].type == 'w') {
         return true
       }
@@ -471,6 +542,29 @@ function sewers(coords, move, board, startingPlayer) {
 function monument(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
+}
+function validateMonumentExtra(coords, extraArray, board, move, startingPlayer) {
+  return extraArray
+      && extraArray.length == 1
+      && (extraArray[0]['row'] != coords[0]['row'] || extraArray[0]['col'] != coords[0]['col'])
+      && (extraArray[0]['row'] != move['row'] || extraArray[0]['col'] != move['col'])
+      && monumentHelper(coords, extraArray, board, move, startingPlayer) 
+}
+function monumentHelper(coords, extraArray, board, move, startingPlayer) {
+  var adjacentToExtra = ShapeUtils.getAdjacentCoordinates(extraArray[0]['row'], extraArray[0]['col'])
+  var adjacentToCoord
+  for (var i=0; i<coords.length; i++) {
+    adjacentToCoord = ShapeUtils.getAdjacentCoordinates(coords[i]['row'], coords[i]['col'])
+    for (var c=0; c<adjacentToCoord.length; c++) {
+      for (var e=0; e<adjacentToExtra.length; e++) {
+        if (adjacentToCoord[c]['row'] == adjacentToExtra[e]['row'] && adjacentToCoord[c]['col'] == adjacentToExtra[e]['col']) {
+          if ((board[extraArray[0]['row']][extraArray[0]['col']].marker == 'player_one' && !startingPlayer) || (board[extraArray[0]['row']][extraArray[0]['col']].marker == 'player_two' && startingPlayer))
+            return true
+        }
+      }
+    }
+  }
+  return false
 }
 
 var buildingData = {

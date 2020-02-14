@@ -52,7 +52,7 @@
         'player': player,
         'name': this.client_object.building.name,
         'location_array': this.client_object.building.location_array,
-        'extra_array': this.client_object.buildings.extra_array
+        'extra_array': this.client_object.building.extra_array
       }
       if (!validateCost(this.game_state, this.active_player_index, this.client_object.building.name, this.client_object.building.variable_cost, newBuilding)
           || !validateAvailable(this.game_state, this.client_object.building.name)
@@ -86,6 +86,37 @@
         }
       }
       if (newBuilding.name == 'Ferry') {
+        var r = newBuilding.extra_array[0].row
+        var c = newBuilding.extra_array[0].col
+        this.game_state.board[r][c].marker = player
+      }
+      if (newBuilding.name == 'Prison') {
+        var r = newBuilding.extra_array[0].row
+        var c = newBuilding.extra_array[0].col
+        this.game_state.board[r][c].marker = 'empty'
+      }
+      if (newBuilding.name == 'Tramway') {
+        var r0 = newBuilding.extra_array[0].row
+        var c0 = newBuilding.extra_array[0].col
+        var r1 = newBuilding.extra_array[1].row
+        var c1 = newBuilding.extra_array[1].col
+          
+        if (board[r0][c0].marker == 'empty') {
+          var oldMarker = this.game_state.board[r1][c1].marker
+          this.game_state.board[r1][c1].marker = 'empty'
+          this.game_state.board[r0][c0].marker = oldMarker
+        } else {
+          var oldMarker = this.game_state.board[r0][c0].marker
+          this.game_state.board[r0][c0].marker = 'empty'
+          this.game_state.board[r1][c1].marker = oldMarker
+        }
+      }
+      if (newBuilding.name == 'Tunnel') {
+        var r = newBuilding.extra_array[0].row
+        var c = newBuilding.extra_array[0].col
+        this.game_state.board[r][c].marker = player
+      }
+      if (newBuilding.name == 'Monument') {
         var r = newBuilding.extra_array[0].row
         var c = newBuilding.extra_array[0].col
         this.game_state.board[r][c].marker = player

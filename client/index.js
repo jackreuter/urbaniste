@@ -93,40 +93,37 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
     return
   }
 
-  if (document.getElementById('slider_checkbox').checked && ['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(MY_MOVE['building']['name'])) {
-    console.log("Follow Up Click")
-    // if tile have already been selected, check if click is to remove
-    var extraArray = []
-    if (MY_MOVE['building']['extra_array']) {
-      for (var coordinate of MY_MOVE['building']['extra_array']) {
-        extraArray.push(coordinate)
-      }
+  var locationArray = []
+  for (var coordinate of MY_MOVE['building']['location_array']) {
+    locationArray.push(coordinate)
+  }
+  for (var i = 0; i < locationArray.length; i++) {
+    if (locationArray[i]['row'] == row && locationArray[i]['col'] == col) {
+      locationArray.splice(i, 1)
+      clearBuildingAndExtraText(row, col)
+      MY_MOVE['building']['location_array'] = locationArray
+      return
+    }
+  }
+  var extraArray = []
+  if (MY_MOVE['building']['extra_array']) {
+    for (var coordinate of MY_MOVE['building']['extra_array']) {
+      extraArray.push(coordinate)
     }
     for (var i = 0; i < extraArray.length; i++) {
       if (extraArray[i]['row'] == row && extraArray[i]['col'] == col) {
-        MY_MOVE['building']['extra_array'].splice(i, 1)
+        extraArray.splice(i, 1)
         clearBuildingAndExtraText(row, col)
+        MY_MOVE['building']['extra_array'] = extraArray
         return
       }
     }
+  }
+  if (document.getElementById('slider_checkbox').checked && ['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(MY_MOVE['building']['name'])) {
     extraArray.push({'row': row, 'col': col})
     MY_MOVE['building']['extra_array'] = extraArray
     cell.innerText = '@'
-
   } else {
-    console.log("HERE?")
-    // if tile have already been selected, check if click is to remove
-    var locationArray = []
-    for (var coordinate of MY_MOVE['building']['location_array']) {
-      locationArray.push(coordinate)
-    }
-    for (var i = 0; i < locationArray.length; i++) {
-      if (locationArray[i]['row'] == row && locationArray[i]['col'] == col) {
-        MY_MOVE['building']['location_array'].splice(i, 1)
-        clearBuildingAndExtraText(row, col)
-        return
-      }
-    }
     locationArray.push({'row': row, 'col': col})
     if (BuildingValidation.validateBuildingSelection(
         MY_MOVE['building']['name'], 
@@ -242,7 +239,7 @@ function onClickShopRow(row) {
   document.getElementById('slider_id_div').style.display = "none"
 
   var buildingName = row.id
-  if (MY_MOVE['marker_placement'] === undefined) {
+  if (MY_MOVE['marker_placement'] === undefined) {slider_id_div
     ErrorHandler.shopError()
     return
   }
@@ -255,6 +252,7 @@ function onClickShopRow(row) {
         document.getElementById('money_form_input').style.display = "block"
       }  
       if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {  
+        if (['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(buildingName))
         document.getElementById('slider_id_div').style.display = "block"
         MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
       } else {
@@ -541,13 +539,36 @@ window.onload = () => {
             'c': parseInt(document.getElementById("money_select_c").value) || 0,
             'l': parseInt(document.getElementById("money_select_l").value) || 0
           }
-          if (['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(MY_MOVE['building']['name'])) {
-            if (!BuildingValidation.validateFerryExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD)) {
+          if (MY_MOVE['building']['name'] == "Ferry") {
+            if (!BuildingValidation.validateFerryExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
               ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
               return
             }
           }
-          console.log("about to validateBuilding")
+          if (MY_MOVE['building']['name'] == "Prison") {
+            if (!BuildingValidation.validatePrisonExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
+              ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
+              return
+            }
+          }
+          if (MY_MOVE['building']['name'] == "Tramway") {
+            if (!BuildingValidation.validateTramwayExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
+              ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
+              return
+            }
+          }
+          if (MY_MOVE['building']['name'] == "Tunnel") {
+            if (!BuildingValidation.validateTunnelExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
+              ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
+              return
+            }
+          }
+          if (MY_MOVE['building']['name'] == "Monument") {
+            if (!BuildingValidation.validateMonumentExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'], STARTING_PLAYER)) {
+              ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
+              return
+            }
+          }
 	        if (BuildingValidation.validateBuilding(
 	    	        MY_MOVE['building']['name'], 
 	    	        MY_MOVE['building']['location_array'],
