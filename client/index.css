@@ -38,6 +38,12 @@ body {
   font-family: var(--main_font);
 }
 
+input {
+  width: 200px;
+  height: 30px;
+  font-size: 20px;
+}
+
 h1 {
   text-align: center;
   font-size: 20;
@@ -95,12 +101,12 @@ p {
   position: absolute;
   font-weight: bold;
   padding: 5px;
-  left: -2%;
-  top: 20%;
+  left: 6%;
+  top: 25%;
   display: inline-block;
   text-align: center;
   font-size: 30;
-  width: 180px;
+  width: 220px;
 }
 
 #not_valid_player_title  {
@@ -116,13 +122,14 @@ p {
 }
 
 #money_form_input {
-  margin-top: 40px;
+  margin-top: 50px;
   display: none;
+  font-size: 20px;
 }
 
 #slider_id_div {
   display: none;
-  margin-top: 50px;
+  margin-top: 70px;
 }
 h3 {
   text-align: left;
