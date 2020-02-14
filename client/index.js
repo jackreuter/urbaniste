@@ -254,6 +254,9 @@ function onClickShopRow(row) {
       if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {  
         if (['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(buildingName))
         document.getElementById('slider_id_div').style.display = "block"
+        if (document.getElementById('slider_checkbox').checked) {
+          document.getElementById('slider_checkbox').click()
+        }
         MY_MOVE['building'] = {'name': buildingName, 'location_array': []}
       } else {
         ErrorHandler.notEnoughMoney(buildingName)
@@ -558,7 +561,7 @@ window.onload = () => {
             }
           }
           if (MY_MOVE['building']['name'] == "Tunnel") {
-            if (!BuildingValidation.validateTunnelExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
+            if (!BuildingValidation.validateTunnelExtra(BUILDINGS, STARTING_PLAYER, MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
               ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
               return
             }

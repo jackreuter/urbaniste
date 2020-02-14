@@ -1,6 +1,7 @@
 // Server side code. To launch server locally:
 // 1) install node.js
 // 2) run "node app.js" inside whatever directory you save this file. Server will then be up and running, and and logs will go to that terminal window. 
+// 3) Open two clients on different localhost:8080 chrome tabs. Client logs will go to dev tools console
 
 var express = require('express')
 var path = require('path')

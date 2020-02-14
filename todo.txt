@@ -6,11 +6,9 @@ Jack - make board have no water on edge <= Joe also said maybe not to do this, b
 Jack - sound ping on your turn
 Jack - have buildings on board be labeled somehow to tell what they are --> I'll take lead on this, already started messing around with SVG text displays
 
-
-tunnel, prison, monument, tramway --> all can be handled by asking for an extra hex click (2 clicks for tramway), with validation. I think this happening before submit button click would be easier to code but be less intuitive
-
-
-
+Tom - get data. on game end, throw some logs of which buildings were built, who won, etc, into a local logs file that we can parse/use later.
+Tom - color/display tiles and buildings to make it more clear what is fiendly and what is enemy
+Tom - more/better errorHandler messages
 
 <<<<-------------------------RESOLVED---------------------------->>>>
 
@@ -32,3 +30,6 @@ docks --> check number of adjacent water in score counting
 ferry --> client check for extra hex that is adjacenet to water adajacent to the building
 prison
 monument
+tunnel
+
+Buildings done! Client logic mostly in calls from index.js into BuildingValidator, and then server interactions handled in moveProcessor

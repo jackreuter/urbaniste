@@ -89,6 +89,7 @@
         var r = newBuilding.extra_array[0].row
         var c = newBuilding.extra_array[0].col
         this.game_state.board[r][c].marker = player
+        this.game_state.board[r][c].most_recent = true
       }
       if (newBuilding.name == 'Prison') {
         var r = newBuilding.extra_array[0].row
@@ -105,21 +106,25 @@
           var oldMarker = this.game_state.board[r1][c1].marker
           this.game_state.board[r1][c1].marker = 'empty'
           this.game_state.board[r0][c0].marker = oldMarker
+          this.game_state.board[r0][c0].most_recent = true
         } else {
           var oldMarker = this.game_state.board[r0][c0].marker
           this.game_state.board[r0][c0].marker = 'empty'
           this.game_state.board[r1][c1].marker = oldMarker
+          this.game_state.board[r1][c1].most_recent = true
         }
       }
       if (newBuilding.name == 'Tunnel') {
         var r = newBuilding.extra_array[0].row
         var c = newBuilding.extra_array[0].col
         this.game_state.board[r][c].marker = player
+        this.game_state.board[r][c].most_recent = true
       }
       if (newBuilding.name == 'Monument') {
         var r = newBuilding.extra_array[0].row
         var c = newBuilding.extra_array[0].col
         this.game_state.board[r][c].marker = player
+        this.game_state.board[r][c].most_recent = true
       }
 
       this.game_state.buildings.push(newBuilding)
