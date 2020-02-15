@@ -359,16 +359,16 @@ function tramwayHelper(coords, extraArray, board, move) {
   var adjacentToCoords = false
   
   for (var i=0; i<extraArray.length; i++) {
-    if (board[extraArray[0]['row']][extraArray[0]['col']].type != 'w') {
+    if (board[extraArray[0]['row']][extraArray[0]['col']].type == 'w') {
       return false
     }
 
     if ((board[extraArray[i]['row']][extraArray[i]['col']].marker == 'empty') && !(extraArray[i]['row'] == move['row'] && extraArray[i]['col'] == move['col'])){
       toHexValidated += 1
-    }
-    if (board[extraArray[i]['row']][extraArray[i]['col']].marker != 'empty' || (extraArray[i]['row'] == move['row'] && extraArray[i]['col'] == move['col'])) {
+    } else {
       fromHexValidated += 1
     }
+    
     for (var j=0; j<coords.length; j++) {
       if (extraArray[i]['row'] == coords[j]['row'] && extraArray[i]['col'] == coords[j]['col']) {
         return false
