@@ -457,7 +457,7 @@ window.onload = () => {
       if (BUILDINGS[i].name == "Embassy") {
         if (BUILDINGS[i].player == "player_one") {
           p1_extra_points += numNextTo.numAdjacentEnemyBuildings
-          p1_extra_points += numNextTO.numAdjacentFriendlyBuildings
+          p1_extra_points += numNextTo.numAdjacentFriendlyBuildings
         }
         if (BUILDINGS[i].player == "player_two") {
           p2_extra_points += numNextTo.numAdjacentEnemyBuildings
