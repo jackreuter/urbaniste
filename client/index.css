@@ -121,10 +121,29 @@ p {
   font-size: 30;
 }
 
+#input_costs {
+  margin-top:50px;
+}
 #money_form_input {
-  margin-top: 50px;
   display: none;
+  position: absolute;
   font-size: 20px;
+}
+
+#casino_steal_input {
+  left: 250px;
+  display: none;
+  position: absolute;
+  font-size: 20px;
+}
+
+#money_form_input>input {
+  width:100px;
+  margin-bottom: 5px;
+}
+#casino_steal_input>input {
+  width:100px;
+  margin-bottom: 5px;
 }
 
 #slider_id_div {

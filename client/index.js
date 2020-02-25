@@ -236,6 +236,7 @@ function displayShop() {
 function onClickShopRow(row) {
 	ErrorHandler.clearErrorDisplay()
   document.getElementById('money_form_input').style.display = "none"
+  document.getElementById('casino_steal_input').style.display = "none"
   document.getElementById('slider_id_div').style.display = "none"
 
   var buildingName = row.id
@@ -250,6 +251,9 @@ function onClickShopRow(row) {
     if (BuildingValidation.buildingAvailable(buildingName, SHOP)) {
       if (buildingName == "Casino" || buildingName == "Tenement" || buildingName == "Bazaar") {
         document.getElementById('money_form_input').style.display = "block"
+        if (buildingName == "Casino") {
+          document.getElementById('casino_steal_input').style.display = "block"
+        }
       }  
       if (BuildingValidation.canPayForBuilding(buildingName, MY_RESOURCES, SHOP)) {  
         if (['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(buildingName))
@@ -446,7 +450,6 @@ window.onload = () => {
   });
 
   socket.on('game_ended', (final_score) => {
-  	console.log(final_score)
   	var your_score
   	var opponent_score
 
@@ -503,6 +506,7 @@ window.onload = () => {
 
   socket.on('server_response', (server_response) => {
     document.getElementById("money_form_input").style.display = "none"
+    document.getElementById("casino_steal_input").style.display = "none"
     document.getElementById("slider_id_div").style.display = "none"
     MY_TURN = true
     document.getElementById('turn_title').innerText = 'Your Turn'
@@ -542,6 +546,11 @@ window.onload = () => {
             'c': parseInt(document.getElementById("money_select_c").value) || 0,
             'l': parseInt(document.getElementById("money_select_l").value) || 0
           }
+          var casino_steal = {
+            'bm': parseInt(document.getElementById("money_steal_bm").value) || 0,
+            'c': parseInt(document.getElementById("money_steal_c").value) || 0,
+            'l': parseInt(document.getElementById("money_steal_l").value) || 0
+          }
           if (MY_MOVE['building']['name'] == "Ferry") {
             if (!BuildingValidation.validateFerryExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
               ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
@@ -549,7 +558,7 @@ window.onload = () => {
             }
           }
           if (MY_MOVE['building']['name'] == "Prison") {
-            if (!BuildingValidation.validatePrisonExtra(MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
+            if (!BuildingValidation.validatePrisonExtra(BUILDINGS, STARTING_PLAYER, MY_MOVE['building']['location_array'], MY_MOVE['building']['extra_array'], BOARD, MY_MOVE['marker_placement'])) {
               ErrorHandler.invalidBuilding(MY_MOVE['building']['name'], {'invalidExtraPlacement': true})
               return
             }
@@ -578,10 +587,11 @@ window.onload = () => {
 	    	        MY_MOVE,
 	    	        BOARD,
 	    	        STARTING_PLAYER)) {
-            if (!BuildingValidation.validateVariableCost(MY_MOVE['building'], variable_building_cost, MY_RESOURCES, ENEMY_RESOURCES, BUILDINGS, SHOP, STARTING_PLAYER, BOARD)) {
+            if (!BuildingValidation.validateVariableCost(MY_MOVE['building'], variable_building_cost, casino_steal, MY_RESOURCES, ENEMY_RESOURCES, BUILDINGS, SHOP, STARTING_PLAYER, BOARD)) {
               ErrorHandler.invalidVariableCost()
             } else {
               MY_MOVE['building']['variable_cost'] = variable_building_cost
+              MY_MOVE['building']['casino_steal'] = casino_steal
               socket.emit('submit_move', MY_MOVE);
               MY_MOVE = {}
             }
