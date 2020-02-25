@@ -467,7 +467,7 @@ function embassy(coords, move, board, startingPlayer) {
 function cathedral(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   var adjacentTo = builtAdjacentTo(coords, move, board, startingPlayer)
-  return on.friendly == 3 && adjacentTo.friendlyBuildings.length == 0 && ShapeUtils.checkShapeV(coords)
+  return on.friendly == 4 && adjacentTo.friendlyBuildings.length == 0 && ShapeUtils.checkShapeDiamond(coords)
 }
 function cityHall(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
@@ -609,7 +609,7 @@ var buildingData = {
   //cultural
   'Docks': {'validation_function': docks, 'length': 4},
   'Embassy': {'validation_function': embassy, 'length': 3},
-  'Cathedral': {'validation_function': cathedral, 'length': 3},
+  'Cathedral': {'validation_function': cathedral, 'length': 4},
   'City Hall': {'validation_function': cityHall, 'length': 3},
   'Marina': {'validation_function': marina, 'length': 4},
 
