@@ -23,7 +23,7 @@
       //cultural
       [ {'name': 'Docks', 'type': 'Cultural', 'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': '*'},
         {'name': 'Embassy', 'type': 'Cultural', 'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': '*'},
-        {'name': 'Cathedral', 'type': 'Cultural', 'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 5},
+        {'name': 'Cathedral', 'type': 'Cultural', 'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6},
         {'name': 'City Hall', 'type': 'Cultural', 'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
         {'name': 'Marina', 'type': 'Cultural', 'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6}],
 
@@ -31,24 +31,24 @@
       [ {'name': 'Tenement', 'type': 'Commercial', 'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 4, 'vp': 3},
         {'name': 'Bazaar', 'type': 'Commercial', 'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3},
         {'name': 'Refinery', 'type': 'Commercial', 'bm': 0, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 2}, 
-        {'name': 'Casino', 'type': 'Commercial', 'bm': 1, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 0},
+        {'name': 'Casino', 'type': 'Commercial', 'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 5, 'vp': 0},
         {'name': 'Watchtower', 'type': 'Commercial', 'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3}],
 
       //civic
       [ {'name': 'Tax House', 'type': 'Civic', 'bm': 0, 'c': 3, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
-        {'name': 'Cemetery', 'type': 'Civic', 'bm': 2, 'c': 0, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+        {'name': 'Cemetery', 'type': 'Civic', 'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
         {'name': 'Shipyard', 'type': 'Civic', 'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 3},
         {'name': 'Sewers', 'type': 'Civic', 'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
         {'name': 'Monument', 'type': 'Civic', 'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2}]
     ]
 
-    // return [
-    //   {'name': 'Tunnel', 'type': 'Infrastructure', 'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
-    //   {'name': 'Lock', 'type': 'Aquatic', 'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
-    //   {'name': 'Harbor', 'type': 'Aquatic', 'bm': 0, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
-    //   {'name': 'City Hall', 'type': 'Cultural', 'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
-    //   {'name': 'Sewers', 'type': 'Civic', 'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
-    // ]
+    return [
+      {'name': 'Foundry', 'type': 'Infrastructure', 'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 1},
+      {'name': 'Harbor', 'type': 'Aquatic', 'bm': 0, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Cathedral', 'type': 'Cultural', 'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6},
+      {'name': 'Watchtower', 'type': 'Commercial', 'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
+      {'name': 'Shipyard', 'type': 'Civic', 'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 3},
+    ]
 
     for (i=0; i<5; i++) {
       var x = Math.floor(Math.random() * buildings[i].length)
@@ -91,8 +91,13 @@
       for (col=0; col<num_columns; col+=1) {
         const markerType = getMarker(row, col, num_rows, num_cols)
         results = getTileType(markerType, tiles_left)
-        type = results[0]
         tiles_left = results[1]
+        type = results[0]
+        isRim = (row == 0 || row == num_rows-1 || col == 0 || col == num_cols-1)
+        if (isRim && type == 'w') {
+          let x = Math.floor(Math.random() * 9)
+          type = ['l', 'bm', 'c', 'w', 'w', 'w', 'w', 'w', 'w'][x]
+        }
         if (markerType == "player_one") {
           p1_resources[type] += 1 
         } else if (markerType == "player_two") {
@@ -112,7 +117,7 @@
   // Private helper function
 
   function getTileType(markerType, tiles_left) {
-    x = Math.floor(Math.random() * tiles_left.length)
+    let x = Math.floor(Math.random() * tiles_left.length)
     var returnType = ""
     if (markerType != 'empty') {
       if (x < tiles_left.length/3) { returnType = 'bm' }
