@@ -8,9 +8,9 @@
       //infrastructure
       [ {'name': 'Boulevard', 'type': 'Infrastructure', 'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
         {'name': 'Tunnel', 'type': 'Infrastructure', 'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
-        {'name': 'Prison', 'type': 'Infrastructure', 'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 3},
+        {'name': 'Prison', 'type': 'Infrastructure', 'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
         {'name': 'Tramway', 'type': 'Infrastructure', 'bm': 2, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
-        {'name': 'Foundry', 'type': 'Infrastructure', 'bm': 2, 'c': 0, 'l': 1, '?': 0, 'limit': 5, 'vp': 1} ],
+        {'name': 'Foundry', 'type': 'Infrastructure', 'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 1} ],
 
       //aquatic
       [ {'name': 'Bridge', 'type': 'Aquatic', 'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 3},
@@ -44,9 +44,9 @@
 
     return [
       {'name': 'Foundry', 'type': 'Infrastructure', 'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 1},
-      {'name': 'Harbor', 'type': 'Aquatic', 'bm': 0, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
-      {'name': 'Cathedral', 'type': 'Cultural', 'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6},
-      {'name': 'Watchtower', 'type': 'Commercial', 'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
+      {'name': 'Prison', 'type': 'Infrastructure', 'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Casino', 'type': 'Commercial', 'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 5, 'vp': 0},
+      {'name': 'Cemetery', 'type': 'Civic', 'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
       {'name': 'Shipyard', 'type': 'Civic', 'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 3},
     ]
 

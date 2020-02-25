@@ -11,7 +11,7 @@ function validateBuilding(buildingName, coords, move, board, startingPlayer, var
   }
 }
 
-function validateVariableCost(building, variableBuildingCost, myResources, enemyResources, buildings, shop, startingPlayer, board) {
+function validateVariableCost(building, variableBuildingCost, casinoSteal, myResources, enemyResources, buildings, shop, startingPlayer, board) {
   var buildingName = building['name']
   var totalBuildingCost
   var deduction = 0
@@ -26,10 +26,14 @@ function validateVariableCost(building, variableBuildingCost, myResources, enemy
   }
   
   if (buildingName == "Casino") {
-    return variableBuildingCost.bm + variableBuildingCost.l + variableBuildingCost.c == 2
-        &&  enemyResources.bm >= variableBuildingCost.bm
-        &&  enemyResources.l >= variableBuildingCost.l
-        &&  enemyResources.c >= variableBuildingCost.c
+    return casinoSteal.bm + casinoSteal.l + casinoSteal.c == 2
+        &&  enemyResources.bm >= casinoSteal.bm
+        &&  enemyResources.l >= casinoSteal.l
+        &&  enemyResources.c >= casinoSteal.c
+        &&  variableBuildingCost.bm + variableBuildingCost.l + variableBuildingCost.c == 4
+        &&  myResources.bm >= variableBuildingCost.bm
+        &&  myResources.l >= variableBuildingCost.l
+        &&  myResources.c >= variableBuildingCost.c
   }
   if (buildingName == "Tenement") {
     for (var i=0; i<buildings.length; i++) {
@@ -325,15 +329,28 @@ function prison(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
 }
-function validatePrisonExtra(coords, extraArray, board, move) {
+function validatePrisonExtra(buildings, startingPlayer, coords, extraArray, board, move) {
   return extraArray
       && extraArray.length == 1
       && board[extraArray[0]['row']][extraArray[0]['col']].type != 'w'
-      && prisonHelper(coords, extraArray, board, move) 
+      && prisonHelper(buildings, startingPlayer, coords, extraArray, board, move) 
 }
-function prisonHelper(coords, extraArray, board, move) {
-  for (var c=0; c<coords.length; c++) {
-    var adjacentToCoord = ShapeUtils.getAdjacentCoordinates(coords[c]['row'], coords[c]['col'])
+function prisonHelper(buildings, startingPlayer, coords, extraArray, board, move) {
+  var allPrisonCoords = []
+  for (var i=0; i<coords.length; i++) {
+    allPrisonCoords.push(coords[i])
+  }
+  for (var i=0; i<buildings.length; i++) {
+    if (buildings[i].name == "Prison") {
+      if ((startingPlayer && buildings[i].player == 'player_one') || (!startingPlayer && buildings[i].player == 'player_two')) {
+        for (var j=0; j<buildings[i]['location_array'].length; j++) {
+          allPrisonCoords.push(buildings[i]['location_array'][j])
+        }
+      }
+    }
+  }
+  for (var c=0; c<allPrisonCoords.length; c++) {
+    var adjacentToCoord = ShapeUtils.getAdjacentCoordinates(allPrisonCoords[c]['row'], allPrisonCoords[c]['col'])
     for (var a=0; a<adjacentToCoord.length; a++) {
       if (extraArray[0]['row'] == adjacentToCoord[a]['row'] && extraArray[0]['col'] == adjacentToCoord[a]['col']) {
         if (board[extraArray[0]['row']][extraArray[0]['col']].marker != 'empty' || (move['row'] == extraArray[0]['row'] && move['col'] == extraArray[0]['col'])) {

@@ -54,7 +54,7 @@
         'location_array': this.client_object.building.location_array,
         'extra_array': this.client_object.building.extra_array
       }
-      if (!validateCost(this.game_state, this.active_player_index, this.client_object.building.name, this.client_object.building.variable_cost, newBuilding)
+      if (!validateCost(this.game_state, this.active_player_index, this.client_object.building.name, this.client_object.building.variable_cost, this.client_object.building.casino_steal, newBuilding)
           || !validateAvailable(this.game_state, this.client_object.building.name)
       ) {
         return this.game_state
@@ -149,7 +149,7 @@
       }
     }
 
-  function validateCost(game_state, active_player_index, building_name, variable_cost, newBuilding) {
+  function validateCost(game_state, active_player_index, building_name, variable_cost, casino_steal, newBuilding) {
     var player_resources
     if (active_player_index == 0) {
       player_resources = game_state.p1_resources
@@ -169,6 +169,23 @@
               game_state.p2_resources.l -= variable_cost.l
               game_state.p2_resources.c -= variable_cost.c
             }
+            if (game_state.shop[i].name == "Casino") {
+              if (active_player_index == 0) {
+                game_state.p2_resources.bm -= casino_steal.bm
+                game_state.p2_resources.l -= casino_steal.l
+                game_state.p2_resources.c -= casino_steal.c
+                game_state.p1_resources.bm += casino_steal.bm
+                game_state.p1_resources.l += casino_steal.l
+                game_state.p1_resources.c += casino_steal.c
+              } else {
+                game_state.p1_resources.bm -= casino_steal.bm
+                game_state.p1_resources.l -= casino_steal.l
+                game_state.p1_resources.c -= casino_steal.c
+                game_state.p2_resources.bm += casino_steal.bm
+                game_state.p2_resources.l += casino_steal.l
+                game_state.p2_resources.c += casino_steal.c
+              }
+            }
             return true
           } else {
             return false
@@ -182,23 +199,6 @@
             game_state.p2_resources.bm -= game_state.shop[i].bm
             game_state.p2_resources.l -= game_state.shop[i].l
             game_state.p2_resources.c -= game_state.shop[i].c
-          }
-          if (game_state.shop[i].name == "Casino") {
-            if (active_player_index == 0) {
-              game_state.p2_resources.bm -= variable_cost.bm
-              game_state.p2_resources.l -= variable_cost.l
-              game_state.p2_resources.c -= variable_cost.c
-              game_state.p1_resources.bm += variable_cost.bm
-              game_state.p1_resources.l += variable_cost.l
-              game_state.p1_resources.c += variable_cost.c
-            } else {
-              game_state.p1_resources.bm -= variable_cost.bm
-              game_state.p1_resources.l -= variable_cost.l
-              game_state.p1_resources.c -= variable_cost.c
-              game_state.p2_resources.bm += variable_cost.bm
-              game_state.p2_resources.l += variable_cost.l
-              game_state.p2_resources.c += variable_cost.c
-            }
           }
           return true
         } else {
