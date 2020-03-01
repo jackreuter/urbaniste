@@ -1,81 +1,78 @@
 <html>
-	<script src="index.js" type="module"></script>
-	<script src="/socket.io/socket.io.js"></script>
-	<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
-	<link rel="stylesheet" type="text/css" href="index.css">
-	<body>
-		<img src="https://i.imgur.com/930pwBA.jpg" class="center">
-		
-		<div id='top-section'>
-		
-			<div id='left-block'>
-				<div id='my_resources' class='resource_box'>
-					<h2>My Resources</h2>
-					<div id='resource_bm' class='red_resource'>Building Materials: 0</div>
-					<div id='resource_c' class='yellow_resource'>Coin: 0</div>
-					<div id='resource_l' class='green_resource'>Labor: 0</div>
-				</div>
-				<div id='enemy_resources' class='resource_box'>
-					<h2>Enemy Resources</h2>
-					<div id='resource_bm_e' class='red_resource'>Building Materials: 0</div>
-					<div id='resource_c_e' class='yellow_resource'>Coin: 0</div>
-					<div id='resource_l_e' class='green_resource'>Labor: 0</div>
-				</div>
-			</div> 
-		
-			<div id='center-block'>
-				<div id='error' class='error center'></div>
-				<div id='button_div'>
-					<input type="submit" id='submit_btn' value="Submit Move">
-					<input type="submit" id='pass_btn' value="Pass Forever">
-					<div id='slider_id_div'>
-						<h3>Follow Up Action</h3>
+  <script src="index.js" type="module"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+  <link rel="stylesheet" type="text/css" href="index.css">
+  <body>
+    <img src="https://i.imgur.com/930pwBA.jpg" class="center">
+    <div id='top-section'>
+      <div id='left-block'>
+	<div id='my_resources' class='resource_box_mine'>
+	  <h2>My Resources</h2>
+	  <div id='resource_bm' class='red_resource'>Building Materials: 0</div>
+	  <div id='resource_c' class='yellow_resource'>Coin: 0</div>
+	  <div id='resource_l' class='green_resource'>Labor: 0</div>
+	</div>
+	<div id='enemy_resources' class='resource_box_enemy'>
+	  <h2>Enemy Resources</h2>
+	  <div id='resource_bm_e' class='red_resource'>Building Materials: 0</div>
+	  <div id='resource_c_e' class='yellow_resource'>Coin: 0</div>
+	  <div id='resource_l_e' class='green_resource'>Labor: 0</div>
+	</div>
+	<div id='button_div'>
+	  <input type="submit" id='submit_btn' value="Submit Move">
+	  <input type="submit" id='pass_btn' value="Pass Forever">
+	</div>
+      </div> 
+      
+      <div id='center-block'>
+	<div id=turn_title></div>
+	<div id='error' class='error center'></div>
+	<div id='slider_id_div'>
+	  <h3>Follow Up Action</h3>
 
-						<label class="switch">
-						  <input type="checkbox" id="slider_checkbox">
-						  <span class="slider round" id="slider_id"></span>
-						</label>
-					</div>
-				</div>
-				<div id="shop_div">
-					<br>
-					<div id='shop_text_wrapper'>
-						<h2 id='shop_label'>Shop</h2>
-					</div>
-					<table id="shop">
-						<tr id='shop_header'>
-							<th>Image on Hover</th>
-							<th>Name</th>
-							<th>Type</th>
-							<th>BM</th>
-							<th>Coin</th>
-							<th>Labor</th>
-							<th>?</th>
-							<th>Available</th>
-							<th>VP</th>
-						</tr>
-					</table>
-				</div>
-				<div id=turn_title></div>
-				<div id=input_costs>
-					<div id='money_form_input'>
-					  Pay BMs: <input type="text" id="money_select_bm" name="bm"><br>
-					  Pay Cs: <input type="text" id="money_select_c" name="c"><br>
-					  Pay Ls: <input type="text" id="money_select_l" name="l">
-					</div>
-					<div id='casino_steal_input'>
-					  Steal BMs: <input type="text" id="money_steal_bm" name="bm"><br>
-					  Steal Cs: <input type="text" id="money_steal_c" name="c"><br>
-					  Steal Ls: <input type="text" id="money_steal_l" name="l">
-					</div>
-				</div>
-				<div id=not_valid_player_title></div>
-			</div> 
-		</div>
-		
-		<div id="board">
+	  <label class="switch">
+	    <input type="checkbox" id="slider_checkbox">
+	    <span class="slider round" id="slider_id"></span>
+	  </label>
+	</div>
+	<div id=input_costs>
+	  <div id='money_form_input'>
+	    Pay BMs: <input type="text" id="money_select_bm" name="bm"><br>
+	    Pay Cs: <input type="text" id="money_select_c" name="c"><br>
+	    Pay Ls: <input type="text" id="money_select_l" name="l">
+	  </div>
+	  <div id='casino_steal_input'>
+	    Steal BMs: <input type="text" id="money_steal_bm" name="bm"><br>
+	    Steal Cs: <input type="text" id="money_steal_c" name="c"><br>
+	    Steal Ls: <input type="text" id="money_steal_l" name="l">
+	  </div>
+	</div>
+	<div id=not_valid_player_title></div>
+      </div>
+
+      <div id="shop_div">
+	<br>
+	<table id="shop">
+	  <tr id='shop_header'>
+	    <th>Image on Hover</th>
+	    <th>Name</th>
+	    <th>Type</th>
+	    <th>BM</th>
+	    <th>Coin</th>
+	    <th>Labor</th>
+	    <th>?</th>
+	    <th>Available</th>
+	    <th>VP</th>
+	  </tr>
+	</table>
+      </div>
+
+    </div>
+    
+    <div id="board">
     </div>
     <svg id="buildings" width="100%" height="300%">
     </svg>
-	</body>
+  </body>
 </html>
