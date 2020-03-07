@@ -233,8 +233,8 @@ svg {
 #board {
   position: absolute;
   left: 50%;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
+  -webkit-transform: translateX(-55%);
+  transform: translateX(-55%);
   top: 270;
   display: grid;
   grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);
