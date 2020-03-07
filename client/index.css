@@ -232,7 +232,9 @@ svg {
 /* modified from https://codepen.io/ericornelissen/pen/vWbWKv */
 #board {
   position: absolute;
-  left: 5;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%);
   top: 270;
   display: grid;
   grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);
