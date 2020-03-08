@@ -234,7 +234,6 @@ function displayShop() {
 
 // handle shop row click
 function onClickShopRow(row) {
-<<<<<<< HEAD
 	ErrorHandler.clearErrorDisplay()
   document.getElementById('money_form_input').style.display = "none"
   document.getElementById('casino_steal_input').style.display = "none"

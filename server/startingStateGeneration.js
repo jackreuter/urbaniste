@@ -53,7 +53,7 @@
     ]
 
     return [
-      {'name': 'Foundry',    'type': 'Infrastructure', 'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1}
+      {'name': 'Foundry',    'type': 'Infrastructure', 'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1},
       {'name': 'Harbor',     'type': 'Aquatic',        'bm': 0, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
       {'name': 'Bazaar',     'type': 'Commercial',     'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3},
       {'name': 'Refinery',   'type': 'Commercial',     'bm': 1, 'c': 1, 'l': 1, '?': 1, 'limit': 5, 'vp': 2}, 
