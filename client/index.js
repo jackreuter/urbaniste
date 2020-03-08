@@ -249,7 +249,7 @@ function onClickShopRow(row) {
  		MY_MOVE['building'] = undefined
   } else { // Select Shop Item
     if (BuildingValidation.buildingAvailable(buildingName, SHOP)) {
-      if (buildingName == "Casino" || buildingName == "Tenement" || buildingName == "Bazaar") {
+      if (buildingName == "Casino" || buildingName == "Tenement" || buildingName == "Refinery" || buildingName == "Bazaar") {
         document.getElementById('money_form_input').style.display = "block"
         if (buildingName == "Casino") {
           document.getElementById('casino_steal_input').style.display = "block"
@@ -339,7 +339,7 @@ function displayBuildings() {
   var lineWidth = 45
   for (var i = 0; i < BUILDINGS.length; i++) {
     var locationArray = BUILDINGS[i]['location_array']
-    var lineColor = (BUILDINGS[i]['player'] === 'player_one') ? 'white' : 'black'
+    var lineColor = getBuildingColor(BUILDINGS[i])
     if (locationArray.length == 1) {
       drawLineOnTile(locationArray[0], lineColor)
     } else {
@@ -354,6 +354,29 @@ function displayBuildings() {
         }
       }
     }
+  }
+}
+function getBuildingColor(building) {
+  console.log(building)
+  console.log(SHOP)
+  var type
+  for (var i=0; i<SHOP.length; i++) {
+    if (SHOP[i].name == building.name) {
+      type = SHOP[i].type
+    }
+  }
+  if (building['player'] === 'player_one') {
+    if (type == 'Infrastructure') { return '#a1ffba' }
+    if (type == 'Aquatic') { return '#acd7fc' }
+    if (type == 'Cultural') { return '#f5a7fc' }
+    if (type == 'Commercial') { return '#fff991' }
+    if (type == 'Civic') { return '#f77b68' }
+  } else {
+    if (type == 'Infrastructure') { return '#003200' }
+    if (type == 'Aquatic') { return '#001645' }
+    if (type == 'Cultural') { return '#1c0038' }
+    if (type == 'Commercial') { return '#b8b500' }
+    if (type == 'Civic') { return '#320000' }
   }
 }
 

@@ -6,49 +6,59 @@
     var results = []
     var buildings = [
       //infrastructure
-      [ {'name': 'Boulevard', 'type': 'Infrastructure', 'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
-        {'name': 'Tunnel', 'type': 'Infrastructure', 'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
-        {'name': 'Prison', 'type': 'Infrastructure', 'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
-        {'name': 'Tramway', 'type': 'Infrastructure', 'bm': 2, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
-        {'name': 'Foundry', 'type': 'Infrastructure', 'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 1} ],
+      [ 
+      {'name': 'Boulevard',  'type': 'Infrastructure', 'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Tunnel',     'type': 'Infrastructure', 'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
+      {'name': 'Prison',     'type': 'Infrastructure', 'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Tramway',    'type': 'Infrastructure', 'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Foundry',    'type': 'Infrastructure', 'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1}
+      ],
 
       //aquatic
-      [ {'name': 'Bridge', 'type': 'Aquatic', 'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 3},
-        {'name': 'Harbor', 'type': 'Aquatic', 'bm': 0, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
-        {'name': 'Canal', 'type': 'Aquatic', 'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
-        {'name': 'Lock', 'type': 'Aquatic', 'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
-        {'name': 'Ferry', 'type': 'Aquatic', 'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
-        {'name': 'Lighthouse', 'type': 'Aquatic', 'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2}],
+      [
+      {'name': 'Bridge',     'type': 'Aquatic',        'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 3},
+      {'name': 'Harbor',     'type': 'Aquatic',        'bm': 0, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Canal',      'type': 'Aquatic',        'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
+      // {'name': 'Lock',       'type': 'Aquatic',        'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Ferry',      'type': 'Aquatic',        'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
+      {'name': 'Lighthouse', 'type': 'Aquatic',        'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2}
+      ],
 
       //cultural
-      [ {'name': 'Docks', 'type': 'Cultural', 'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': '*'},
-        {'name': 'Embassy', 'type': 'Cultural', 'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': '*'},
-        {'name': 'Cathedral', 'type': 'Cultural', 'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6},
-        {'name': 'City Hall', 'type': 'Cultural', 'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
-        {'name': 'Marina', 'type': 'Cultural', 'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6}],
+      [
+      {'name': 'Docks',      'type': 'Cultural',       'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': '*'},
+      {'name': 'Embassy',    'type': 'Cultural',       'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': '*'},
+      {'name': 'Cathedral',  'type': 'Cultural',       'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6},
+      {'name': 'City Hall',  'type': 'Cultural',       'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
+      {'name': 'Marina',     'type': 'Cultural',       'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6}
+      ],
 
       //commercial
-      [ {'name': 'Tenement', 'type': 'Commercial', 'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 4, 'vp': 3},
-        {'name': 'Bazaar', 'type': 'Commercial', 'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3},
-        {'name': 'Refinery', 'type': 'Commercial', 'bm': 0, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 2}, 
-        {'name': 'Casino', 'type': 'Commercial', 'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 5, 'vp': 0},
-        {'name': 'Watchtower', 'type': 'Commercial', 'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3}],
+      [
+      {'name': 'Tenement',   'type': 'Commercial',     'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 4, 'vp': 3},
+      {'name': 'Bazaar',     'type': 'Commercial',     'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3},
+      {'name': 'Refinery',   'type': 'Commercial',     'bm': 1, 'c': 1, 'l': 1, '?': 1, 'limit': 5, 'vp': 2}, 
+      {'name': 'Casino',     'type': 'Commercial',     'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 5, 'vp': 0},
+      {'name': 'Watchtower', 'type': 'Commercial',     'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3}
+      ],
 
       //civic
-      [ {'name': 'Tax House', 'type': 'Civic', 'bm': 0, 'c': 3, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
-        {'name': 'Cemetery', 'type': 'Civic', 'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
-        {'name': 'Shipyard', 'type': 'Civic', 'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 3},
-        {'name': 'Sewers', 'type': 'Civic', 'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
-        {'name': 'Monument', 'type': 'Civic', 'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2}]
+      [
+      {'name': 'Tax House',  'type': 'Civic',          'bm': 0, 'c': 3, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Cemetery',   'type': 'Civic',          'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Shipyard',   'type': 'Civic',          'bm': 1, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Sewers',     'type': 'Civic',          'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Monument',   'type': 'Civic',          'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2}
+      ]
     ]
 
-    return [
-      {'name': 'Foundry', 'type': 'Infrastructure', 'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 1},
-      {'name': 'Harbor', 'type': 'Aquatic', 'bm': 0, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
-      {'name': 'Cathedral', 'type': 'Cultural', 'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6},
-      {'name': 'Watchtower', 'type': 'Commercial', 'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
-      {'name': 'Shipyard', 'type': 'Civic', 'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 3},
-    ]
+    // return [
+    //   {'name': 'Prison',     'type': 'Infrastructure', 'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+    //   {'name': 'Bridge',     'type': 'Aquatic',        'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 3},
+    //   {'name': 'Cathedral',  'type': 'Cultural',       'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6},
+    //   {'name': 'Refinery',   'type': 'Commercial',     'bm': 1, 'c': 1, 'l': 1, '?': 1, 'limit': 5, 'vp': 2}, 
+    //   {'name': 'Shipyard',   'type': 'Civic',          'bm': 1, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 2},
+    // ]
 
     for (i=0; i<5; i++) {
       var x = Math.floor(Math.random() * buildings[i].length)
@@ -64,10 +74,10 @@
     p2_resources = {'bm':0, 'l':0, 'c':0}
     tiles_left = []
     var i=0
-    num_water = parseInt(96* (percent_water/100))
-    num_bm = parseInt((96 - num_water)/3)
-    num_l = parseInt((96 - num_water - num_bm)/2)
-    num_c = parseInt(96 - num_water - num_bm - num_l)
+    num_water = parseInt(104* (percent_water/100))
+    num_bm = parseInt((104 - num_water)/3)
+    num_l = parseInt((104 - num_water - num_bm)/2)
+    num_c = parseInt(104 - num_water - num_bm - num_l)
     while (i < num_bm) {
       tiles_left.push('bm')
       i++

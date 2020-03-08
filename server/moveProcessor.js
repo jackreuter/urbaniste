@@ -161,13 +161,13 @@
         if (game_state.shop[i]['?'] > 0) {
           if (canPayVariableCost(game_state, game_state.shop[i], player_resources, variable_cost, active_player_index, newBuilding)) {
             if (active_player_index == 0) {
-              game_state.p1_resources.bm -= variable_cost.bm
-              game_state.p1_resources.l -= variable_cost.l
-              game_state.p1_resources.c -= variable_cost.c
+              game_state.p1_resources.bm -= (variable_cost.bm + game_state.shop[i].bm)
+              game_state.p1_resources.l -= (variable_cost.l + game_state.shop[i].l)
+              game_state.p1_resources.c -= (variable_cost.c + game_state.shop[i].c)
             } else {
-              game_state.p2_resources.bm -= variable_cost.bm
-              game_state.p2_resources.l -= variable_cost.l
-              game_state.p2_resources.c -= variable_cost.c
+              game_state.p2_resources.bm -= (variable_cost.bm + game_state.shop[i].bm)
+              game_state.p2_resources.l -= (variable_cost.l + game_state.shop[i].l)
+              game_state.p2_resources.c -= (variable_cost.c + game_state.shop[i].c)
             }
             if (game_state.shop[i].name == "Casino") {
               if (active_player_index == 0) {
@@ -186,8 +186,10 @@
                 game_state.p2_resources.c += casino_steal.c
               }
             }
+            console.log('t1')
             return true
           } else {
+            console.log('f1')
             return false
           } 
         } else if (canPayCost(game_state.shop[i], player_resources)) {
@@ -200,8 +202,10 @@
             game_state.p2_resources.l -= game_state.shop[i].l
             game_state.p2_resources.c -= game_state.shop[i].c
           }
+          console.log('t2')
           return true
         } else {
+          console.log('f2')
           return false
         }
       }
@@ -258,9 +262,9 @@
       deduction += numNextTo.numAdjacentEnemyBuildings
       deduction += numNextTo.numAdjacentFriendlyBuildings
     }
-    return player_resources.bm >= variable_cost.bm
-        && player_resources.l >= variable_cost.l
-        && player_resources.c >= variable_cost.c
+    return player_resources.bm >= variable_cost.bm + shop_item['bm']
+        && player_resources.l >= variable_cost.l + shop_item['l']
+        && player_resources.c >= variable_cost.c + shop_item['c']
         && variable_cost.bm + variable_cost.l + variable_cost.c == (shop_item['?'] - deduction)
   }
 

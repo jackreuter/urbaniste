@@ -13,15 +13,21 @@ function validateBuilding(buildingName, coords, move, board, startingPlayer, var
 
 function validateVariableCost(building, variableBuildingCost, casinoSteal, myResources, enemyResources, buildings, shop, startingPlayer, board) {
   var buildingName = building['name']
-  var totalBuildingCost
+  var totalBuildingVariableCost
+  var buildingBMs
+  var buildingCs
+  var buildingLs 
   var deduction = 0
 
   for (var i=0; i<shop.length; i++) {
     if (shop[i].name == buildingName) {
-      totalBuildingCost = shop[i]['?']
+      totalBuildingVariableCost = shop[i]['?']
+      buildingBMs = shop[i]['bm']
+      buildingCs = shop[i]['c']
+      buildingLs = shop[i]['l'] 
     }
   }
-  if (!totalBuildingCost) {
+  if (!totalBuildingVariableCost) {
     return true
   }
   
@@ -47,11 +53,12 @@ function validateVariableCost(building, variableBuildingCost, casinoSteal, myRes
     deduction += numNextTo.numAdjacentEnemyBuildings
     deduction += numNextTo.numAdjacentFriendlyBuildings
   }
-  
-  return myResources.bm >= variableBuildingCost.bm
-      && myResources.l >= variableBuildingCost.l
-      && myResources.c >= variableBuildingCost.c
-      && variableBuildingCost.bm + variableBuildingCost.l + variableBuildingCost.c == (totalBuildingCost - deduction)
+  console.log(myResources)
+  console.log(variableBuildingCost)
+  return myResources.bm >= variableBuildingCost.bm + buildingBMs
+      && myResources.l >= variableBuildingCost.l + buildingCs
+      && myResources.c >= variableBuildingCost.c + buildingLs
+      && variableBuildingCost.bm + variableBuildingCost.l + variableBuildingCost.c == (totalBuildingVariableCost - deduction)
 }
 
 // recursively checks if any possible valid building could exist using given tiles
@@ -119,7 +126,7 @@ function canPayVariableCost(building, buildings, starting_player, my_resources) 
       }
     }
   }
-  return my_resources.bm + my_resources.l + my_resources.c >= building['?'] - deductions
+  return my_resources.bm + my_resources.l + my_resources.c >= (building['?'] + building['bm'] + building['l'] + building['c'] - deductions)
 }
 
 function isWatchtowerBlocked(row, col, buildings, startingPlayer) {
