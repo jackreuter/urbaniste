@@ -63,6 +63,9 @@ function validateVariableCost(building, variableBuildingCost, casinoSteal, myRes
 
 // recursively checks if any possible valid building could exist using given tiles
 function validateBuildingSelection(buildingName, coords, move, board, startingPlayer) {
+  console.log(buildingName)
+  console.log(coords)
+  console.log(buildingData[buildingName])
   if (coords.length > buildingData[buildingName]['length']) {
     return false
   } else if (coords.length == buildingData[buildingName]['length']) {
@@ -614,6 +617,45 @@ function monumentHelper(coords, extraArray, board, move, startingPlayer) {
   return false
 }
 
+//commercial
+function placeCharlesDeGaulle(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 7 // TODO: write 7 check
+}
+function parcDeButtesChaumont(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 6 // TODO: write 6 ring, and surrounded by water check
+}
+function rueDeRivoli(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 5 // TODO: write 5 in a row check
+}
+function theCityHall(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 5 // TODO: write 5 in a V check
+}
+function theEmbassy(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 3 && ShapeUtils.checkShapeV(coords)
+}
+function tourEiffel(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 1 // TODO: surrounded by buildings on all sides
+}
+function boisDeVincennes(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
+}
+function waterworks(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  var adjacentTo = builtAdjacentTo(coords, move, board, startingPlayer)
+  return on.friendly == 1 && adjacentTo.water >= 1 && coords.length == 1
+}
+function museeDuLouvre(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 3 && ShapeUtils.checkShapeTriangle(coords)
+}
+
 var buildingData = {
   //infrastructure
   'Boulevard': {'validation_function': boulevard, 'length': 4},
@@ -649,5 +691,16 @@ var buildingData = {
   'Cemetery': {'validation_function': cemetery, 'length': 3},
   'Shipyard': {'validation_function': shipyard, 'length': 3},
   'Sewers': {'validation_function': sewers, 'length': 3},
-  'Monument': {'validation_function': monument, 'length': 2}
+  'Monument': {'validation_function': monument, 'length': 2},
+
+  //new cultural
+  'Place Charles de Gaulle': {'validation_function': placeCharlesDeGaulle, 'length': 7}, 
+  'Parc de Buttes Chaumont': {'validation_function': parcDeButtesChaumont, 'length': 6},
+  'Rue de Rivoli': {'validation_function': rueDeRivoli, 'length': 5},
+  'The City Hall': {'validation_function': theCityHall, 'length': 5},
+  'Embassy': {'validation_function': theEmbassy, 'length': 3},
+  'Tour Eiffel': {'validation_function': tourEiffel, 'length': 1},
+  'Bois de Vincennes': {'validation_function': boisDeVincennes, 'length': 2},
+  'Waterworks': {'validation_function': waterworks, 'length': 1},
+  'Musee du Louvre': {'validation_function': museeDuLouvre, 'length': 3}
 }

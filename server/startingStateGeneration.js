@@ -19,7 +19,6 @@
       {'name': 'Bridge',     'type': 'Aquatic',        'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 3},
       {'name': 'Harbor',     'type': 'Aquatic',        'bm': 0, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
       {'name': 'Canal',      'type': 'Aquatic',        'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
-      // {'name': 'Lock',       'type': 'Aquatic',        'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
       {'name': 'Ferry',      'type': 'Aquatic',        'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
       {'name': 'Lighthouse', 'type': 'Aquatic',        'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2}
       ],
@@ -31,6 +30,19 @@
       {'name': 'Cathedral',  'type': 'Cultural',       'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6},
       {'name': 'City Hall',  'type': 'Cultural',       'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
       {'name': 'Marina',     'type': 'Cultural',       'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6}
+      ],
+
+      //new cultural
+      [
+      {'name': 'Place Charles de Gaulle ',  'type': 'NewCultural',   'bm': 4, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 10},
+      {'name': 'Parc de Buttes Chaumont',   'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 9},
+      {'name': 'Rue de Rivoli',             'type': 'NewCultural',   'bm': 3, 'c': 2, 'l': 1, '?': 0, 'limit': 1, 'vp': 8},
+      {'name': 'The City Hall',             'type': 'NewCultural',   'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Embassy',                   'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Tour Eiffel',               'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 7},
+      {'name': 'Bois de Vincennes',         'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Waterworks',                'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0}
       ],
 
       //commercial
@@ -53,11 +65,19 @@
     ]
 
     return [
-      {'name': 'Foundry',    'type': 'Infrastructure', 'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1},
+      {'name': 'Tramway',    'type': 'Infrastructure', 'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
       {'name': 'Harbor',     'type': 'Aquatic',        'bm': 0, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
-      {'name': 'Bazaar',     'type': 'Commercial',     'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3},
       {'name': 'Refinery',   'type': 'Commercial',     'bm': 1, 'c': 1, 'l': 1, '?': 1, 'limit': 5, 'vp': 2}, 
-      {'name': 'Monument',   'type': 'Civic',          'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2}
+      {'name': 'Shipyard',   'type': 'Civic',          'bm': 1, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 2},
+      // {'name': 'Place Charles de Gaulle',  'type': 'NewCultural',   'bm': 4, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 10},
+      // {'name': 'Parc de Buttes Chaumont',   'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 9},
+      {'name': 'Rue de Rivoli',             'type': 'NewCultural',   'bm': 3, 'c': 2, 'l': 1, '?': 0, 'limit': 1, 'vp': 8},
+      {'name': 'The City Hall',                 'type': 'NewCultural',   'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Embassy',                   'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Tour Eiffel',               'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 7},
+      {'name': 'Bois de Vincennes',         'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Waterworks',                'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0}
     ]
 
 
