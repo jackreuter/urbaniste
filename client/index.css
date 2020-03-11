@@ -79,14 +79,13 @@ p {
 #top-section {
     position: relative;
     width: 100%;
-    height: 200px;
     margin: 0 auto;
 }
 
 #left-block {
     position: absolute;
     left: 0px;
-    width: 20%;
+    width: 300px;
     height: 100%;
 }
 #center-block {
@@ -99,15 +98,14 @@ p {
 #right-block {
     float: right;
     width: 700px;
-    height: 100%;
 }
 
 #turn_title {
     position: absolute;
     font-weight: bold;
     padding: 5px;
-    left: 26%;
-    top: 25%;
+    left: 10%;
+    top: 700%;
     display: inline-block;
     text-align: center;
     font-size: 30;
@@ -202,12 +200,14 @@ h3 {
 }
 
 .error {
-    height: 30px;
+    position: absolute;
+    left: -100px;
+    height: 50px;
     font-size: 20px;
     text-align: center;
     border: 3px solid black;
     margin-top: 5px;
-    width: 615px;
+    width: 515px;
     margin-left: 0px;
 }
 
@@ -216,8 +216,8 @@ h3 {
 /* absolute positioning to match board position */
 svg {
     position: absolute;
-    left: 8%;
-    top: 270;
+    /*left: 8%;*/
+    top: 300;
     z-index: 1;
     pointer-events: none;
     -webkit-filter: drop-shadow( 3px 3px 2px rgba(0, 0, 0, .7));
@@ -230,7 +230,7 @@ svg {
 #board {
   position: absolute;
   left: 5;
-  top: 350;
+  top: 300;
   display: grid;
   grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);
   grid-auto-rows: calc(var(--hex-width) - 28.87px/2);

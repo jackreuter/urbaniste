@@ -115,22 +115,22 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
 		    return
 	    }
     }
-    if (document.getElementById('slider_checkbox').checked && ['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(MY_MOVE['building']['name'])) {
-      extraArray.push({'row': row, 'col': col})
-      MY_MOVE['building']['extra_array'] = extraArray
-      cell.innerText = '@'
-    } else {
-      locationArray.push({'row': row, 'col': col})
-      if (BuildingValidation.validateBuildingSelection(
-        MY_MOVE['building']['name'], 
-        locationArray,
-        MY_MOVE,
-        BOARD,
-        STARTING_PLAYER
-      )) {
-        MY_MOVE['building']['location_array'] = locationArray
-        cell.innerText = 'B'
-      }
+  }
+  if (document.getElementById('slider_checkbox').checked && ['Prison', 'Tunnel', 'Ferry', 'Tramway', 'Monument'].includes(MY_MOVE['building']['name'])) {
+    extraArray.push({'row': row, 'col': col})
+    MY_MOVE['building']['extra_array'] = extraArray
+    cell.innerText = '@'
+  } else {
+    locationArray.push({'row': row, 'col': col})
+    if (BuildingValidation.validateBuildingSelection(
+      MY_MOVE['building']['name'], 
+      locationArray,
+      MY_MOVE,
+      BOARD,
+      STARTING_PLAYER
+    )) {
+      MY_MOVE['building']['location_array'] = locationArray
+      cell.innerText = 'B'
     }
   }
 }
@@ -242,6 +242,7 @@ function onClickShopRow(row) {
   }
   // If shop item is already selected, deselect it
   if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
+    console.log('DERP')
  		MY_MOVE['building'] = undefined
   } else { // Select Shop Item
     if (BuildingValidation.buildingAvailable(buildingName, SHOP)) {
@@ -266,9 +267,9 @@ function onClickShopRow(row) {
     else {
       ErrorHandler.buildingNotAvailable(buildingName)
     }
-    displayShop()
-    clearPendingBuildings()
   }
+  displayShop()
+  clearPendingBuildings()
 }
 
 // render resource list HTML
@@ -363,17 +364,19 @@ function getBuildingColor(building) {
     }
   }
   if (building['player'] === 'player_one') {
-    if (type == 'Infrastructure') { return '#a1ffba' }
-    if (type == 'Aquatic') { return '#acd7fc' }
-    if (type == 'Cultural') { return '#f5a7fc' }
-    if (type == 'Commercial') { return '#fff991' }
-    if (type == 'Civic') { return '#f77b68' }
+    if (type == 'Infrastructure') { return '#e0ffe8' }
+    if (type == 'Aquatic') { return '#d6ecff' }
+    if (type == 'Cultural') { return '#fde3ff' }
+    if (type == 'Commercial') { return '#fffed6' }
+    if (type == 'Civic') { return '#ffe9e8' }
+    if (type == 'NewCultural') { return 'white' }
   } else {
-    if (type == 'Infrastructure') { return '#003200' }
+    if (type == 'Infrastructure') { return '#003600' }
     if (type == 'Aquatic') { return '#001645' }
-    if (type == 'Cultural') { return '#1c0038' }
-    if (type == 'Commercial') { return '#b8b500' }
-    if (type == 'Civic') { return '#320000' }
+    if (type == 'Cultural') { return '#240047' }
+    if (type == 'Commercial') { return '#573e00' }
+    if (type == 'Civic') { return '#3b0000' }
+    if (type == 'NewCultural') { return 'black' }
   }
 }
 
