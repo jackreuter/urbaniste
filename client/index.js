@@ -355,8 +355,6 @@ function displayBuildings() {
   }
 }
 function getBuildingColor(building) {
-  console.log(building)
-  console.log(SHOP)
   var type
   for (var i=0; i<SHOP.length; i++) {
     if (SHOP[i].name == building.name) {
