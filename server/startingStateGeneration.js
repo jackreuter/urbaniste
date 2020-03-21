@@ -38,7 +38,7 @@
       {'name': 'Parc de Buttes Chaumont',   'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 9},
       {'name': 'Rue de Rivoli',             'type': 'NewCultural',   'bm': 3, 'c': 2, 'l': 1, '?': 0, 'limit': 1, 'vp': 8},
       {'name': 'The City Hall',             'type': 'NewCultural',   'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
-      {'name': 'Embassy',                   'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'The Embassy',               'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'Tour Eiffel',               'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 7},
       {'name': 'Bois de Vincennes',         'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'Waterworks',                'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 0},
@@ -65,18 +65,18 @@
     ]
 
     return [
-      {'name': 'Tramway',    'type': 'Infrastructure', 'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
-      {'name': 'Harbor',     'type': 'Aquatic',        'bm': 0, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
-      {'name': 'Refinery',   'type': 'Commercial',     'bm': 0, 'c': 0, 'l': 0, '?': 3, 'limit': 5, 'vp': 2}, 
-      {'name': 'Shipyard',   'type': 'Civic',          'bm': 1, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 2},
-      // {'name': 'Place Charles de Gaulle',  'type': 'NewCultural',   'bm': 4, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 10},
-      // {'name': 'Parc de Buttes Chaumont',   'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 9},
-      {'name': 'Rue de Rivoli',             'type': 'NewCultural',   'bm': 3, 'c': 2, 'l': 1, '?': 0, 'limit': 1, 'vp': 8},
-      {'name': 'The City Hall',             'type': 'NewCultural',   'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
-      // {'name': 'Embassy',                   'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Foundry',    'type': 'Infrastructure', 'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1},
+      {'name': 'Canal',      'type': 'Aquatic',        'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
+      {'name': 'Tenement',   'type': 'Commercial',     'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 4, 'vp': 3},
+      {'name': 'Monument',   'type': 'Civic',          'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Place Charles de Gaulle ',  'type': 'NewCultural',   'bm': 4, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 10},
+      {'name': 'Tour Eiffel',               'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 7},
+      {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0}
+      // {'name': 'The City Hall',             'type': 'NewCultural',   'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
+      // {'name': 'The Embassy',                   'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
       // {'name': 'Tour Eiffel',               'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 7},
-      {'name': 'Bois de Vincennes',         'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
-      // {'name': 'Waterworks',                'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 0},
+      // {'name': 'Bois de Vincennes',         'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
+      // {'name': 'Waterworks',                'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 0}
       // {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0}
     ]
 
@@ -95,10 +95,10 @@
     p2_resources = {'bm':0, 'l':0, 'c':0}
     tiles_left = []
     var i=0
-    num_water = parseInt(104* (percent_water/100))
-    num_bm = parseInt((104 - num_water)/3)
-    num_l = parseInt((104 - num_water - num_bm)/2)
-    num_c = parseInt(104 - num_water - num_bm - num_l)
+    num_water = parseInt(108 * (percent_water/100))
+    num_bm = parseInt((108 - num_water)/3)
+    num_l = parseInt((108 - num_water - num_bm)/2)
+    num_c = parseInt(108 - num_water - num_bm - num_l)
     while (i < num_bm) {
       tiles_left.push('bm')
       i++
@@ -162,10 +162,10 @@
   }
 
   function getMarker(row, col, num_rows, num_cols) {
-    if ((row == 1 && col == (num_cols - 2)) || (row == (num_rows - 2) && col == 1)) {
+    if ((row == 2 && col == (num_cols - 3)) || (row == (num_rows - 3) && col == 2)) {
       return "player_one"
     }
-    if ((row == 1 && col == 1) || (row == (num_rows - 2) && col == (num_cols - 2))) {
+    if ((row == 2 && col == 2) || (row == (num_rows - 3) && col == (num_cols - 3))) {
       return "player_two"
     }
     return 'empty'
