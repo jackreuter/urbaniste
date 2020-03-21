@@ -122,7 +122,7 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
     cell.innerText = '@'
   } else {
     locationArray.push({'row': row, 'col': col})
-    if (BuildingValidation.validateBuildingSelection(
+    if (MY_MOVE['building']['name'] == 'Place Charles de Gaulle' || MY_MOVE['building']['name'] == 'Parc de Buttes Chaumont' || BuildingValidation.validateBuildingSelection(
       MY_MOVE['building']['name'], 
       locationArray,
       MY_MOVE,
@@ -242,7 +242,6 @@ function onClickShopRow(row) {
   }
   // If shop item is already selected, deselect it
   if (MY_MOVE['building'] && MY_MOVE['building']['name'] === buildingName) {
-    console.log('DERP')
  		MY_MOVE['building'] = undefined
   } else { // Select Shop Item
     if (BuildingValidation.buildingAvailable(buildingName, SHOP)) {
@@ -520,7 +519,7 @@ window.onload = () => {
 
   socket.on('not_your_turn', () => {
     MY_TURN = false
-    document.getElementById('turn_title').innerText = 'Opponents Turn'
+    document.getElementById('turn_title').innerText = 'Opponent\'s Turn'
   });
 
   socket.on('server_response', (server_response) => {

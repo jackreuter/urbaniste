@@ -53,8 +53,12 @@ function validateVariableCost(building, variableBuildingCost, casinoSteal, myRes
     deduction += numNextTo.numAdjacentEnemyBuildings
     deduction += numNextTo.numAdjacentFriendlyBuildings
   }
-  console.log(myResources)
-  console.log(variableBuildingCost)
+  if (buildingName == "Refinery") {
+    if (variableBuildingCost.bm != totalBuildingVariableCost && variableBuildingCost.l != totalBuildingVariableCost && variableBuildingCost.c != totalBuildingVariableCost) {
+      return false
+    }
+  }
+  
   return myResources.bm >= variableBuildingCost.bm + buildingBMs
       && myResources.l >= variableBuildingCost.l + buildingCs
       && myResources.c >= variableBuildingCost.c + buildingLs
@@ -63,9 +67,6 @@ function validateVariableCost(building, variableBuildingCost, casinoSteal, myRes
 
 // recursively checks if any possible valid building could exist using given tiles
 function validateBuildingSelection(buildingName, coords, move, board, startingPlayer) {
-  console.log(buildingName)
-  console.log(coords)
-  console.log(buildingData[buildingName])
   if (coords.length > buildingData[buildingName]['length']) {
     return false
   } else if (coords.length == buildingData[buildingName]['length']) {
@@ -698,7 +699,7 @@ var buildingData = {
   'Parc de Buttes Chaumont': {'validation_function': parcDeButtesChaumont, 'length': 6},
   'Rue de Rivoli': {'validation_function': rueDeRivoli, 'length': 5},
   'The City Hall': {'validation_function': theCityHall, 'length': 5},
-  'Embassy': {'validation_function': theEmbassy, 'length': 3},
+  'The Embassy': {'validation_function': theEmbassy, 'length': 3},
   'Tour Eiffel': {'validation_function': tourEiffel, 'length': 1},
   'Bois de Vincennes': {'validation_function': boisDeVincennes, 'length': 2},
   'Waterworks': {'validation_function': waterworks, 'length': 1},

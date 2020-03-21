@@ -233,7 +233,7 @@ svg {
   left: 5;
   top: 300;
   display: grid;
-  grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);
+  grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);
   grid-auto-rows: calc(var(--hex-width) - 28.87px/2);
   grid-gap: var(--hex-between) var(--hex-between);
   padding-bottom: var(--hex-border);
@@ -282,20 +282,19 @@ svg {
     border-bottom-color: var(--color-hex-hover);
 }
 
-/* shift every other row right to align */ 
-.hexagon:nth-child(26n + 14),
-.hexagon:nth-child(26n + 15),
-.hexagon:nth-child(26n + 16),
-.hexagon:nth-child(26n + 17),
-.hexagon:nth-child(26n + 18),
-.hexagon:nth-child(26n + 19),
-.hexagon:nth-child(26n + 20),
-.hexagon:nth-child(26n + 21),
-.hexagon:nth-child(26n + 22),
-.hexagon:nth-child(26n + 23),
-.hexagon:nth-child(26n + 24),
-.hexagon:nth-child(26n + 25),
-.hexagon:nth-child(26n + 26) {
+/* shift every other row right to align */
+.hexagon:nth-child(24n + 13), 
+.hexagon:nth-child(24n + 14),
+.hexagon:nth-child(24n + 15),
+.hexagon:nth-child(24n + 16),
+.hexagon:nth-child(24n + 17),
+.hexagon:nth-child(24n + 18),
+.hexagon:nth-child(24n + 19),
+.hexagon:nth-child(24n + 20),
+.hexagon:nth-child(24n + 21),
+.hexagon:nth-child(24n + 22),
+.hexagon:nth-child(24n + 23),
+.hexagon:nth-child(24n + 24) {
   margin-left: calc(var(--hex-width) / 2 + var(--hex-between) / 2);
 }
 
