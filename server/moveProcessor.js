@@ -44,7 +44,7 @@
       }
     }
     this.game_state.board[row][col].most_recent = true
-    incrementResource(this.game_state.board[row][col].type, this.active_player_index, this.game_state)
+    incrementResource(this.game_state.board[row][col].type, this.active_player_index, this.game_state, row, col)
 
     // handle buildings
     if (this.client_object.building) {
@@ -186,10 +186,8 @@
                 game_state.p2_resources.c += casino_steal.c
               }
             }
-            console.log('t1')
             return true
           } else {
-            console.log('f1')
             return false
           } 
         } else if (canPayCost(game_state.shop[i], player_resources)) {
@@ -202,10 +200,8 @@
             game_state.p2_resources.l -= game_state.shop[i].l
             game_state.p2_resources.c -= game_state.shop[i].c
           }
-          console.log('t2')
           return true
         } else {
-          console.log('f2')
           return false
         }
       }
@@ -317,11 +313,39 @@
     }
   }
 
-  function incrementResource(type, active_player_index, game_state) {
+  function incrementResource(type, active_player_index, game_state, row, col) {
     if (active_player_index == 0) {
       game_state.p1_resources[type] += 1
     } else {
       game_state.p2_resources[type] += 1
+    }
+
+    for (var i=0; i<game_state.buildings.length; i++) {
+      if (game_state.buildings[i].name == 'Musee du Orsay') {
+        adjacents1 = getAdjacentCoordinates(game_state.buildings[i]['location_array'][0]['row'], game_state.buildings[i]['location_array'][0]['col'])
+        adjacents2 = getAdjacentCoordinates(game_state.buildings[i]['location_array'][1]['row'], game_state.buildings[i]['location_array'][1]['col'])
+
+        for (var j1=0; j1<adjacents1.length; j1++) {
+          if (adjacents1[j1]['row'] == row && adjacents1[j1]['col'] == col) {
+            if (active_player_index == 0) {
+              game_state.p1_resources[type] += 1
+            } else {
+              game_state.p2_resources[type] += 1
+            }
+            return
+          }
+        }
+        for (var j2=0; j2<adjacents2.length; j2++) {
+          if (adjacents2[j2]['row'] == row && adjacents2[j2]['col'] == col) {
+            if (active_player_index == 0) {
+              game_state.p1_resources[type] += 1
+            } else {
+              game_state.p2_resources[type] += 1
+            }
+            return
+          }
+        }
+      }
     }
   }
 

@@ -58,6 +58,7 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
   // Clicking on an already selected hex will de-select it.
   if (cell.innerText == '*') {
   	clearPendingPlacements()
+    displayShop()
   	displayResources()
   	MY_MOVE = {}
   } else if (
@@ -71,7 +72,9 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
       clearPendingPlacements()
       cell.innerText = '*'
     
-      MY_RESOURCES[BOARD[row][col].type] += 1
+      var resource_type = BOARD[row][col].type
+      MY_RESOURCES[resource_type] += 1
+      handleBonusResources(row, col, resource_type, true)
       displayResources()
 
       MY_MOVE['marker_placement'] = {'row': row, 'col': col}
@@ -79,6 +82,21 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
       ErrorHandler.invalidHexClick(BOARD[row][col], ShapeUtils.tileAdjacencyCheck(row, col, MY_MOVE, BOARD, STARTING_PLAYER, BUILDINGS).adjacentToFriendly)
     }
     displayShop()
+  }
+}
+
+function handleBonusResources(row, col, resource_type, should_add) {
+  for (var i=0; i<BUILDINGS.length; i++) {
+    if (BUILDINGS[i].name == 'Musee du Orsay') {
+      if (ShapeUtils.adjacent({'row': row, 'col': col}, BUILDINGS[i]['location_array'][0]) || ShapeUtils.adjacent({'row': row, 'col': col}, BUILDINGS[i]['location_array'][1])) {
+        if (should_add) {
+          MY_RESOURCES[resource_type] += 1
+        } else {
+          MY_RESOURCES[resource_type] -= 1
+        }
+        return    
+      }
+    }
   }
 }
 
@@ -122,7 +140,7 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
     cell.innerText = '@'
   } else {
     locationArray.push({'row': row, 'col': col})
-    if (MY_MOVE['building']['name'] == 'Place Charles de Gaulle' || MY_MOVE['building']['name'] == 'Parc de Buttes Chaumont' || BuildingValidation.validateBuildingSelection(
+    if (MY_MOVE['building']['name'] == 'Place Charles de Gaulle' || MY_MOVE['building']['name'] == 'Guild Hall' || MY_MOVE['building']['name'] == 'Parc de Buttes Chaumont' || BuildingValidation.validateBuildingSelection(
       MY_MOVE['building']['name'], 
       locationArray,
       MY_MOVE,
@@ -304,6 +322,8 @@ function clearPendingPlacements() {
 	    if (document.getElementById(row + "_" + col).innerText == "*") {
 		    document.getElementById(row + "_" + col).innerText = ""
 		    MY_RESOURCES[BOARD[row][col].type] -= 1
+        handleBonusResources(row, col, BOARD[row][col].type, false)
+
 	    }
 	  }
   }
@@ -515,11 +535,13 @@ window.onload = () => {
   socket.on('your_turn', () => {
     MY_TURN = true
     document.getElementById('turn_title').innerText = 'Your Turn'
+    document.title = "Your Turn!"
   });
 
   socket.on('not_your_turn', () => {
     MY_TURN = false
     document.getElementById('turn_title').innerText = 'Opponent\'s Turn'
+    document.title = "Waiting on opponent"
   });
 
   socket.on('server_response', (server_response) => {
@@ -528,6 +550,7 @@ window.onload = () => {
   	document.getElementById("slider_id_div").style.display = "none"
   	MY_TURN = true
   	document.getElementById('turn_title').innerText = 'Your Turn'
+    document.title = "Your Turn!"
 
   	ingestServerResponse(server_response)  
 

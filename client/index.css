@@ -28,8 +28,8 @@ a>div { display: none; }
 a:hover>div { 
     display: block;
     position:absolute;
-    right:-30px;
-    top:-100px;
+    right:0px;
+    top:0px;
 }
 
 body {
