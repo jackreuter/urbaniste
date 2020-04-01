@@ -32,7 +32,6 @@
       // {'name': 'Marina',     'type': 'Cultural',       'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6}
       // ],
 
-
       //commercial
       [
       {'name': 'Tenement',   'type': 'Commercial',                   'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 4, 'vp': 3},
@@ -54,35 +53,18 @@
       //new cultural
       [
       {'name': 'Place Charles de Gaulle',   'type': 'NewCultural',   'bm': 3, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 8},
-      // {'name': 'Parc de Buttes Chaumont',   'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 7},
-      // {'name': 'Rue de Rivoli',             'type': 'NewCultural',   'bm': 3, 'c': 2, 'l': 1, '?': 0, 'limit': 1, 'vp': 6},
-      //// {'name': 'The City Hall',             'type': 'NewCultural',   'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
-      // {'name': 'The Embassy',               'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
-      // {'name': 'Tour Eiffel',               'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 6},
-      // {'name': 'Bois de Vincennes',         'type': 'NewCultural',   'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
-      // {'name': 'Waterworks',                'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
-      // {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Parc de Buttes Chaumont',   'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 7},
+      {'name': 'Rue de Rivoli',             'type': 'NewCultural',   'bm': 3, 'c': 2, 'l': 1, '?': 0, 'limit': 1, 'vp': 6},
+      // {'name': 'The City Hall',             'type': 'NewCultural',   'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'The Embassy',               'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Tour Eiffel',               'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 6},
+      {'name': 'Bois de Vincennes',         'type': 'NewCultural',   'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Waterworks',                'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
+      {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'Guild Hall',                'type': 'NewCultural',   'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'Musee du Orsay',            'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 2},
       ]
     ]
-
-    // return [
-    //   {'name': 'Foundry',    'type': 'Infrastructure', 'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1},
-    //   {'name': 'Canal',      'type': 'Aquatic',        'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
-    //   {'name': 'Tenement',   'type': 'Commercial',     'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 4, 'vp': 3},
-    //   {'name': 'Monument',   'type': 'Civic',          'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
-    //   {'name': 'Place Charles de Gaulle ',  'type': 'NewCultural',   'bm': 4, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 10},
-    //   {'name': 'Tour Eiffel',               'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 7},
-    //   {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0}
-    //   // {'name': 'The City Hall',             'type': 'NewCultural',   'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
-    //   // {'name': 'The Embassy',                   'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
-    //   // {'name': 'Tour Eiffel',               'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 7},
-    //   // {'name': 'Bois de Vincennes',         'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
-    //   // {'name': 'Waterworks',                'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 0}
-    //   // {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0}
-    // ]
-
 
     for (i=0; i<4; i++) {
       var x = Math.floor(Math.random() * buildings[i].length)
