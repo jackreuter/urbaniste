@@ -130,6 +130,9 @@ function canPayVariableCost(building, buildings, starting_player, my_resources) 
       }
     }
   }
+  if (building.name == "Refinery") {
+    return (my_resources.bm >= 3 || my_resources.l >= 3 || my_resources.c >= 3)
+  }
   return my_resources.bm + my_resources.l + my_resources.c >= (building['?'] + building['bm'] + building['l'] + building['c'] - deductions)
 }
 
@@ -625,11 +628,11 @@ function placeCharlesDeGaulle(coords, move, board, startingPlayer) {
 }
 function parcDeButtesChaumont(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
-  return on.friendly == 6 // TODO: write 6 ring, and surrounded by water check
+  return on.friendly == 5 // TODO: write 6 ring, and surrounded by water check
 }
 function rueDeRivoli(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
-  return on.friendly == 5 // TODO: write 5 in a row check
+  return on.friendly == 6 // TODO: write 5 in a row check
 }
 function theCityHall(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
@@ -655,6 +658,14 @@ function waterworks(coords, move, board, startingPlayer) {
 function museeDuLouvre(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 3 && ShapeUtils.checkShapeTriangle(coords)
+}
+function guildHall(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 6 // TODO: write 6 in a triangle shape
+}
+function museeDuOrsay(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
 }
 
 var buildingData = {
@@ -696,12 +707,14 @@ var buildingData = {
 
   //new cultural
   'Place Charles de Gaulle': {'validation_function': placeCharlesDeGaulle, 'length': 7}, 
-  'Parc de Buttes Chaumont': {'validation_function': parcDeButtesChaumont, 'length': 6},
-  'Rue de Rivoli': {'validation_function': rueDeRivoli, 'length': 5},
+  'Parc de Buttes Chaumont': {'validation_function': parcDeButtesChaumont, 'length': 5},
+  'Rue de Rivoli': {'validation_function': rueDeRivoli, 'length': 6},
   'The City Hall': {'validation_function': theCityHall, 'length': 5},
   'The Embassy': {'validation_function': theEmbassy, 'length': 3},
   'Tour Eiffel': {'validation_function': tourEiffel, 'length': 1},
   'Bois de Vincennes': {'validation_function': boisDeVincennes, 'length': 2},
   'Waterworks': {'validation_function': waterworks, 'length': 1},
-  'Musee du Louvre': {'validation_function': museeDuLouvre, 'length': 3}
+  'Musee du Louvre': {'validation_function': museeDuLouvre, 'length': 3},
+  'Guild Hall': {'validation_function': guildHall, 'length': 6},
+  'Musee du Orsay': {'validation_function': museeDuOrsay, 'length': 2}
 }
