@@ -667,6 +667,10 @@ function museeDuOrsay(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
 }
+function leHavre(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 4 && ShapeUtils.checkShapeStar(coords)
+}
 
 var buildingData = {
   //infrastructure
@@ -716,5 +720,6 @@ var buildingData = {
   'Waterworks': {'validation_function': waterworks, 'length': 1},
   'Musee du Louvre': {'validation_function': museeDuLouvre, 'length': 3},
   'Guild Hall': {'validation_function': guildHall, 'length': 6},
-  'Musee du Orsay': {'validation_function': museeDuOrsay, 'length': 2}
+  'Musee du Orsay': {'validation_function': museeDuOrsay, 'length': 2},
+  'Le Havre': {'validation_function': leHavre, 'length': 4}
 }

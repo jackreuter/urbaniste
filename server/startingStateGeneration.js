@@ -63,6 +63,7 @@
       {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'Guild Hall',                'type': 'NewCultural',   'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'Musee du Orsay',            'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 2},
+      {'name': 'Le Havre',                  'type': 'NewCultural',   'bm': 3, 'c': 3, 'l': 0, '?': 0, 'limit': 1, 'vp': 0},
       ]
     ]
 

@@ -282,6 +282,29 @@ function checkShapeU(tiles) {
   }
 }
 
+// check if tiles form a star shape
+function checkShapeStar(tiles) {
+  if (tiles.length != 4) {
+    return false
+  } else {
+    var vCount = 0
+    for (var i = 0; i < tiles.length; i++) {
+      for (var j = i+1; j < tiles.length; j++) {
+        for (var k = j+1; k < tiles.length; k++) {
+          var subsetOfTiles = [tiles[i], tiles[j], tiles[k]]
+          if (checkShapeV(subsetOfTiles)) {
+            vCount++
+          }
+          if (checkShapeTriangle(subsetOfTiles)) {
+            return false
+          }
+        }
+      }
+    }
+    return vCount == 3
+  }
+}
+
 // Exported methods. Accessed via "e.g. ShapeUtils.checkShapeDouble(tiles)"
 const ShapeUtils = {
   adjacent: adjacent,
@@ -294,6 +317,7 @@ const ShapeUtils = {
   checkShapeCane: checkShapeCane,
   checkShapeDiamond: checkShapeDiamond,
   checkShapeU: checkShapeU,
+  checkShapeStar: checkShapeStar,
   friendly: friendly,
 
   // check if tile at coordinates is adjacent to friendly marker, pending placement, or water tile
