@@ -92,9 +92,11 @@
         this.game_state.board[r][c].most_recent = true
       }
       if (newBuilding.name == 'Prison') {
-        var r = newBuilding.extra_array[0].row
-        var c = newBuilding.extra_array[0].col
-        this.game_state.board[r][c].marker = 'empty'
+        for (e=0; e<newBuilding.extra_array.length; e++) {
+          var r = newBuilding.extra_array[e].row
+          var c = newBuilding.extra_array[e].col
+          this.game_state.board[r][c].marker = 'empty'
+        }
       }
       if (newBuilding.name == 'Tramway') {
         var r0 = newBuilding.extra_array[0].row
