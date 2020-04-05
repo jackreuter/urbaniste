@@ -5,6 +5,15 @@
   module.exports.generateShop = function(num_items) {
     var results = []
     var buildings = [
+      // //cultural
+      // [
+      // {'name': 'Docks',      'type': 'Cultural',       'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': '*'},
+      // {'name': 'Embassy',    'type': 'Cultural',       'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': '*'},
+      // {'name': 'Cathedral',  'type': 'Cultural',       'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6},
+      // {'name': 'City Hall',  'type': 'Cultural',       'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
+      // {'name': 'Marina',     'type': 'Cultural',       'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6}
+      // ],
+
       //infrastructure
       [ 
       {'name': 'Boulevard',  'type': 'Infrastructure',               'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
@@ -22,15 +31,6 @@
       {'name': 'Ferry',      'type': 'Aquatic',                      'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
       {'name': 'Lighthouse', 'type': 'Aquatic',                      'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2}
       ],
-
-      // //cultural
-      // [
-      // {'name': 'Docks',      'type': 'Cultural',       'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': '*'},
-      // {'name': 'Embassy',    'type': 'Cultural',       'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': '*'},
-      // {'name': 'Cathedral',  'type': 'Cultural',       'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6},
-      // {'name': 'City Hall',  'type': 'Cultural',       'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
-      // {'name': 'Marina',     'type': 'Cultural',       'bm': 2, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 6}
-      // ],
 
       //commercial
       [
