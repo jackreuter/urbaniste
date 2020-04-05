@@ -345,35 +345,47 @@ function prison(coords, move, board, startingPlayer) {
 }
 function validatePrisonExtra(buildings, startingPlayer, coords, extraArray, board, move) {
   return extraArray
-      && extraArray.length == 1
       && board[extraArray[0]['row']][extraArray[0]['col']].type != 'w'
       && prisonHelper(buildings, startingPlayer, coords, extraArray, board, move) 
 }
 function prisonHelper(buildings, startingPlayer, coords, extraArray, board, move) {
-  var allPrisonCoords = []
-  for (var i=0; i<coords.length; i++) {
-    allPrisonCoords.push(coords[i])
-  }
+  var friendlyPrisonCoords = []
+  friendlyPrisonCoords.push(coords)
   for (var i=0; i<buildings.length; i++) {
     if (buildings[i].name == "Prison") {
       if ((startingPlayer && buildings[i].player == 'player_one') || (!startingPlayer && buildings[i].player == 'player_two')) {
-        for (var j=0; j<buildings[i]['location_array'].length; j++) {
-          allPrisonCoords.push(buildings[i]['location_array'][j])
-        }
+        friendlyPrisonCoords.push(buildings[i]['location_array'])
       }
     }
   }
-  for (var c=0; c<allPrisonCoords.length; c++) {
-    var adjacentToCoord = ShapeUtils.getAdjacentCoordinates(allPrisonCoords[c]['row'], allPrisonCoords[c]['col'])
-    for (var a=0; a<adjacentToCoord.length; a++) {
-      if (extraArray[0]['row'] == adjacentToCoord[a]['row'] && extraArray[0]['col'] == adjacentToCoord[a]['col']) {
-        if (board[extraArray[0]['row']][extraArray[0]['col']].marker != 'empty' || (move['row'] == extraArray[0]['row'] && move['col'] == extraArray[0]['col'])) {
-          return true
+  if (extraArray.length != friendlyPrisonCoords.length) {
+    return false
+  }
+  var extraArrayCopy = extraArray.slice() 
+  for (var prisonIndex=0; prisonIndex<friendlyPrisonCoords.length; prisonIndex++) {
+    var foundAdjacentMarkerForPrison = false
+    for (var c=0; c<friendlyPrisonCoords[prisonIndex].length; c++) {
+      var adjacentToCoord = ShapeUtils.getAdjacentCoordinates(friendlyPrisonCoords[prisonIndex][c]['row'], friendlyPrisonCoords[prisonIndex][c]['col'])
+      for (var a=0; a<adjacentToCoord.length; a++) {
+        for (var e=0; e<extraArrayCopy.length; e++) {
+          if (extraArrayCopy[e]['row'] == adjacentToCoord[a]['row'] && extraArrayCopy[e]['col'] == adjacentToCoord[a]['col']) {
+            if (board[extraArrayCopy[e]['row']][extraArrayCopy[e]['col']].marker != 'empty' || (move['row'] == extraArrayCopy[e]['row'] && move['col'] == extraArrayCopy[e]['col'])) {
+              foundAdjacentMarkerForPrison = true
+              extraArrayCopy.splice(e, 1)
+              e = 100
+              a = 100
+              c = 100
+            }
+          }
         }
       }
     }
+    if (!foundAdjacentMarkerForPrison) {
+      console.log(friendlyPrisonCoords[prisonIndex])
+      return false
+    }
   }
-  return false
+  return true
 }
 function tramway(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
