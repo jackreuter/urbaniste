@@ -210,15 +210,19 @@ function displayShop() {
     var row = document.createElement("tr")
     row.class = "png-able" // inaddition
     var image = document.createElement("img")
-    image.style.height = "300px"
-    image.style.width = "230px"
+    image.style.height = "450px"
+    image.style.width = "315px"
+    image.style.position = "relative"
+    image.style["z-index"] = "999"
     image.src = "/pictures/" + SHOP[i]['name'] + ".png"
     var div = document.createElement("div")
     div.appendChild(image)
     var a = document.createElement("a")
-    a.innerText = SHOP[i]['name'] + " Image"
+    a.innerHTML = SHOP[i]['name'] + "\t\t"
     a.appendChild(div)
-    row.appendChild(a)
+    var derp = document.createElement("th")
+    derp.appendChild(a)
+    row.appendChild(derp)
 
     row.id = SHOP[i]['name']
     if (MY_MOVE['building'] && MY_MOVE['building']['name'] && MY_MOVE['building']['name'] === row.id) {
@@ -237,10 +241,25 @@ function displayShop() {
   	}(row)
 
   	var datum
+    var index=0
   	for (var attribute of Object.keys(SHOP[i])) {
+      if (index == 0) {
+        index += 1
+        continue
+      }
 	    datum = document.createElement("th")
 	    datum.innerText = SHOP[i][attribute]
-	    row.appendChild(datum)
+      if (index==2) {
+        datum.style.backgroundColor='#e86f51'
+      }
+      if (index==3) {
+        datum.style.backgroundColor='#f6ee7f'
+      }
+      if (index==4) {
+        datum.style.backgroundColor='#7ad15e'
+      }
+      row.appendChild(datum)
+      index += 1
   	}
   	shop.appendChild(row)
   }
