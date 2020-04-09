@@ -361,6 +361,19 @@ function prisonHelper(buildings, startingPlayer, coords, extraArray, board, move
   if (extraArray.length != friendlyPrisonCoords.length) {
     return false
   }
+
+  var prisonCoordsPermutations = permutations(friendlyPrisonCoords)
+  for (var i=0; i<prisonCoordsPermutations.length; i++) {
+    if (prisonHelperHelper(prisonCoordsPermutations[i], extraArray, board, move)) {
+      return true
+    }
+  }
+  return false
+}
+function permutations(a) {
+  return a.length ? a.reduce((r, v, i) => [ ...r, ...permutations([ ...a.slice(0, i), ...a.slice(i + 1) ]).map(x => [ v, ...x ])], []) : [[]]
+}
+function prisonHelperHelper(friendlyPrisonCoords, extraArray, board, move) {
   var extraArrayCopy = extraArray.slice() 
   for (var prisonIndex=0; prisonIndex<friendlyPrisonCoords.length; prisonIndex++) {
     var foundAdjacentMarkerForPrison = false
