@@ -16,25 +16,25 @@
 
       //infrastructure
       [ 
-      // {'name': 'Boulevard',  'type': 'Infrastructure',               'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
-      // {'name': 'Tunnel',     'type': 'Infrastructure',               'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
-      {'name': 'Prison',     'type': 'Infrastructure',               'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2}
-      // {'name': 'Tramway',    'type': 'Infrastructure',               'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
-      // {'name': 'Foundry',    'type': 'Infrastructure',               'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1}
+      {'name': 'Boulevard',  'type': 'Infrastructure',               'bm': 1, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Tunnel',     'type': 'Infrastructure',               'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
+      {'name': 'Prison',     'type': 'Infrastructure',               'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Tramway',    'type': 'Infrastructure',               'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 2},
+      {'name': 'Foundry',    'type': 'Infrastructure',               'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1}
       ],
 
       //aquatic
       [
       {'name': 'Bridge',     'type': 'Aquatic',                      'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 3},
       {'name': 'Harbor',     'type': 'Aquatic',                      'bm': 0, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
-      {'name': 'Canal',      'type': 'Aquatic',                      'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
+      {'name': 'Canal',      'type': 'Aquatic',                      'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2},
       {'name': 'Ferry',      'type': 'Aquatic',                      'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 3},
       {'name': 'Lighthouse', 'type': 'Aquatic',                      'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2}
       ],
 
       //commercial
       [
-      {'name': 'Tenement',   'type': 'Commercial',                   'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 4, 'vp': 3},
+      {'name': 'Tenement',   'type': 'Commercial',                   'bm': 0, 'c': 0, 'l': 0, '?': 5, 'limit': 4, 'vp': 3},
       {'name': 'Bazaar',     'type': 'Commercial',                   'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3},
       {'name': 'Refinery',   'type': 'Commercial',                   'bm': 0, 'c': 0, 'l': 0, '?': 3, 'limit': 5, 'vp': 1}, 
       {'name': 'Casino',     'type': 'Commercial',                   'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 5, 'vp': 0},
@@ -63,7 +63,7 @@
       {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'Guild Hall',                'type': 'NewCultural',   'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'Musee du Orsay',            'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 2},
-      {'name': 'Le Havre',                  'type': 'NewCultural',   'bm': 3, 'c': 3, 'l': 0, '?': 0, 'limit': 1, 'vp': 0}
+      {'name': 'Le Havre',                  'type': 'NewCultural',   'bm': 0, 'c': 3, 'l': 3, '?': 0, 'limit': 1, 'vp': 0}
       ]
     ]
 
