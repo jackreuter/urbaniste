@@ -294,8 +294,25 @@ function builtAdjacentTo(coords, move, board, startingPlayer) {
 
 //infrastructure
 function boulevard(coords, move, board, startingPlayer) {
-  var on = builtOn(coords, move, board, startingPlayer)
-  return on.empty == 2 && on.friendly == 2 && ShapeUtils.checkShapeCane(coords)
+  if (coords.length != 3) {
+    return false
+  } else {
+    var middle
+    var outer
+    for (var i = 0; i < 3; i++) {
+      if (ShapeUtils.adjacent(coords[i], coords[(i+1)%3]) && ShapeUtils.adjacent(coords[i], coords[(i+2)%3])) {
+        middle = coords[i]
+        outer = [coords[(i+1)%3], coords[(i+2)%3]]
+      }
+    }
+    if (middle == undefined || outer == undefined) {
+      return false
+    } else {
+      var middleOn = builtOn([middle], move, board, startingPlayer)
+      var outerOn = builtOn(outer, move, board, startingPlayer)
+      return middleOn.friendly == 1 && outerOn.empty == 2 && ShapeUtils.checkShape3Line(coords)
+    }
+  }
 }
 function tunnel(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
@@ -472,8 +489,25 @@ function bridge(coords, move, board, startingPlayer) {
   }
 }
 function canal(coords, move, board, startingPlayer) {
-  var on = builtOn(coords, move, board, startingPlayer)
-  return on.water == 2 && on.friendly == 2 && ShapeUtils.checkShapeCane(coords)
+  if (coords.length != 3) {
+    return false
+  } else {
+    var middle
+    var outer
+    for (var i = 0; i < 3; i++) {
+      if (ShapeUtils.adjacent(coords[i], coords[(i+1)%3]) && ShapeUtils.adjacent(coords[i], coords[(i+2)%3])) {
+        middle = coords[i]
+        outer = [coords[(i+1)%3], coords[(i+2)%3]]
+      }
+    }
+    if (middle == undefined || outer == undefined) {
+      return false
+    } else {
+      var middleOn = builtOn([middle], move, board, startingPlayer)
+      var outerOn = builtOn(outer, move, board, startingPlayer)
+      return ShapeUtils.checkShapeV(coords) && outerOn.friendly == 1 && outerOn.water == 1 && (middleOn.water == 1 || middleOn.friendly == 1)
+    }
+  }
 }
 function lock(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
@@ -549,11 +583,11 @@ function marina(coords, move, board, startingPlayer) {
 //commercial
 function tenement(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
-  return on.friendly == 4 && ShapeUtils.checkShapeDiamond(coords)
+  return on.friendly == 3 && ShapeUtils.checkShapeTriangle(coords)
 }
 function bazaar(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
-  return on.friendly == 4 && ShapeUtils.checkShapeCane(coords)
+  return on.friendly == 3 && ShapeUtils.checkShapeV(coords)
 }
 function refinery(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
@@ -699,7 +733,7 @@ function leHavre(coords, move, board, startingPlayer) {
 
 var buildingData = {
   //infrastructure
-  'Boulevard': {'validation_function': boulevard, 'length': 4},
+  'Boulevard': {'validation_function': boulevard, 'length': 3},
   'Tunnel': {'validation_function': tunnel, 'length': 1},
   'Prison': {'validation_function': prison, 'length': 2},
   'Tramway': {'validation_function': tramway, 'length': 3},
@@ -708,7 +742,7 @@ var buildingData = {
   //aquatic
   'Bridge': {'validation_function': bridge, 'length': 3},
   'Harbor': {'validation_function': harbor, 'length': 1},
-  'Canal': {'validation_function': canal, 'length': 4},
+  'Canal': {'validation_function': canal, 'length': 3},
   'Lock': {'validation_function': lock, 'length': 4},
   'Ferry': {'validation_function': ferry, 'length': 1},
   'Lighthouse': {'validation_function': lightHouse, 'length': 1},
@@ -721,8 +755,8 @@ var buildingData = {
   'Marina': {'validation_function': marina, 'length': 4},
 
   //commericial
-  'Tenement': {'validation_function': tenement, 'length': 4},
-  'Bazaar': {'validation_function': bazaar, 'length': 4},
+  'Tenement': {'validation_function': tenement, 'length': 3},
+  'Bazaar': {'validation_function': bazaar, 'length': 3},
   'Refinery': {'validation_function': refinery, 'length': 2},
   'Casino': {'validation_function': casino, 'length': 3},
   'Watchtower': {'validation_function': watchTower, 'length': 1},
