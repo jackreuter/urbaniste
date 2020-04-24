@@ -58,6 +58,11 @@ function validateVariableCost(building, variableBuildingCost, casinoSteal, myRes
       return false
     }
   }
+  if (buildingName == "Loan Office") {
+    if ((casinoSteal.bm != 3 && casinoSteal.l != 3 && casinoSteal.c != 3) || (casinoSteal.bm + casinoSteal.c + casinoSteal.l != 3)){
+      return false
+    }
+  }
   
   return myResources.bm >= variableBuildingCost.bm + buildingBMs
       && myResources.l >= variableBuildingCost.l + buildingCs
@@ -310,7 +315,7 @@ function boulevard(coords, move, board, startingPlayer) {
     } else {
       var middleOn = builtOn([middle], move, board, startingPlayer)
       var outerOn = builtOn(outer, move, board, startingPlayer)
-      return middleOn.friendly == 1 && outerOn.empty == 2 && ShapeUtils.checkShape3Line(coords)
+      return middleOn.friendly == 1 && (outerOn.empty == 2 || (outerOn.friendly == 1 && outerOn.empty == 1)) && ShapeUtils.checkShape3Line(coords)
     }
   }
 }
@@ -342,7 +347,7 @@ function tunnelHelper(buildings, startingPlayer, coords, extraArray) {
       }
     }
   }
-  if (adjacentEnemyBuildings.size != 1) {
+  if (adjacentEnemyBuildings.size == 0) {
     return false
   }
 
@@ -509,6 +514,14 @@ function canal(coords, move, board, startingPlayer) {
     }
   }
 }
+function theGrandCanal(coords, move, board, startingPlayer) {
+  if (coords.length != 5) {
+    return false
+  }
+  var ons = builtOn(coords, move, board, startingPlayer)
+  return ons.friendly > 0 && ons.water > 0 && ons.enemy == 0
+    
+}
 function lock(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 4 && ShapeUtils.checkShapeDiamond(coords)
@@ -589,11 +602,19 @@ function bazaar(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 3 && ShapeUtils.checkShapeV(coords)
 }
+function housingUnit(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
+}
 function refinery(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
 }
 function casino(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 3 && ShapeUtils.checkShapeTriangle(coords)
+}
+function loanOffice(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 3 && ShapeUtils.checkShapeTriangle(coords)
 }
@@ -760,6 +781,7 @@ var buildingData = {
   'Refinery': {'validation_function': refinery, 'length': 2},
   'Casino': {'validation_function': casino, 'length': 3},
   'Watchtower': {'validation_function': watchTower, 'length': 1},
+  'Loan Office': {'validation_function': loanOffice, 'length': 3},
 
   //civic
   'Tax House': {'validation_function': taxHouse, 'length': 3},
@@ -767,6 +789,9 @@ var buildingData = {
   'Shipyard': {'validation_function': shipyard, 'length': 3},
   'Sewers': {'validation_function': sewers, 'length': 3},
   'Monument': {'validation_function': monument, 'length': 2},
+
+  //default
+  'Housing Unit': {'validation_function': housingUnit, 'length': 2},
 
   //new cultural
   'Place Charles de Gaulle': {'validation_function': placeCharlesDeGaulle, 'length': 7}, 
@@ -780,5 +805,6 @@ var buildingData = {
   'Musee du Louvre': {'validation_function': museeDuLouvre, 'length': 3},
   'Guild Hall': {'validation_function': guildHall, 'length': 6},
   'Musee du Orsay': {'validation_function': museeDuOrsay, 'length': 2},
-  'Le Havre': {'validation_function': leHavre, 'length': 4}
+  'Le Havre': {'validation_function': leHavre, 'length': 4},
+  'The Grand Canal': {'validation_function': theGrandCanal, 'length': 5}
 }

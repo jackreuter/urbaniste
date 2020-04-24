@@ -258,6 +258,9 @@ function displayShop() {
       if (index==4) {
         datum.style.backgroundColor='#7ad15e'
       }
+      if (index==5) {
+        datum.style.backgroundColor='lightgrey'
+      }
       row.appendChild(datum)
       index += 1
   	}
@@ -282,9 +285,15 @@ function onClickShopRow(row) {
  		MY_MOVE['building'] = undefined
   } else { // Select Shop Item
     if (BuildingValidation.buildingAvailable(buildingName, SHOP)) {
-      if (buildingName == "Casino" || buildingName == "Tenement" || buildingName == "Refinery" || buildingName == "Bazaar") {
+      if (
+          buildingName == "Casino" ||
+          buildingName == "Tenement" ||
+          buildingName == "Refinery" ||
+          buildingName == "Bazaar" ||
+          buildingName == "Housing Unit" ||
+          buildingName == "Loan Office") {
         document.getElementById('money_form_input').style.display = "block"
-        if (buildingName == "Casino") {
+        if (buildingName == "Casino" || buildingName == "Loan Office") {
           document.getElementById('casino_steal_input').style.display = "block"
         }
       }  
