@@ -188,6 +188,17 @@
                 game_state.p2_resources.c += casino_steal.c
               }
             }
+            if (game_state.shop[i].name == "Loan Office") {
+              if (active_player_index == 0) {
+                game_state.p1_resources.bm += casino_steal.bm
+                game_state.p1_resources.l += casino_steal.l
+                game_state.p1_resources.c += casino_steal.c
+              } else {
+                game_state.p2_resources.bm += casino_steal.bm
+                game_state.p2_resources.l += casino_steal.l
+                game_state.p2_resources.c += casino_steal.c
+              }
+            }
             return true
           } else {
             return false

@@ -249,6 +249,13 @@ function displayShop() {
       }
 	    datum = document.createElement("th")
 	    datum.innerText = SHOP[i][attribute]
+      console.log(SHOP[i][attribute])
+      if (index==1) {
+        datum.style.backgroundColor=getColor(SHOP[i][attribute], STARTING_PLAYER)
+        if (!STARTING_PLAYER) {
+          datum.style.color='lightgrey'
+        }
+      }
       if (index==2) {
         datum.style.backgroundColor='#e86f51'
       }
@@ -258,10 +265,33 @@ function displayShop() {
       if (index==4) {
         datum.style.backgroundColor='#7ad15e'
       }
+      if (index==5) {
+        datum.style.backgroundColor='lightgrey'
+      }
       row.appendChild(datum)
       index += 1
   	}
   	shop.appendChild(row)
+  }
+}
+
+function getColor(type, is_starting_player) {
+  if (is_starting_player) {
+    if (type == 'Infrastructure') { return '#e0ffe8' }
+    if (type == 'Aquatic') { return '#d6ecff' }
+    if (type == 'Cultural') { return '#fde3ff' }
+    if (type == 'Commercial') { return '#fffed6' }
+    if (type == 'Civic') { return '#ffe9e8' }
+    if (type == 'Default') { return '#c9c9c9' }
+    if (type == 'NewCultural') { return '#e4bdfc' }
+  } else {
+    if (type == 'Infrastructure') { return '#014a01' }
+    if (type == 'Aquatic') { return '#001645' }
+    if (type == 'Cultural') { return '#240047' }
+    if (type == 'Commercial') { return '#573e00' }
+    if (type == 'Civic') { return '#3b0000' }
+    if (type == 'Default') { return '#525252' }
+    if (type == 'NewCultural') { return '#4f057d' }
   }
 }
 
@@ -282,9 +312,15 @@ function onClickShopRow(row) {
  		MY_MOVE['building'] = undefined
   } else { // Select Shop Item
     if (BuildingValidation.buildingAvailable(buildingName, SHOP)) {
-      if (buildingName == "Casino" || buildingName == "Tenement" || buildingName == "Refinery" || buildingName == "Bazaar") {
+      if (
+          buildingName == "Casino" ||
+          buildingName == "Tenement" ||
+          buildingName == "Refinery" ||
+          buildingName == "Bazaar" ||
+          buildingName == "Housing Unit" ||
+          buildingName == "Loan Office") {
         document.getElementById('money_form_input').style.display = "block"
-        if (buildingName == "Casino") {
+        if (buildingName == "Casino" || buildingName == "Loan Office") {
           document.getElementById('casino_steal_input').style.display = "block"
         }
       }  
@@ -377,7 +413,7 @@ function displayBuildings() {
     var locationArray = BUILDINGS[i]['location_array']
     var lineColor = getBuildingColor(BUILDINGS[i])
     if (locationArray.length == 1) {
-      drawLineOnTile(locationArray[0], lineColor)
+      drawLineOnTile(locationArray[0], lineColor, BUILDINGS[i]['player'] === 'player_one')
     } else {
       for (var j = 0; j < locationArray.length; j++) {
         for (var k = j+1; k < locationArray.length; k++) {
@@ -385,7 +421,7 @@ function displayBuildings() {
           var tile2 = locationArray[k]
           // draw line between adjacent tiles
           if (ShapeUtils.adjacent(tile1, tile2)) {
-            drawLineBetweenTiles(tile1, tile2, lineColor)
+            drawLineBetweenTiles(tile1, tile2, lineColor, BUILDINGS[i]['player'] === 'player_one')
           }
         }
       }
@@ -399,25 +435,12 @@ function getBuildingColor(building) {
       type = SHOP[i].type
     }
   }
-  if (building['player'] === 'player_one') {
-    if (type == 'Infrastructure') { return '#e0ffe8' }
-    if (type == 'Aquatic') { return '#d6ecff' }
-    if (type == 'Cultural') { return '#fde3ff' }
-    if (type == 'Commercial') { return '#fffed6' }
-    if (type == 'Civic') { return '#ffe9e8' }
-    if (type == 'NewCultural') { return 'white' }
-  } else {
-    if (type == 'Infrastructure') { return '#003600' }
-    if (type == 'Aquatic') { return '#001645' }
-    if (type == 'Cultural') { return '#240047' }
-    if (type == 'Commercial') { return '#573e00' }
-    if (type == 'Civic') { return '#3b0000' }
-    if (type == 'NewCultural') { return 'black' }
-  }
+  return getColor(type, building['player'] === 'player_one')
+  
 }
 
 // draw SVG line between two tiles
-function drawLineBetweenTiles(tile1, tile2, lineColor) {
+function drawLineBetweenTiles(tile1, tile2, lineColor, is_player_one) {
   var x1 = SVG_HEX_WIDTH/2 + SVG_SPACING/2 + SVG_WIDTH_MULTIPLIER*(tile1.col)
   var x2 = SVG_HEX_WIDTH/2 + SVG_SPACING/2 + SVG_WIDTH_MULTIPLIER*(tile2.col)
   var y1 = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile1.row)
@@ -429,11 +452,13 @@ function drawLineBetweenTiles(tile1, tile2, lineColor) {
   if (tile2.row%2 != 0) {
     x2 += SVG_WIDTH_BUFFER
   }
-  drawLine(x1, y1, x2, y2, lineColor)
+  var edge_color = is_player_one ? 'white' : 'black'
+  drawLine(x1, y1, x2, y2, edge_color, SVG_LINE_WIDTH)
+  drawLine(x1, y1, x2, y2, lineColor, SVG_LINE_WIDTH*0.8)
 }
 
 // draw SVG line on single tile
-function drawLineOnTile(tile, lineColor) {
+function drawLineOnTile(tile, lineColor, is_player_one) {
   var x = SVG_HEX_WIDTH/2 + SVG_SPACING/2 + SVG_WIDTH_MULTIPLIER*(tile.col)
   var y = SVG_HEIGHT_BUFFER + SVG_HEIGHT_MULTIPLIER*(tile.row)
   if (tile.row%2 != 0) {
@@ -445,11 +470,13 @@ function drawLineOnTile(tile, lineColor) {
   var y1 = y - SVG_LINE_WIDTH/2
   var y2 = y + SVG_LINE_WIDTH/2
 
-  drawLine(x1, y1, x2, y2, lineColor)
+  var edge_color = is_player_one ? 'white' : 'black'
+  drawLine(x1, y1, x2, y2, edge_color, SVG_LINE_WIDTH)
+  drawLine(x1, y1, x2, y2, lineColor, SVG_LINE_WIDTH*0.8)
 }
 
 // draw SVG line
-function drawLine(x1, y1, x2, y2, lineColor) {
+function drawLine(x1, y1, x2, y2, lineColor, line_width) {
   var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
   newLine.setAttribute('id','line');
   newLine.setAttribute('x1', x1);
@@ -457,7 +484,7 @@ function drawLine(x1, y1, x2, y2, lineColor) {
   newLine.setAttribute('x2', x2);
   newLine.setAttribute('y2', y2);
   newLine.setAttribute("stroke", lineColor);
-  newLine.setAttribute("stroke-width", SVG_LINE_WIDTH);
+  newLine.setAttribute("stroke-width", line_width);
   $("svg").append(newLine);
 }
 
