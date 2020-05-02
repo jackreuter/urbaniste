@@ -54,7 +54,7 @@
 
       //default
       [
-      {'name': 'Housing Unit',             'type': 'Default',       'bm': 0, 'c': 0, 'l': 0, '?': 3, 'limit': 8, 'vp': 1},
+      {'name': 'Housing Unit',             'type': 'Default',       'bm': 0, 'c': 0, 'l': 0, '?': 3, 'limit': 10, 'vp': 1},
       ],
 
       //new cultural
