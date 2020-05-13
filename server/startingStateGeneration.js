@@ -39,7 +39,7 @@
       {'name': 'Refinery',   'type': 'Commercial',                   'bm': 0, 'c': 0, 'l': 0, '?': 3, 'limit': 5, 'vp': 1}, 
       {'name': 'Casino',     'type': 'Commercial',                   'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 5, 'vp': 0},
       {'name': 'Watchtower', 'type': 'Commercial',                   'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3},
-      {'name': 'Loan Office','type': 'Commercial',                   'bm': 0, 'c': 0, 'l': 0, '?': 2, 'limit': 5, 'vp': -1},
+      {'name': 'Loan Office','type': 'Commercial',                   'bm': 0, 'c': 0, 'l': 0, '?': 2, 'limit': 5, 'vp': -1}
       ],
 
       //civic
@@ -59,9 +59,9 @@
 
       //new cultural
       [
-      {'name': 'Place Charles de Gaulle',   'type': 'NewCultural',   'bm': 3, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 8},
-      {'name': 'Parc de Buttes Chaumont',   'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 7},
-      {'name': 'Rue de Rivoli',             'type': 'NewCultural',   'bm': 3, 'c': 2, 'l': 1, '?': 0, 'limit': 1, 'vp': 6},
+      // {'name': 'Place Charles de Gaulle',   'type': 'NewCultural',   'bm': 3, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 8},
+      // {'name': 'Parc de Buttes Chaumont',   'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 7},
+      // {'name': 'Rue de Rivoli',             'type': 'NewCultural',   'bm': 3, 'c': 2, 'l': 1, '?': 0, 'limit': 1, 'vp': 6},
       {'name': 'The Embassy',               'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'Tour Eiffel',               'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 6},
       {'name': 'Bois de Vincennes',         'type': 'NewCultural',   'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
@@ -69,7 +69,7 @@
       {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'Guild Hall',                'type': 'NewCultural',   'bm': 2, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'Musee du Orsay',            'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 2},
-      {'name': 'Le Havre',                  'type': 'NewCultural',   'bm': 0, 'c': 3, 'l': 3, '?': 0, 'limit': 1, 'vp': 0},
+      // {'name': 'Le Havre',                  'type': 'NewCultural',   'bm': 0, 'c': 3, 'l': 3, '?': 0, 'limit': 1, 'vp': 0},
       {'name': 'The Grand Canal',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 2, '?': 0, 'limit': 1, 'vp': 0},
       ]
     ]
