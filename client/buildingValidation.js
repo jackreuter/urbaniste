@@ -791,7 +791,7 @@ var buildingData = {
   'Monument': {'validation_function': monument, 'length': 2},
 
   //default
-  'Housing Unit': {'validation_function': housingUnit, 'length': 2},
+  'Housing Shack': {'validation_function': housingUnit, 'length': 2},
 
   //new cultural
   'Place Charles de Gaulle': {'validation_function': placeCharlesDeGaulle, 'length': 7}, 

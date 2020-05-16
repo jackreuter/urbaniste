@@ -319,7 +319,7 @@ function onClickShopRow(row) {
           buildingName == "Tenement" ||
           buildingName == "Refinery" ||
           buildingName == "Bazaar" ||
-          buildingName == "Housing Unit" ||
+          buildingName == "Housing Shack" ||
           buildingName == "Loan Office") {
         document.getElementById('money_form_input').style.display = "block"
         if (buildingName == "Casino" || buildingName == "Loan Office") {
