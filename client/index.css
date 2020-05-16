@@ -139,6 +139,21 @@ p {
     font-size: 20px;
 }
 
+#my_resources {
+    width: 160px;
+    padding-right: 0px;
+}
+#enemy_resources {
+    width: 160px;
+    padding-right: 0px;
+}
+#button_div {
+    position: absolute;
+    left: 175px;
+    top: 220px;
+}
+
+
 #casino_steal_input {
     left: 250px;
     top: 100px;
@@ -344,7 +359,9 @@ svg {
 }
 
 .color-blue {
+    background: radial-gradient(circle at 100% 50%, transparent 20%, rgba(255,255,255,.3) 21%, rgba(255,255,255,.3) 34%, transparent 35%, transparent), radial-gradient(circle at 0% 50%, transparent 20%, rgba(255,255,255,.3) 21%, rgba(255,255,255,.3) 34%, transparent 35%, transparent) 0 -50px;
     background-color: var(--water_color);
+    background-size: 75px 100px;
 }
 .color-blue::after,
 .color-blue::before {

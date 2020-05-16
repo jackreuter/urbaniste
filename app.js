@@ -24,7 +24,8 @@ var GAME_STATE = {
   'buildings': [],
   'shop': startingStateGeneration.generateShop(5),
   'p1_resources': startState[1],
-  'p2_resources': startState[2]
+  'p2_resources': startState[2],
+  'vps': {'p1':0, 'p2':0, 'p1_special':false, 'p2_special':false}
 }
 
 // Express to serve correct client side code
@@ -75,6 +76,7 @@ io.on('connection', function(socket) {
     
     if (moveProcessor.validateMove(socket.id, PLAYER_IDS[ACTIVE_PLAYER_INDEX].socket_id)) {
       GAME_STATE = moveProcessor.processMove(client_object)
+      GAME_STATE.vps = calcVPS()
       emitMoveToPlayers(socket)
     }
 
@@ -160,6 +162,34 @@ function emitMoveToPlayers(socket) {
   })
   socket.emit('not_your_turn')
   ACTIVE_PLAYER_INDEX = +(!ACTIVE_PLAYER_INDEX)
+}
+
+function calcVPS() {
+  p1_vps = 0
+  p2_vps = 0
+  p1_special = false
+  p2_special = false
+  for (var i=0; i<GAME_STATE.buildings.length; i++) {
+    for (var j=0; j<GAME_STATE.shop.length; j++) {
+      if (GAME_STATE.shop[j].name == GAME_STATE.buildings[i].name) {
+        if (GAME_STATE.buildings[i].player == 'player_one') {
+          if (GAME_STATE.shop[j].vp != "*") {
+            p1_vps += GAME_STATE.shop[j].vp
+          } else {
+            p1_special = true
+          }
+        }
+        if (GAME_STATE.buildings[i].player == 'player_two') {
+          if (GAME_STATE.shop[j].vp != "*") {
+            p2_vps += GAME_STATE.shop[j].vp
+          } else {
+            p2_special = true
+          }
+        }
+      }
+    }
+  }
+  return {'p1':p1_vps, 'p2':p2_vps, 'p1_special':p1_special, 'p2_special':p2_special}
 }
 
 function gameEnded() {

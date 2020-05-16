@@ -36,6 +36,7 @@ var MY_MOVE = {}
 var STARTING_PLAYER = false
 var MY_RESOURCES = {'bm':0, 'l':0, 'c':0}
 var ENEMY_RESOURCES = {'bm':0, 'l':0, 'c':0}
+var VPS = {'me':0, 'enemy':0, 'me_special':false, 'enemy_special':false}
 
 // handle hex click
 // force marker placement selection first
@@ -179,12 +180,13 @@ function displayBoard() {
 	    var cell = document.createElement("div")
       cell.id = row + "_" + col
       if (BOARD[row][col].most_recent) {
-        cell.style.fontSize = '30'
+        cell.style.fontSize = '33'
       }
 
       if (BOARD[row][col].building === undefined) {
         if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_one') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_two')) {
           cell.innerText = 'Mine'
+
         }
         if ((STARTING_PLAYER && BOARD[row][col].marker == 'player_two') || (!STARTING_PLAYER && BOARD[row][col].marker == 'player_one')) {
           cell.innerText = 'Enemy'
@@ -249,7 +251,7 @@ function displayShop() {
       }
 	    datum = document.createElement("th")
 	    datum.innerText = SHOP[i][attribute]
-      console.log(SHOP[i][attribute])
+      
       if (index==1) {
         datum.style.backgroundColor=getColor(SHOP[i][attribute], STARTING_PLAYER)
         if (!STARTING_PLAYER) {
@@ -317,7 +319,7 @@ function onClickShopRow(row) {
           buildingName == "Tenement" ||
           buildingName == "Refinery" ||
           buildingName == "Bazaar" ||
-          buildingName == "Housing Unit" ||
+          buildingName == "Housing Shack" ||
           buildingName == "Loan Office") {
         document.getElementById('money_form_input').style.display = "block"
         if (buildingName == "Casino" || buildingName == "Loan Office") {
@@ -353,6 +355,19 @@ function displayResources() {
   document.getElementById('resource_bm_e').innerText = "Building Materials: " + ENEMY_RESOURCES.bm
   document.getElementById('resource_l_e').innerText = "Labor: " + ENEMY_RESOURCES.l
   document.getElementById('resource_c_e').innerText = "Coin: " + ENEMY_RESOURCES.c
+}
+
+function displayVps() {
+  var me_string = "Victory Points: " + VPS.me
+  if (VPS.me_special) {
+    me_string += " + *"
+  }
+  var enemy_string = "Victory Points: " + VPS.enemy
+  if (VPS.enemy_special) {
+    enemy_string += " + *"
+  }
+  document.getElementById('vp_me').innerText = me_string
+  document.getElementById('vp_e').innerText = enemy_string
 }
 
 function clearBuildingAndExtraText(row, col) {
@@ -407,7 +422,30 @@ var SVG_HEIGHT_BUFFER = 55 // trial and error bullshit
 var SVG_LINE_WIDTH = 45
 
 // Iterate through BOARD object and draw SVG lines for buildings
-function displayBuildings() {
+function displaySvgElements() {
+  for (var row = 0; row < BOARD.length; row++) {
+    for (var col = 0; col < BOARD[row].length; col++) {
+      var xValue = 46 + 105*col
+      if (row%2 == 1) {
+        xValue += 55
+      }
+      if (document.getElementById(row + "_" + col).innerText == "Mine") {
+        if (STARTING_PLAYER) {
+          drawCircle(xValue, 55 + 91*row, '#ffffff', 0.7)
+        } else {
+          drawCircle(xValue, 55 + 91*row, '#000000', 0.4)
+        }
+      }
+      if (document.getElementById(row + "_" + col).innerText == "Enemy") { 
+        if (STARTING_PLAYER) {
+          drawCircle(xValue, 55 + 91*row, '#000000', 0.4)
+        } else {
+          drawCircle(xValue, 55 + 91*row, '#ffffff', 0.7)
+        }
+      }
+    }
+  }
+
   var lineWidth = 45
   for (var i = 0; i < BUILDINGS.length; i++) {
     var locationArray = BUILDINGS[i]['location_array']
@@ -475,6 +513,20 @@ function drawLineOnTile(tile, lineColor, is_player_one) {
   drawLine(x1, y1, x2, y2, lineColor, SVG_LINE_WIDTH*0.8)
 }
 
+function drawCircle(x, y, color, opacity) {
+
+  var newLine = document.createElementNS('http://www.w3.org/2000/svg','circle');
+  newLine.setAttribute('id','circle');
+  newLine.setAttribute('cx', x);
+  newLine.setAttribute('cy', y);
+  newLine.setAttribute('r', 25);
+  newLine.setAttribute("stroke", 'none');
+  newLine.setAttribute("fill", color);
+  newLine.setAttribute("fill-opacity", opacity);
+  
+  $("svg").append(newLine);
+}
+
 // draw SVG line
 function drawLine(x1, y1, x2, y2, lineColor, line_width) {
   var newLine = document.createElementNS('http://www.w3.org/2000/svg','line');
@@ -514,15 +566,31 @@ function ingestServerResponse(server_response) {
   if (STARTING_PLAYER) {
     MY_RESOURCES = server_response.game_state.p1_resources
     ENEMY_RESOURCES = server_response.game_state.p2_resources
+    
+    VPS.me = server_response.game_state.vps.p1
+    VPS.me_special = server_response.game_state.vps.p1_special
+    VPS.enemy = server_response.game_state.vps.p2
+    VPS.enemy_special = server_response.game_state.vps.p2_special
   } else {
     MY_RESOURCES = server_response.game_state.p2_resources
     ENEMY_RESOURCES = server_response.game_state.p1_resources
+    
+    VPS.me = server_response.game_state.vps.p2
+    VPS.me_special = server_response.game_state.vps.p2_special
+    VPS.enemy = server_response.game_state.vps.p1
+    VPS.enemy_special = server_response.game_state.vps.p1_special
   }
 
+  var svg = document.getElementById('buildings')
+  while (svg.lastChild) {
+    svg.removeChild(svg.lastChild);
+  }
   displayBoard()
-  displayBuildings()
+  displaySvgElements()
   displayShop()
   displayResources()
+  displayVps()
+
 }
 
 window.onload = () => {
