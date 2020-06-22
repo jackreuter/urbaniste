@@ -88,7 +88,7 @@ function handleHexClickForMarkerPlacement(cell, row, col) {
 
 function handleBonusResources(row, col, resource_type, should_add) {
   for (var i=0; i<BUILDINGS.length; i++) {
-    if (BUILDINGS[i].name == 'Musee du Orsay') {
+    if (BUILDINGS[i].name == 'Opera Garnier') {
       if (ShapeUtils.adjacent({'row': row, 'col': col}, BUILDINGS[i]['location_array'][0]) || ShapeUtils.adjacent({'row': row, 'col': col}, BUILDINGS[i]['location_array'][1])) {
         if (should_add) {
           MY_RESOURCES[resource_type] += 1
@@ -107,6 +107,9 @@ function handleHexClickForBuildingPlacement(cell, row, col) {
   	return
   }
   if (BuildingValidation.isWatchtowerBlocked(row, col, BUILDINGS, STARTING_PLAYER)) {
+    return
+  }
+  if (BuildingValidation.isWatchtowerBBlocked(row, col, BUILDINGS, STARTING_PLAYER)) {
     return
   }
   var locationArray = []
@@ -216,6 +219,7 @@ function displayShop() {
     image.style.width = "315px"
     image.style.position = "relative"
     image.style["z-index"] = "999"
+    console.log(SHOP)
     image.src = "/pictures/" + SHOP[i]['name'] + ".png"
     var div = document.createElement("div")
     div.appendChild(image)
@@ -227,6 +231,9 @@ function displayShop() {
     row.appendChild(derp)
 
     row.id = SHOP[i]['name']
+    if (!BuildingValidation.buildingAvailable(SHOP[i]['name'], SHOP)) {
+      a.style.textDecoration = 'line-through'
+    }
     if (MY_MOVE['building'] && MY_MOVE['building']['name'] && MY_MOVE['building']['name'] === row.id) {
         row.style.backgroundColor = 'red'
     } else if (BuildingValidation.canPayCost(SHOP[i], MY_RESOURCES) && BuildingValidation.canPayVariableCost(SHOP[i], BUILDINGS, STARTING_PLAYER, MY_RESOURCES) && BuildingValidation.buildingAvailable(SHOP[i]['name'], SHOP)) {

@@ -17,12 +17,14 @@ var MoveProcessor = require('./server/moveProcessor')
 var ACTIVE_PLAYER_INDEX = 0
 var PLAYER_IDS = []
 
+var beginner_mode = true
 
-var startState = startingStateGeneration.generateBoard(9, 12, 20)
+
+var startState = startingStateGeneration.generateBoard(20, beginner_mode)
 var GAME_STATE = {
   'board': startState[0],
   'buildings': [],
-  'shop': startingStateGeneration.generateShop(5),
+  'shop': startingStateGeneration.generateShop(beginner_mode),
   'p1_resources': startState[1],
   'p2_resources': startState[2],
   'vps': {'p1':0, 'p2':0, 'p1_special':false, 'p2_special':false}
@@ -173,14 +175,14 @@ function calcVPS() {
     for (var j=0; j<GAME_STATE.shop.length; j++) {
       if (GAME_STATE.shop[j].name == GAME_STATE.buildings[i].name) {
         if (GAME_STATE.buildings[i].player == 'player_one') {
-          if (GAME_STATE.shop[j].vp != "*") {
+          if (GAME_STATE.shop[j].vp != "0" || GAME_STATE.shop[j].name == 'Casino') {
             p1_vps += GAME_STATE.shop[j].vp
           } else {
             p1_special = true
           }
         }
         if (GAME_STATE.buildings[i].player == 'player_two') {
-          if (GAME_STATE.shop[j].vp != "*") {
+          if (GAME_STATE.shop[j].vp != "0" || GAME_STATE.shop[j].name == 'Casino') {
             p2_vps += GAME_STATE.shop[j].vp
           } else {
             p2_special = true

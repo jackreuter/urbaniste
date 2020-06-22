@@ -156,6 +156,21 @@ function isWatchtowerBlocked(row, col, buildings, startingPlayer) {
   }
   return false
 }
+function isWatchtowerBBlocked(row, col, buildings, startingPlayer) {
+  var adjacent = ShapeUtils.getAdjacentCoordinates(row, col)
+  for (var building=0; building<buildings.length; building++) {
+    if (buildings[building].name == "WatchtowerBOnly") {
+      if ((startingPlayer && buildings[building]['player'] == 'player_two') || (!startingPlayer && buildings[building]['player'] == 'player_one')) {
+        for (var index=0; index<adjacent.length; index++) {
+          if ((buildings[building]['location_array'][0]['row'] == adjacent[index]['row']) && (buildings[building]['location_array'][0]['col'] == adjacent[index]['col'])) {
+            return true
+          }
+        }
+      }
+    }
+  }
+  return false
+}
 
 
 const BuildingValidation = { 
@@ -163,6 +178,7 @@ const BuildingValidation = {
   'validateVariableCost': validateVariableCost,
   'validateBuildingSelection': validateBuildingSelection,
   'isWatchtowerBlocked': isWatchtowerBlocked,
+  'isWatchtowerBBlocked': isWatchtowerBBlocked,
   'canPayForBuilding': canPayForBuilding,
   'buildingAvailable': buildingAvailable,
   'canPayCost': canPayCost,
@@ -310,13 +326,13 @@ function boulevard(coords, move, board, startingPlayer) {
         outer = [coords[(i+1)%3], coords[(i+2)%3]]
       }
     }
-    if (middle == undefined || outer == undefined) {
-      return false
-    } else {
-      var middleOn = builtOn([middle], move, board, startingPlayer)
-      var outerOn = builtOn(outer, move, board, startingPlayer)
-      return middleOn.friendly == 1 && (outerOn.empty == 2 || (outerOn.friendly == 1 && outerOn.empty == 1)) && ShapeUtils.checkShape3Line(coords)
-    }
+  }
+  if (middle == undefined || outer == undefined) {
+    return false
+  } else {
+    var middleOn = builtOn([middle], move, board, startingPlayer)
+    var outerOn = builtOn(outer, move, board, startingPlayer)
+    return middleOn.friendly == 1 && outerOn.empty == 2 && ShapeUtils.checkShapeV(coords)
   }
 }
 function tunnel(coords, move, board, startingPlayer) {
@@ -464,6 +480,18 @@ function tramwayHelper(coords, extraArray, board, move) {
 function foundry(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
+}
+function watchTower(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 1 && coords.length == 1
+}
+function watchTowerBOnly(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 1 && coords.length == 1
+}
+function landfill(coords, move, board, startingPlayer) {
+  var on = builtOn(coords, move, board, startingPlayer)
+  return on.friendly == 1
 }
 
 //aquatic
@@ -618,10 +646,6 @@ function loanOffice(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
   return on.friendly == 3 && ShapeUtils.checkShapeTriangle(coords)
 }
-function watchTower(coords, move, board, startingPlayer) {
-  var on = builtOn(coords, move, board, startingPlayer)
-  return on.friendly == 1 && coords.length == 1
-}
 
 //civic
 function taxHouse(coords, move, board, startingPlayer) {
@@ -728,7 +752,8 @@ function tourEiffel(coords, move, board, startingPlayer) {
 }
 function boisDeVincennes(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
-  return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
+  var adjacentTo = builtAdjacentTo(coords, move, board, startingPlayer)
+  return on.friendly == 2 && adjacentTo.water >= 1 && ShapeUtils.checkShapeDouble(coords)
 }
 function waterworks(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
@@ -760,6 +785,10 @@ var buildingData = {
   'Tramway': {'validation_function': tramway, 'length': 3},
   'Foundry': {'validation_function': foundry, 'length': 2},
 
+  'Watchtower': {'validation_function': watchTower, 'length': 1},
+  'WatchtowerBOnly': {'validation_function': watchTowerBOnly, 'length': 1},
+  'Landfill': {'validation_function': landfill, 'length': 1},
+
   //aquatic
   'Bridge': {'validation_function': bridge, 'length': 3},
   'Harbor': {'validation_function': harbor, 'length': 1},
@@ -780,7 +809,6 @@ var buildingData = {
   'Bazaar': {'validation_function': bazaar, 'length': 3},
   'Refinery': {'validation_function': refinery, 'length': 2},
   'Casino': {'validation_function': casino, 'length': 3},
-  'Watchtower': {'validation_function': watchTower, 'length': 1},
   'Loan Office': {'validation_function': loanOffice, 'length': 3},
 
   //civic
@@ -804,7 +832,7 @@ var buildingData = {
   'Waterworks': {'validation_function': waterworks, 'length': 1},
   'Musee du Louvre': {'validation_function': museeDuLouvre, 'length': 3},
   'Guild Hall': {'validation_function': guildHall, 'length': 6},
-  'Musee du Orsay': {'validation_function': museeDuOrsay, 'length': 2},
+  'Opera Garnier': {'validation_function': museeDuOrsay, 'length': 2},
   'Le Havre': {'validation_function': leHavre, 'length': 4},
   'The Grand Canal': {'validation_function': theGrandCanal, 'length': 5}
 }

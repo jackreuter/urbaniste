@@ -98,6 +98,20 @@
           this.game_state.board[r][c].marker = 'empty'
         }
       }
+      if (newBuilding.name == 'Landfill') {
+        count = 0
+        for (e=0; e<newBuilding.location_array.length; e++) {
+          var r = newBuilding.location_array[e].row
+          var c = newBuilding.location_array[e].col
+          var adjacentHexes = getAdjacentCoordinates(r, c)
+          for (h=0; h<adjacentHexes.length; h++) {
+            if (count < 8 && this.game_state.board[adjacentHexes[h].row] && this.game_state.board[adjacentHexes[h].col] && this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col].marker != player) {
+              this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col].marker = 'empty'
+              count += 1
+            }
+          }
+        }
+      }
       if (newBuilding.name == 'Tramway') {
         var r0 = newBuilding.extra_array[0].row
         var c0 = newBuilding.extra_array[0].col
@@ -334,7 +348,7 @@
     }
 
     for (var i=0; i<game_state.buildings.length; i++) {
-      if (game_state.buildings[i].name == 'Musee du Orsay') {
+      if (game_state.buildings[i].name == 'Opera Garnier') {
         adjacents1 = getAdjacentCoordinates(game_state.buildings[i]['location_array'][0]['row'], game_state.buildings[i]['location_array'][0]['col'])
         adjacents2 = getAdjacentCoordinates(game_state.buildings[i]['location_array'][1]['row'], game_state.buildings[i]['location_array'][1]['col'])
 

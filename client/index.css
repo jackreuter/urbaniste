@@ -256,11 +256,69 @@ svg {
   left: 5;
   top: 300;
   display: grid;
-  grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);
+  
+  /* BEGINNER MODE */
+  grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);
+  
+  /* ADVANCED MODE */
+  /*grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);*/
+
   grid-auto-rows: calc(var(--hex-width) - 28.87px/2);
   grid-gap: var(--hex-between) var(--hex-between);
   padding-bottom: var(--hex-border);
 }
+
+/* BEGINNER MODE */
+.hexagon:nth-child(18n + 10), 
+.hexagon:nth-child(18n + 11),
+.hexagon:nth-child(18n + 12),
+.hexagon:nth-child(18n + 13),
+.hexagon:nth-child(18n + 14),
+.hexagon:nth-child(18n + 15),
+.hexagon:nth-child(18n + 16),
+.hexagon:nth-child(18n + 17),
+.hexagon:nth-child(18n + 18) {
+  margin-left: calc(var(--hex-width) / 2 + var(--hex-between) / 2);
+}
+
+
+/* ADVANCED MODE */
+/*.hexagon:nth-child(24n + 13), 
+.hexagon:nth-child(24n + 14),
+.hexagon:nth-child(24n + 15),
+.hexagon:nth-child(24n + 16),
+.hexagon:nth-child(24n + 17),
+.hexagon:nth-child(24n + 18),
+.hexagon:nth-child(24n + 19),
+.hexagon:nth-child(24n + 20),
+.hexagon:nth-child(24n + 21),
+.hexagon:nth-child(24n + 22),
+.hexagon:nth-child(24n + 23),
+.hexagon:nth-child(24n + 24) {
+  margin-left: calc(var(--hex-width) / 2 + var(--hex-between) / 2);
+}*/
+
+.tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  bottom: 100%;
+  left: 50%;
+  margin-left: -60px;
+
+  /* Position the tooltip */
+  position: absolute;
+  z-index: 1;
+}
+
+.svg_line:hover .tooltiptext {
+  visibility: visible;
+}
+
 .hexagon {
     align-items: center;
     background-color: var(--color-hex-default);
@@ -303,22 +361,6 @@ svg {
 .hexagon:hover::before {
     border-top-color: var(--color-hex-hover);
     border-bottom-color: var(--color-hex-hover);
-}
-
-/* shift every other row right to align */
-.hexagon:nth-child(24n + 13), 
-.hexagon:nth-child(24n + 14),
-.hexagon:nth-child(24n + 15),
-.hexagon:nth-child(24n + 16),
-.hexagon:nth-child(24n + 17),
-.hexagon:nth-child(24n + 18),
-.hexagon:nth-child(24n + 19),
-.hexagon:nth-child(24n + 20),
-.hexagon:nth-child(24n + 21),
-.hexagon:nth-child(24n + 22),
-.hexagon:nth-child(24n + 23),
-.hexagon:nth-child(24n + 24) {
-  margin-left: calc(var(--hex-width) / 2 + var(--hex-between) / 2);
 }
 
 /* Colors */
