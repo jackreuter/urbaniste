@@ -252,7 +252,7 @@ function displayShop() {
   	var datum
     var index=0
   	for (var attribute of Object.keys(SHOP[i])) {
-      if (index == 0) {
+      if (index == 0 || index == 8) {
         index += 1
         continue
       }

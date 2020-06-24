@@ -269,7 +269,7 @@ svg {
 }
 
 /* BEGINNER MODE */
-.hexagon:nth-child(18n + 10), 
+.hexagon:nth-child(18n + 10),
 .hexagon:nth-child(18n + 11),
 .hexagon:nth-child(18n + 12),
 .hexagon:nth-child(18n + 13),
@@ -283,7 +283,8 @@ svg {
 
 
 /* ADVANCED MODE */
-/*.hexagon:nth-child(24n + 13), 
+/*
+.hexagon:nth-child(24n + 13), 
 .hexagon:nth-child(24n + 14),
 .hexagon:nth-child(24n + 15),
 .hexagon:nth-child(24n + 16),
@@ -296,7 +297,8 @@ svg {
 .hexagon:nth-child(24n + 23),
 .hexagon:nth-child(24n + 24) {
   margin-left: calc(var(--hex-width) / 2 + var(--hex-between) / 2);
-}*/
+}
+*/
 
 .tooltiptext {
   visibility: hidden;
