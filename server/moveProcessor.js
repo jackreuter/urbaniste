@@ -104,8 +104,21 @@
           var r = newBuilding.location_array[e].row
           var c = newBuilding.location_array[e].col
           var adjacentHexes = getAdjacentCoordinates(r, c)
+
+          console.log("HI")
+          console.log(adjacentHexes)
           for (h=0; h<adjacentHexes.length; h++) {
-            if (count < 8 && this.game_state.board[adjacentHexes[h].row] && this.game_state.board[adjacentHexes[h].col] && this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col].marker != player) {
+            console.log(this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col])
+            if (player == 'player_one') {
+              var looking_for = 'player_two'
+            }
+            if (player == 'player_two') {
+              var looking_for = 'player_one'
+            }
+            if (this.game_state.board[adjacentHexes[h].row] && this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col] && this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col].marker == looking_for) {
+              console.log(h)
+              console.log(player)
+              console.log(this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col])
               this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col].marker = 'empty'
               count += 1
             }
@@ -285,7 +298,7 @@
       deduction += numNextTo.numAdjacentEnemyBuildings
       deduction += numNextTo.numAdjacentFriendlyBuildings
     }
- 
+
     return player_resources.bm >= variable_cost.bm + shop_item['bm']
         && player_resources.l >= variable_cost.l + shop_item['l']
         && player_resources.c >= variable_cost.c + shop_item['c']
