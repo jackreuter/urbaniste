@@ -285,6 +285,7 @@
       deduction += numNextTo.numAdjacentEnemyBuildings
       deduction += numNextTo.numAdjacentFriendlyBuildings
     }
+ 
     return player_resources.bm >= variable_cost.bm + shop_item['bm']
         && player_resources.l >= variable_cost.l + shop_item['l']
         && player_resources.c >= variable_cost.c + shop_item['c']

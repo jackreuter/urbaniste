@@ -65,8 +65,8 @@ function validateVariableCost(building, variableBuildingCost, casinoSteal, myRes
   }
   
   return myResources.bm >= variableBuildingCost.bm + buildingBMs
-      && myResources.l >= variableBuildingCost.l + buildingCs
-      && myResources.c >= variableBuildingCost.c + buildingLs
+      && myResources.l >= variableBuildingCost.l + buildingLs
+      && myResources.c >= variableBuildingCost.c + buildingCs
       && variableBuildingCost.bm + variableBuildingCost.l + variableBuildingCost.c == (totalBuildingVariableCost - deduction)
 }
 
@@ -332,7 +332,28 @@ function boulevard(coords, move, board, startingPlayer) {
   } else {
     var middleOn = builtOn([middle], move, board, startingPlayer)
     var outerOn = builtOn(outer, move, board, startingPlayer)
-    return middleOn.friendly == 1 && outerOn.empty == 2 && ShapeUtils.checkShapeV(coords)
+    return middleOn.friendly == 1 && outerOn.empty == 1 && outerOn.friendly == 1 && ShapeUtils.checkShape3Line(coords)
+  }
+}
+function boulevard_delux(coords, move, board, startingPlayer) {
+  if (coords.length != 3) {
+    return false
+  } else {
+    var middle
+    var outer
+    for (var i = 0; i < 3; i++) {
+      if (ShapeUtils.adjacent(coords[i], coords[(i+1)%3]) && ShapeUtils.adjacent(coords[i], coords[(i+2)%3])) {
+        middle = coords[i]
+        outer = [coords[(i+1)%3], coords[(i+2)%3]]
+      }
+    }
+  }
+  if (middle == undefined || outer == undefined) {
+    return false
+  } else {
+    var middleOn = builtOn([middle], move, board, startingPlayer)
+    var outerOn = builtOn(outer, move, board, startingPlayer)
+    return middleOn.empty == 1 && outerOn.friendly == 1 && outerOn.empty == 1 && ShapeUtils.checkShape3Line(coords)
   }
 }
 function tunnel(coords, move, board, startingPlayer) {
@@ -432,7 +453,6 @@ function prisonHelperHelper(friendlyPrisonCoords, extraArray, board, move) {
       }
     }
     if (!foundAdjacentMarkerForPrison) {
-      console.log(friendlyPrisonCoords[prisonIndex])
       return false
     }
   }
@@ -780,6 +800,7 @@ function leHavre(coords, move, board, startingPlayer) {
 var buildingData = {
   //infrastructure
   'Boulevard': {'validation_function': boulevard, 'length': 3},
+  'Boulevard-Delux': {'validation_function': boulevard_delux, 'length': 3},
   'Tunnel': {'validation_function': tunnel, 'length': 1},
   'Prison': {'validation_function': prison, 'length': 2},
   'Tramway': {'validation_function': tramway, 'length': 3},

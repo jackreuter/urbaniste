@@ -16,13 +16,12 @@
 
       //infrastructure
       [ 
-      {'name': 'Tunnel',          'type': 'Infrastructure',               'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
-      {'name': 'Prison',          'type': 'Infrastructure',               'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
-      {'name': 'Tramway',         'type': 'Infrastructure',               'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
-      {'name': 'Foundry',         'type': 'Infrastructure',               'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1, 'beginner': false},
+      // {'name': 'Tunnel',          'type': 'Infrastructure',               'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
+      // {'name': 'Prison',          'type': 'Infrastructure',               'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      // {'name': 'Tramway',         'type': 'Infrastructure',               'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
+      // {'name': 'Foundry',         'type': 'Infrastructure',               'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1, 'beginner': false},
       {'name': 'Landfill',        'type': 'Infrastructure',               'bm': 2, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
-
-      // {'name': 'Boulevard',       'type': 'Infrastructure',               'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      {'name': 'Boulevard',       'type': 'Infrastructure',               'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
       
       // {'name': 'Watchtower',      'type': 'Infrastructure',               'bm': 0, 'c': 2, 'l': 3, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
       // {'name': 'WatchtowerBOnly', 'type': 'Infrastructure',               'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
@@ -70,7 +69,7 @@
       {'name': 'Rue de Rivoli',             'type': 'NewCultural',   'bm': 3, 'c': 2, 'l': 1, '?': 0, 'limit': 1, 'vp': 6, 'beginner': false},  
       {'name': 'The Embassy',               'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0, 'beginner': true},  
       {'name': 'Tour Eiffel',               'type': 'NewCultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 5, 'beginner': true},
-      {'name': 'Bois de Vincennes',         'type': 'NewCultural',   'bm': 2, 'c': 1, 'l': 3, '?': 0, 'limit': 1, 'vp': 0, 'beginner': false},
+      {'name': 'Bois de Vincennes',         'type': 'NewCultural',   'bm': 3, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0, 'beginner': false},
       {'name': 'Musee du Louvre',           'type': 'NewCultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0, 'beginner': false},
       {'name': 'Guild Hall',                'type': 'NewCultural',   'bm': 2, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0, 'beginner': false},
       {'name': 'Opera Garnier',            'type': 'NewCultural',   'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 2, 'beginner': false},
@@ -105,8 +104,13 @@
     } else {
       for (i=0; i<5; i++) {
         var x = Math.floor(Math.random() * buildings[i].length)
+        var derp = buildings[i][x].name
         results.push(buildings[i][x])
         buildings[i].splice(x, 1)
+
+        if (derp == 'Boulevard') {
+          results.push({'name': 'Boulevard-Delux', 'type': 'Infrastructure', 'bm': 2, 'c': 2, 'l': 0, '?': 2, 'limit': 5, 'vp': 2, 'beginner': false})
+        }
       }
       for (i=0; i<3; i++) {
         var x = Math.floor(Math.random() * buildings[5].length)

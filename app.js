@@ -17,7 +17,7 @@ var MoveProcessor = require('./server/moveProcessor')
 var ACTIVE_PLAYER_INDEX = 0
 var PLAYER_IDS = []
 
-var beginner_mode = true
+var beginner_mode = false
 
 
 var startState = startingStateGeneration.generateBoard(20, beginner_mode)

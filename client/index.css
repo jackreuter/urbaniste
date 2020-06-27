@@ -258,10 +258,10 @@ svg {
   display: grid;
   
   /* BEGINNER MODE */
-  grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);
+  /*grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);*/
   
   /* ADVANCED MODE */
-  /*grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);*/
+  grid-template-columns: var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width) var(--hex-width);
 
   grid-auto-rows: calc(var(--hex-width) - 28.87px/2);
   grid-gap: var(--hex-between) var(--hex-between);
@@ -269,7 +269,7 @@ svg {
 }
 
 /* BEGINNER MODE */
-.hexagon:nth-child(18n + 10),
+/*.hexagon:nth-child(18n + 10),
 .hexagon:nth-child(18n + 11),
 .hexagon:nth-child(18n + 12),
 .hexagon:nth-child(18n + 13),
@@ -279,11 +279,11 @@ svg {
 .hexagon:nth-child(18n + 17),
 .hexagon:nth-child(18n + 18) {
   margin-left: calc(var(--hex-width) / 2 + var(--hex-between) / 2);
-}
+}*/
 
 
 /* ADVANCED MODE */
-/*
+
 .hexagon:nth-child(24n + 13), 
 .hexagon:nth-child(24n + 14),
 .hexagon:nth-child(24n + 15),
@@ -298,7 +298,7 @@ svg {
 .hexagon:nth-child(24n + 24) {
   margin-left: calc(var(--hex-width) / 2 + var(--hex-between) / 2);
 }
-*/
+
 
 .tooltiptext {
   visibility: hidden;
