@@ -74,7 +74,7 @@ io.on('connection', function(socket) {
   // When "submit_move" message comes in, call a function
   socket.on('submit_move', function(client_object) {
 
-    var moveProcessor = new MoveProcessor(GAME_STATE, client_object, ACTIVE_PLAYER_INDEX)
+    var moveProcessor = new MoveProcessor(GAME_STATE, client_object, ACTIVE_PLAYER_INDEX, beginner_mode)
     
     if (moveProcessor.validateMove(socket.id, PLAYER_IDS[ACTIVE_PLAYER_INDEX].socket_id)) {
       GAME_STATE = moveProcessor.processMove(client_object)

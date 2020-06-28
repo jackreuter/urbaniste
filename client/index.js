@@ -219,7 +219,7 @@ function displayShop() {
     image.style.width = "315px"
     image.style.position = "relative"
     image.style["z-index"] = "999"
-    console.log(SHOP)
+
     image.src = "/pictures/" + SHOP[i]['name'] + ".png"
     var div = document.createElement("div")
     div.appendChild(image)
@@ -292,7 +292,7 @@ function getColor(type, is_starting_player) {
     if (type == 'Commercial') { return '#fffed6' }
     if (type == 'Civic') { return '#ffe9e8' }
     if (type == 'Default') { return '#c9c9c9' }
-    if (type == 'NewCultural') { return '#e4bdfc' }
+    if (type == 'Cultural') { return '#e4bdfc' }
   } else {
     if (type == 'Infrastructure') { return '#014a01' }
     if (type == 'Aquatic') { return '#001645' }
@@ -300,7 +300,7 @@ function getColor(type, is_starting_player) {
     if (type == 'Commercial') { return '#573e00' }
     if (type == 'Civic') { return '#3b0000' }
     if (type == 'Default') { return '#525252' }
-    if (type == 'NewCultural') { return '#4f057d' }
+    if (type == 'Cultural') { return '#4f057d' }
   }
 }
 

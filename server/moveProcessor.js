@@ -3,10 +3,11 @@
 
   // Constructor
 
-  function MoveProcessor(game_state, client_object, active_player_index) {
+  function MoveProcessor(game_state, client_object, active_player_index, beginner_mode) {
     this.game_state = game_state
     this.active_player_index = active_player_index
     this.client_object = client_object
+    this.beginner_mode = beginner_mode
   }
 
   // Public server modules
@@ -99,28 +100,24 @@
         }
       }
       if (newBuilding.name == 'Landfill') {
-        count = 0
-        for (e=0; e<newBuilding.location_array.length; e++) {
-          var r = newBuilding.location_array[e].row
-          var c = newBuilding.location_array[e].col
-          var adjacentHexes = getAdjacentCoordinates(r, c)
+        var r = newBuilding.location_array[0].row
+        var c = newBuilding.location_array[0].col
+        var adjacentHexes = getAdjacentCoordinates(r, c)
 
-          console.log("HI")
-          console.log(adjacentHexes)
-          for (h=0; h<adjacentHexes.length; h++) {
-            console.log(this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col])
-            if (player == 'player_one') {
-              var looking_for = 'player_two'
-            }
-            if (player == 'player_two') {
-              var looking_for = 'player_one'
-            }
-            if (this.game_state.board[adjacentHexes[h].row] && this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col] && this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col].marker == looking_for) {
-              console.log(h)
-              console.log(player)
-              console.log(this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col])
-              this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col].marker = 'empty'
-              count += 1
+        for (h=0; h<adjacentHexes.length; h++) {
+          if (player == 'player_one') {
+            var looking_for = 'player_two'
+          }
+          if (player == 'player_two') {
+            var looking_for = 'player_one'
+          }
+          if (this.game_state.board[adjacentHexes[h].row] && this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col] && this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col].marker == looking_for) {
+            for (var building=0; building<this.game_state.buildings.length; building++) {
+              for (var tile=0; tile<this.game_state.buildings[building].location_array.length; tile++) {
+                if (this.game_state.buildings[building].location_array[tile].row != adjacentHexes[h].row  && this.game_state.buildings[building].location_array[tile].col != adjacentHexes[h].col) {
+                  this.game_state.board[adjacentHexes[h].row][adjacentHexes[h].col].marker = 'empty'
+                }
+              }
             }
           }
         }
@@ -339,7 +336,8 @@
       adjacents.push({'row': row-1, 'col': col+1})
       adjacents.push({'row': row+1, 'col': col+1})
     }
-    return adjacents
+    var col_limit = this.beginner_mode ? 8 : 11
+    return adjacents.filter(a => a.row>=0 && a.col>=0 && a.row<=8 && a.col<=col_limit)
   }
 
   function adjacent(row, col, active_player_index, game_state) {
