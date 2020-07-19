@@ -460,7 +460,7 @@ function prisonHelperHelper(friendlyPrisonCoords, extraArray, board, move) {
 }
 function tramway(coords, move, board, startingPlayer) {
   var on = builtOn(coords, move, board, startingPlayer)
-  return on.friendly == 3 && ShapeUtils.checkShape3Line(coords)
+  return on.friendly == 2 && ShapeUtils.checkShapeDouble(coords)
 }
 function validateTramwayExtra(coords, extraArray, board, move) {
   return extraArray
@@ -803,7 +803,7 @@ var buildingData = {
   'Boulevard-Delux': {'validation_function': boulevard_delux, 'length': 3},
   'Tunnel': {'validation_function': tunnel, 'length': 1},
   'Prison': {'validation_function': prison, 'length': 2},
-  'Tramway': {'validation_function': tramway, 'length': 3},
+  'Tramway': {'validation_function': tramway, 'length': 2},
   'Foundry': {'validation_function': foundry, 'length': 2},
 
   'Watchtower': {'validation_function': watchTower, 'length': 1},

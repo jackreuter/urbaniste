@@ -26,20 +26,20 @@
 
       //infrastructure
       [ 
-      {'name': 'Tunnel',          'type': 'Infrastructure',               'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
-      {'name': 'Prison',          'type': 'Infrastructure',               'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
-      {'name': 'Tramway',         'type': 'Infrastructure',               'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
-      {'name': 'Foundry',         'type': 'Infrastructure',               'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1, 'beginner': false},
-      {'name': 'Landfill',        'type': 'Infrastructure',               'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
-      {'name': 'Boulevard',       'type': 'Infrastructure',               'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      {'name': 'Tunnel',          'type': 'Infrastructure',          'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
+      {'name': 'Prison',          'type': 'Infrastructure',          'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      {'name': 'Tramway',         'type': 'Infrastructure',          'bm': 0, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
+      {'name': 'Foundry',         'type': 'Infrastructure',          'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1, 'beginner': false},
+      {'name': 'Landfill',        'type': 'Infrastructure',          'bm': 2, 'c': 0, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      {'name': 'Boulevard',       'type': 'Infrastructure',          'bm': 1, 'c': 0, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
       ],
-      // 1-1-3,  0-2-2,  1-0-2,  0,0,3,  2-0-2,  0-0-3
+      // 1-1-3,  0-2-2,  0-1-2,  0,0,3,  2-0-2,  1-0-2
 
       //aquatic
       [
-      {'name': 'Bridge',     'type': 'Aquatic',                      'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 3, 'beginner': true},
+      {'name': 'Bridge',     'type': 'Aquatic',                      'bm': 1, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 3, 'beginner': true},
       {'name': 'Harbor',     'type': 'Aquatic',                      'bm': 0, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': true},
-      {'name': 'Canal',      'type': 'Aquatic',                      'bm': 2, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      {'name': 'Canal',      'type': 'Aquatic',                      'bm': 1, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
       {'name': 'Ferry',      'type': 'Aquatic',                      'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 3, 'beginner': true},
       {'name': 'Lighthouse', 'type': 'Aquatic',                      'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
       ],
@@ -47,21 +47,21 @@
 
       //commercial
       [
-      {'name': 'Tenement',        'type': 'Commercial',               'bm': 0, 'c': 0, 'l': 0, '?': 5, 'limit': 5, 'vp': 3, 'beginner': true},
-      {'name': 'Bazaar',          'type': 'Commercial',               'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3, 'beginner': true},
-      {'name': 'Refinery',        'type': 'Commercial',               'bm': 0, 'c': 0, 'l': 0, '?': 3, 'limit': 5, 'vp': 1, 'beginner': true}, 
-      {'name': 'Casino',          'type': 'Commercial',               'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 5, 'vp': 0, 'beginner': false},
-      {'name': 'Loan Office',     'type': 'Commercial',               'bm': 0, 'c': 0, 'l': 0, '?': 2, 'limit': 5, 'vp': -1, 'beginner': false},
+      {'name': 'Tenement',        'type': 'Commercial',              'bm': 0, 'c': 0, 'l': 0, '?': 5, 'limit': 5, 'vp': 3, 'beginner': true},
+      {'name': 'Bazaar',          'type': 'Commercial',              'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3, 'beginner': true},
+      {'name': 'Refinery',        'type': 'Commercial',              'bm': 0, 'c': 0, 'l': 0, '?': 3, 'limit': 5, 'vp': 1, 'beginner': true}, 
+      {'name': 'Casino',          'type': 'Commercial',              'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 5, 'vp': 0, 'beginner': false},
+      {'name': 'Loan Office',     'type': 'Commercial',              'bm': 0, 'c': 0, 'l': 0, '?': 2, 'limit': 5, 'vp': -1, 'beginner': false},
 
       ],
 
       //civic
       [
-      {'name': 'Shipyard',   'type': 'Civic',                        'bm': 1, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
-      {'name': 'Tax House',  'type': 'Civic',                        'bm': 0, 'c': 3, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': true},
+      {'name': 'Shipyard',   'type': 'Civic',                        'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      {'name': 'Tax House',  'type': 'Civic',                        'bm': 3, 'c': 0, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': true},
       {'name': 'Cemetery',   'type': 'Civic',                        'bm': 3, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': true},
-      {'name': 'Sewers',     'type': 'Civic',                        'bm': 2, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
-      {'name': 'Monument',   'type': 'Civic',                        'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      {'name': 'Sewers',     'type': 'Civic',                        'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      {'name': 'Monument',   'type': 'Civic',                        'bm': 3, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
       ],
       // 3-1-0,  3-0-2,  3-2-0,  3-1-1,  3-2-0 
 
@@ -114,9 +114,18 @@
         buildings[i].splice(x, 1)
 
         if (derp == 'Boulevard') {
-          results.push({'name': 'Boulevard-Delux', 'type': 'Infrastructure', 'bm': 0, 'c': 0, 'l': 4, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false})
+          results.push({'name': 'Boulevard-Delux', 'type': 'Infrastructure', 'bm': 1, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false})
         }
       }
+      // results = [ 
+      // {'name': 'Tunnel',          'type': 'Infrastructure',               'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
+      // {'name': 'Prison',          'type': 'Infrastructure',               'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      // {'name': 'Tramway',         'type': 'Infrastructure',               'bm': 3, 'c': 0, 'l': 0, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
+      // {'name': 'Foundry',         'type': 'Infrastructure',               'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1, 'beginner': false},
+      // {'name': 'Landfill',        'type': 'Infrastructure',               'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      // {'name': 'Boulevard',       'type': 'Infrastructure',               'bm': 0, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      // {'name': 'Boulevard-Delux', 'type': 'Infrastructure', 'bm': 0, 'c': 4, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false}
+      // ]
       for (i=0; i<3; i++) {
         var x = Math.floor(Math.random() * buildings[5].length)
         results.push(buildings[5][x])
