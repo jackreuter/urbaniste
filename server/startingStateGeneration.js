@@ -26,9 +26,9 @@
 
       //infrastructure
       [ 
-      {'name': 'Tunnel',          'type': 'Infrastructure',          'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
+      // {'name': 'Tunnel',          'type': 'Infrastructure',          'bm': 1, 'c': 1, 'l': 3, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
       {'name': 'Prison',          'type': 'Infrastructure',          'bm': 0, 'c': 2, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
-      {'name': 'Tramway',         'type': 'Infrastructure',          'bm': 0, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 3, 'beginner': false},
+      {'name': 'Tramway',         'type': 'Infrastructure',          'bm': 0, 'c': 1, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
       {'name': 'Foundry',         'type': 'Infrastructure',          'bm': 0, 'c': 0, 'l': 3, '?': 0, 'limit': 5, 'vp': 1, 'beginner': false},
       {'name': 'Landfill',        'type': 'Infrastructure',          'bm': 2, 'c': 0, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
       {'name': 'Boulevard',       'type': 'Infrastructure',          'bm': 1, 'c': 0, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
@@ -37,18 +37,18 @@
 
       //aquatic
       [
-      {'name': 'Bridge',     'type': 'Aquatic',                      'bm': 1, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 3, 'beginner': true},
-      {'name': 'Harbor',     'type': 'Aquatic',                      'bm': 0, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': true},
-      {'name': 'Canal',      'type': 'Aquatic',                      'bm': 1, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
-      {'name': 'Ferry',      'type': 'Aquatic',                      'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 3, 'beginner': true},
-      {'name': 'Lighthouse', 'type': 'Aquatic',                      'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      {'name': 'Bridge',     'type': 'Aquatic',                      'bm': 2, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': true},
+      // {'name': 'Harbor',     'type': 'Aquatic',                      'bm': 0, 'c': 3, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': true},
+      // {'name': 'Canal',      'type': 'Aquatic',                      'bm': 1, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      // {'name': 'Ferry',      'type': 'Aquatic',                      'bm': 0, 'c': 3, 'l': 2, '?': 0, 'limit': 5, 'vp': 3, 'beginner': true},
+      // {'name': 'Lighthouse', 'type': 'Aquatic',                      'bm': 1, 'c': 3, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
       ],
       // 1-3-0,  0-3-0,  1-2-1,  1-3-1,  1-3-1
 
       //commercial
       [
       {'name': 'Tenement',        'type': 'Commercial',              'bm': 0, 'c': 0, 'l': 0, '?': 5, 'limit': 5, 'vp': 3, 'beginner': true},
-      {'name': 'Bazaar',          'type': 'Commercial',              'bm': 0, 'c': 0, 'l': 0, '?': 6, 'limit': 5, 'vp': 3, 'beginner': true},
+      {'name': 'Bazaar',          'type': 'Commercial',              'bm': 0, 'c': 0, 'l': 0, '?': 7, 'limit': 5, 'vp': 3, 'beginner': true},
       {'name': 'Refinery',        'type': 'Commercial',              'bm': 0, 'c': 0, 'l': 0, '?': 3, 'limit': 5, 'vp': 1, 'beginner': true}, 
       {'name': 'Casino',          'type': 'Commercial',              'bm': 0, 'c': 0, 'l': 0, '?': 4, 'limit': 5, 'vp': 0, 'beginner': false},
       {'name': 'Loan Office',     'type': 'Commercial',              'bm': 0, 'c': 0, 'l': 0, '?': 2, 'limit': 5, 'vp': -1, 'beginner': false},
@@ -59,8 +59,8 @@
       [
       {'name': 'Shipyard',   'type': 'Civic',                        'bm': 3, 'c': 1, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
       {'name': 'Tax House',  'type': 'Civic',                        'bm': 3, 'c': 0, 'l': 2, '?': 0, 'limit': 5, 'vp': 2, 'beginner': true},
-      {'name': 'Cemetery',   'type': 'Civic',                        'bm': 3, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': true},
-      {'name': 'Sewers',     'type': 'Civic',                        'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
+      {'name': 'Cemetery',   'type': 'Civic',                        'bm': 3, 'c': 1, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': true},
+      {'name': 'Sewers',     'type': 'Civic',                        'bm': 2, 'c': 2, 'l': 1, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
       {'name': 'Monument',   'type': 'Civic',                        'bm': 3, 'c': 2, 'l': 0, '?': 0, 'limit': 5, 'vp': 2, 'beginner': false},
       ],
       // 3-1-0,  3-0-2,  3-2-0,  3-1-1,  3-2-0 
@@ -73,15 +73,16 @@
 
       //new cultural
       [
-      {'name': 'Place Charles de Gaulle',   'type': 'Cultural',   'bm': 3, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 8, 'beginner': true},
-      {'name': 'Parc de Buttes Chaumont',   'type': 'Cultural',   'bm': 1, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 6, 'beginner': true},
-      {'name': 'Rue de Rivoli',             'type': 'Cultural',   'bm': 3, 'c': 2, 'l': 1, '?': 0, 'limit': 1, 'vp': 6, 'beginner': false},  
-      {'name': 'The Embassy',               'type': 'Cultural',   'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0, 'beginner': true},  
-      {'name': 'Tour Eiffel',               'type': 'Cultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 5, 'beginner': true},
-      {'name': 'Bois de Vincennes',         'type': 'Cultural',   'bm': 3, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0, 'beginner': false},
-      {'name': 'Musee du Louvre',           'type': 'Cultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0, 'beginner': false},
+      // {'name': 'Place Charles de Gaulle',   'type': 'Cultural',   'bm': 3, 'c': 1, 'l': 3, '?': 0, 'limit': 1, 'vp': 8, 'beginner': true},
+      // {'name': 'Parc de Buttes Chaumont',   'type': 'Cultural',   'bm': 1, 'c': 2, 'l': 3, '?': 0, 'limit': 1, 'vp': 6, 'beginner': true},
+      // {'name': 'Rue de Rivoli',             'type': 'Cultural',   'bm': 3, 'c': 2, 'l': 1, '?': 0, 'limit': 1, 'vp': 6, 'beginner': false},  
+      // {'name': 'The Embassy',               'type': 'Cultural',   'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0, 'beginner': true},  
+      // {'name': 'Tour Eiffel',               'type': 'Cultural',   'bm': 1, 'c': 1, 'l': 1, '?': 0, 'limit': 1, 'vp': 5, 'beginner': true},
+      // {'name': 'Bois de Vincennes',         'type': 'Cultural',   'bm': 3, 'c': 1, 'l': 2, '?': 0, 'limit': 1, 'vp': 0, 'beginner': false},
+      // {'name': 'Musee du Louvre',           'type': 'Cultural',   'bm': 2, 'c': 3, 'l': 1, '?': 0, 'limit': 1, 'vp': 0, 'beginner': false},
       {'name': 'Guild Hall',                'type': 'Cultural',   'bm': 2, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 0, 'beginner': false},
       {'name': 'Opera Garnier',             'type': 'Cultural',   'bm': 1, 'c': 2, 'l': 2, '?': 0, 'limit': 1, 'vp': 2, 'beginner': false},
+      {'name': 'Ile de la Cite',            'type': 'Cultural',   'bm': 2, 'c': 1, 'l': 3, '?': 0, 'limit': 1, 'vp': 5, 'beginner': false},
       ]
     ]
 
